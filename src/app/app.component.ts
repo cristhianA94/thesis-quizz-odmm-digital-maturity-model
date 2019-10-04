@@ -26,13 +26,13 @@ export class AppComponent implements OnInit {
       var element = document.getElementById("navbar-top");
       if (element) {
         element.classList.remove("navbar-transparent");
-        element.classList.add("bg-danger");
+        element.classList.add("bg-warning");
       }
     } else {
       var element = document.getElementById("navbar-top");
       if (element) {
         element.classList.add("navbar-transparent");
-        element.classList.remove("bg-danger");
+        element.classList.remove("bg-warning");
       }
     }
   }

@@ -1,13 +1,15 @@
 .index-page .squares {
-  @include linear-gradient($danger-states, $danger);
+    @include linear-gradient($default-states, $warning);
 }
+
 .register-page,
 .section.section-signup {
-  .squares,
-  .square {
-    @include linear-gradient($danger-states, $danger);
-  }
+    .squares,
+    .square {
+        @include linear-gradient($default-states, $warning);
+    }
 }
+
 .footer {
-  border-top: 2px solid $danger;
+    border-top: 3px solid $warning;
 }

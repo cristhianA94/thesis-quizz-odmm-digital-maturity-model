@@ -7,9 +7,9 @@ import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
 
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { CollapseModule } from "ngx-bootstrap/collapse";
 import { ProgressbarModule } from "ngx-bootstrap/progressbar";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
-import { CollapseModule } from "ngx-bootstrap/collapse";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { AlertModule } from "ngx-bootstrap/alert";
@@ -17,15 +17,20 @@ import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { CarouselModule } from "ngx-bootstrap/carousel";
 import { ModalModule } from "ngx-bootstrap/modal";
 
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { PagesModule } from "./pages/pages.module";
+import { FooterComponent } from './components/shared/footer/footer.component';
 
 import { IndexComponent } from "./pages/index/index.component";
 import { ProfilepageComponent } from "./pages/examples/profilepage/profilepage.component";
 import { RegisterpageComponent } from "./pages/examples/registerpage/registerpage.component";
 import { LandingpageComponent } from "./pages/examples/landingpage/landingpage.component";
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent,
+    FooterComponent
     // IndexComponent,
     // ProfilepageComponent,
     // RegisterpageComponent,
@@ -37,10 +42,10 @@ import { LandingpageComponent } from "./pages/examples/landingpage/landingpage.c
     HttpClientModule,
     RouterModule,
     AppRoutingModule,
-    // BsDropdownModule.forRoot(),
+    BsDropdownModule.forRoot(),
     // ProgressbarModule.forRoot(),
     // TooltipModule.forRoot(),
-    // CollapseModule.forRoot(),
+    CollapseModule.forRoot(),
     // TabsModule.forRoot(),
     PagesModule
     // PaginationModule.forRoot(),
