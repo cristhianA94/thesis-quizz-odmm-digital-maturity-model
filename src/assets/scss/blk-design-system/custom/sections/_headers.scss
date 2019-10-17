@@ -4,6 +4,7 @@
     }
     .container {
         color: $white;
+        margin-top: 5%;
     }
     .title {
         color: $white;
@@ -17,7 +18,7 @@
     }
 }
 
-.landing-page {
+.home-page {
     .content-center {
         img {
             height: 300px;
@@ -81,7 +82,7 @@
             }
             img {
                 height: 150px;
-                margin-top: 40px;
+                //margin-top: 10px;
             }
         }
     }

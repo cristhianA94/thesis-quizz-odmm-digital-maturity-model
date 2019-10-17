@@ -109,8 +109,6 @@ ODMM-Digital-Maturity-Model
 
 ## Licensing
 
-- Copyright 2018 Creative Tim (https://www.creative-tim.com/?ref=blkdsa-readme)
-
 - Licensed under GNU (https://github.com/cristhianA94/thesis-quizz-odmm-digital-maturity-model/blob/master/LICENSE.md)
 
 ### Social Media

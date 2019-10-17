@@ -3,17 +3,17 @@ import { CommonModule } from "@angular/common";
 import { BrowserModule } from "@angular/platform-browser";
 import { Routes, RouterModule } from "@angular/router";
 
-import { IndexComponent } from "./pages/index/index.component";
-import { ProfilepageComponent } from "./pages/examples/profilepage/profilepage.component";
-import { RegisterpageComponent } from "./pages/examples/registerpage/registerpage.component";
-import { LandingpageComponent } from "./pages/examples/landingpage/landingpage.component";
+import { ProfilepageComponent } from "./components/pages/profilepage/profilepage.component";
+import { RegisterpageComponent } from "./components/pages/registerpage/registerpage.component";
+import { HomepageComponent } from './components/pages/home/homepage.component';
+import { AcercaDeComponent } from './components/pages/acerca-de/acerca-de.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
-  { path: "home", component: IndexComponent },
-  { path: "profile", component: ProfilepageComponent },
+  { path: "home", component: HomepageComponent },
   { path: "register", component: RegisterpageComponent },
-  { path: "landing", component: LandingpageComponent }
+  { path: "about", component: AcercaDeComponent },
+  { path: "profile", component: ProfilepageComponent }
 ];
 
 @NgModule({
@@ -26,4 +26,4 @@ const routes: Routes = [
   ],
   exports: []
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

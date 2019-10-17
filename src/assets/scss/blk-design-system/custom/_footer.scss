@@ -1,7 +1,7 @@
 .footer {
     padding: 50px 0;
     border-top: 3px solid #ff8d72;
-    background: radial-gradient( ellipse farthest-corner at right, #ff8d72 5%, $gray-900 75%);
+    background: radial-gradient( ellipse farthest-corner at right, $primary 5%, $gray-900 75%);
     [class*="container-"] {
         padding: 0;
     }

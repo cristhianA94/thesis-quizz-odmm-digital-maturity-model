@@ -202,7 +202,7 @@
 
 .page-header {
     min-height: 100vh;
-    max-height: 999px;
+    max-height: 2180px;
     padding: 0;
     color: $white;
     position: relative;
@@ -237,7 +237,7 @@
         width: 100%;
         max-width: 880px;
         &.brand {
-            width: 47%;
+            width: 100%;
         }
     }
     footer {

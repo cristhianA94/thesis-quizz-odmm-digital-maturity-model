@@ -44,7 +44,7 @@
     }
     &.navbar-transparent {
         background: $transparent-bg !important;
-        padding-top: 25px;
+        margin-bottom: 5%;
     }
     &.bg-white {
         .navbar-nav {
@@ -184,6 +184,9 @@
                     a {
                         font-weight: $font-weight-bold;
                     }
+                }
+                .logo-collapse {
+                    max-width: 100px;
                 }
                 .collapse-close {
                     .navbar-toggler {
@@ -387,9 +390,12 @@
         left: 0;
         top: 0;
         margin: 0.7rem;
-        background: $fondo-nav;
-        border-radius: $border-radius-sm;
+        background: #3F4253;
+        border-radius: $border-radius-xl;
         padding: 1.4rem;
+    }
+    .navbar-brand {
+        width: 25%;
     }
 }
 
