@@ -89,7 +89,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
     'Internacional'
   ];
 
-  num_trabajadores: string;
+  tamanio_empresa: string;
   empresas: Tamanio_Empresa[] = [
     { tipo_empresa: 'Microempresa', view: 'Microempresa (menos de 10 personas)' },
     { tipo_empresa: 'Pequeña empresa', view: 'Pequeña empresa (entre 10 y 50 personas)' },
@@ -457,7 +457,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       apellidos: ['', Validators.required],
       cedula: ['', Validators.required],
       telefono: new FormControl('', Validators.required),
-      sexo: ['', Validators.required],
+      sexo: ['', ],
       correo: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -468,7 +468,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       razon_social: ['', Validators.required],
       cargo: ['Gerente', Validators.required],
       sector_industrial: ['', Validators.required],
-      num_trabajadores: ['', Validators.required],
+      tamanio_empresa: ['', Validators.required],
       anio_creacion: ['', Validators.required],
       franquicias: ['', Validators.required],
       area_alcance: ['', Validators.required],

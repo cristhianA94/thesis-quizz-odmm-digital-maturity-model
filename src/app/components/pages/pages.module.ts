@@ -18,11 +18,13 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { JwBootstrapSwitchNg2Module } from "jw-bootstrap-switch-ng2";
 import { PopoverModule } from "ngx-bootstrap/popover";
 
-/* Pages */
+/* Components */
 import { ProfilepageComponent } from "./profilepage/profilepage.component";
 import { RegisterpageComponent } from "./registerpage/registerpage.component";
 import { HomepageComponent } from "./home/homepage.component";
 import { AcercaDeComponent } from './acerca-de/acerca-de.component';
+import { AdminpageComponent } from './adminpage/adminpage.component';
+
 
 
 /* Servicios */
@@ -41,7 +43,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../material.module';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+//import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 
@@ -78,20 +80,23 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     // Modulos de angular material
     MaterialModule,
     MatPasswordStrengthModule.forRoot(),
-    ScrollingModule
+    //ScrollingModule,
+
 
   ],
   declarations: [
     ProfilepageComponent,
     RegisterpageComponent,
     HomepageComponent,
-    AcercaDeComponent
+    AcercaDeComponent,
+    AdminpageComponent
   ],
   exports: [
     ProfilepageComponent,
     RegisterpageComponent,
     HomepageComponent,
-    AcercaDeComponent
+    AcercaDeComponent,
+    AdminpageComponent
   ],
   providers: [
     AlertsService,

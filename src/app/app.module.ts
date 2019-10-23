@@ -22,7 +22,6 @@ import { FooterComponent } from './components/shared/footer/footer.component';
 /* Pages */
 import { PagesModule } from "./components/pages/pages.module";
 
-
 /* Firebase */
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';

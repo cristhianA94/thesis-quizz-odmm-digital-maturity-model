@@ -69,7 +69,11 @@
                     <button class="btn btn-primary btn-round mr-1" type="button" [routerLink]="['/register']">
                         <i class="fas fa-sign-in-alt"> </i> Acceder
                     </button>
-
+                </div>
+                <div *ngIf="!isLogged">
+                    <button class="btn btn-primary btn-round mr-1" type="button" [routerLink]="['/register']">
+                        <i class="fas fa-sign-in-alt"> </i> Cuenta
+                    </button>
                 </div>
             </div>
 

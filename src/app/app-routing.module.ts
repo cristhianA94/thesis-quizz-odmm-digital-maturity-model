@@ -7,23 +7,46 @@ import { ProfilepageComponent } from "./components/pages/profilepage/profilepage
 import { RegisterpageComponent } from "./components/pages/registerpage/registerpage.component";
 import { HomepageComponent } from './components/pages/home/homepage.component';
 import { AcercaDeComponent } from './components/pages/acerca-de/acerca-de.component';
+import { AdminpageComponent } from './components/pages/adminpage/adminpage.component';
+
+import { pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+/* Firebase Auth */
+import { AngularFireAuthGuard, customClaims } from '@angular/fire/auth-guard';
+
+const isUser = () => pipe(map(user => {
+  return !!user ? !!user : ['/'];
+}));
+
+const isAdmin = () => pipe(customClaims, map(claims => {
+  return claims.admin === true ? claims.admin : ['/'];
+}));
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "home", component: HomepageComponent },
-  { path: "register", component: RegisterpageComponent },
   { path: "about", component: AcercaDeComponent },
-  { path: "profile", component: ProfilepageComponent }
+  { path: "register", component: RegisterpageComponent },
+  {
+    path: 'admin', component: AdminpageComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: isAdmin }
+  },
+  {
+    path: 'profile',
+    component: ProfilepageComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: isUser }
+  },
+  //{ path: '**', component: HomepageComponent }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
-    RouterModule.forRoot(routes, {
-      useHash: true
-    })
-  ],
-  exports: []
+    RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

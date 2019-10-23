@@ -50,6 +50,7 @@
     "homepage": "https://github.com/cristhianA94/thesis-quizz-odmm-digital-maturity-model/",
     "private": false,
     "dependencies": {
+        "@angular-material-extensions/pages": "^3.0.0",
         "@angular-material-extensions/password-strength": "^4.0.1",
         "@angular/animations": "^8.2.9",
         "@angular/cdk": "^8.2.2",
