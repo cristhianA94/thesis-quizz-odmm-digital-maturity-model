@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
 @Component({
@@ -5,7 +6,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
   templateUrl: "profilepage.component.html"
 })
 export class ProfilepageComponent implements OnInit, OnDestroy {
-  constructor() {}
+  constructor(public auth: AuthService) { }
 
   ngOnInit() {
     var body = document.getElementsByTagName("body")[0];

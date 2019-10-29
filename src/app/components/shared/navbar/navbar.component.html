@@ -56,25 +56,21 @@
                     <a class="nav-link" [routerLink]="['/about']">Acerca De </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/profile']">Cuestionario</a>
+                    <a class="nav-link" [routerLink]="['/cuestionario']">Cuestionario</a>
                 </li>
             </ul>
 
             <!-- Buscador y acceso al sistema -->
             <div class="form-inline my-2 my-lg-0">
-                <button class="btn btn-danger btn-round mr-1" type="button" *ngIf="isLogged" (click)="onLogout()">
-                    <i class="fas fa-sign-out-alt"> </i> Cerrar
-                    Sesion</button>
-                <div *ngIf="!isLogged">
+                <button class="btn btn-danger btn-round mr-1" type="button" *ngIf="authService.isLogged" (click)="onLogout()">
+                    <i class="fas fa-sign-out-alt"> </i> Cerrar Sesión
+                </button>
+                <div *ngIf="!authService.isLogged">
                     <button class="btn btn-primary btn-round mr-1" type="button" [routerLink]="['/register']">
                         <i class="fas fa-sign-in-alt"> </i> Acceder
                     </button>
                 </div>
-                <div *ngIf="!isLogged">
-                    <button class="btn btn-primary btn-round mr-1" type="button" [routerLink]="['/register']">
-                        <i class="fas fa-sign-in-alt"> </i> Cuenta
-                    </button>
-                </div>
+
             </div>
 
         </div>

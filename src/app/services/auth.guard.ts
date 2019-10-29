@@ -1,14 +1,47 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+  Router
+} from '@angular/router';
+import { Observable } from 'rxjs';
+
 import { AuthService } from './auth.service';
+import { tap, map, take } from 'rxjs/operators';
 
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate {
 
-@Injectable()
-export class UsuarioGuard implements CanActivate {
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
-  canActivate() {
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    return false;
+    //Guard que comprueba si esta logeado
+    if (this.auth.isLogged) {
+      return true;
+    }
+    console.error('¡Accesso denegado! - ¡Necesitas estar logueado!')
+    this.router.navigate(['/register']);
+    /*
+    //Guard production
+    return this.auth.user.pipe(
+      take(1),
+      //map(user => user && user.rol.admin ? true : false),
+      map(user => !!user),
+      tap(isAdmin => {
+        if (!isAdmin) {
+          console.error('¡Accesso denegado! - ¡Solo admin!')
+          this.router.navigate(['/register'])
+        }
+      })
+    ); */
+
   }
+
 }

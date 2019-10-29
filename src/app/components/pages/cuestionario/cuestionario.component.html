@@ -1,0 +1,104 @@
+<div class="wrapper">
+
+    <div class="container cuestionario">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="file" accept=".csv" (change)="handleFileSelect($event)">
+                <button (click)="ConvertCSVtoJSON()">Convert CSV to JSON</button>
+
+
+            </div>
+
+        </div>
+        <div class="row justify-content-center ">
+            <div class="col-md-12 ">
+                <!-- *ngIf="records.length > 0" -->
+                <mat-pages>
+                    <mat-page-loader *ngFor="let cats of categorias">
+                        <mat-page-outlook title="{{ cats }}">
+                            {{ cats }}
+                        </mat-page-outlook>
+                        <mat-page-content>
+
+                            <label id="example-radio-group-label">Pregunta 1</label>
+                            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="favoriteSeason">
+                                <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+                                    {{season}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+
+
+                        </mat-page-content>
+                    </mat-page-loader>
+                </mat-pages>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="csv-result-table">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categorias</th>
+                            <th>Sub_Categorias</th>
+                            <th>Capacidad</th>
+                            <th>Descripcion</th>
+                            <th>Metrica</th>
+                            <th>Pregunta</th>
+                            <th>Nivel_Madurez_0</th>
+                            <th>Nivel_Madurez_1</th>
+                            <th>Nivel_Madurez_2</th>
+                            <th>Nivel_Madurez_3</th>
+                            <th>Nivel_Madurez_4</th>
+                            <th>Nivel_Madurez_5</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let csvData of test;let i = index;">
+
+                            <td>
+                                <span>{{csvData.Categorias}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Sub_Categorias}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Capacidad}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Descripcion}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Metrica}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_0}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_1}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_2}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_3}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_4}}</span>
+                            </td>
+                            <td>
+                                <span>{{csvData.Nivel_Madurez_5}}</span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

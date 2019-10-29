@@ -69,6 +69,7 @@
         "jw-bootstrap-switch-ng2": "2.0.5",
         "material-design-icons": "^3.0.1",
         "ngx-bootstrap": "5.1.2",
+        "ngx-papaparse": "^3.0.4",
         "ngx-toastr": "^11.1.0",
         "nouislider": "11.1.0",
         "rxjs": "6.5.3",

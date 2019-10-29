@@ -9,11 +9,11 @@ import { HttpClientModule } from "@angular/common/http";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 
-
 /* Angular Material */
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from 'ngx-toastr';
 import { MaterialModule } from './material.module';
+import { MatPagesModule } from '@angular-material-extensions/pages';
 
 /* Components shared */
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
@@ -22,9 +22,13 @@ import { FooterComponent } from './components/shared/footer/footer.component';
 /* Pages */
 import { PagesModule } from "./components/pages/pages.module";
 
+/* Services */
+import { AlertsService } from 'src/app/services/alerts.service';
+import { AuthService } from './services/auth.service';
+
 /* Firebase */
-import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
@@ -56,9 +60,11 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
-    MaterialModule
+    //Angular Material
+    MaterialModule,
+    MatPagesModule.forRoot()
   ],
-  providers: [],
+  providers: [AuthService, AlertsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

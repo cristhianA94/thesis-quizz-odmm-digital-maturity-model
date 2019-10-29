@@ -1,3 +1,4 @@
+import { CuestionarioComponent } from './components/pages/cuestionario/cuestionario.component';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BrowserModule } from "@angular/platform-browser";
@@ -13,7 +14,11 @@ import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /* Firebase Auth */
-import { AngularFireAuthGuard, customClaims } from '@angular/fire/auth-guard';
+import { AuthGuard } from './services/auth.guard';
+import { AngularFireAuthGuard, customClaims, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
+
+const redirectUnauthorizedToLogin = redirectUnauthorizedTo(["registro"]);
 
 const isUser = () => pipe(map(user => {
   return !!user ? !!user : ['/'];
@@ -28,17 +33,20 @@ const routes: Routes = [
   { path: "home", component: HomepageComponent },
   { path: "about", component: AcercaDeComponent },
   { path: "register", component: RegisterpageComponent },
+  { path: "profile", component: ProfilepageComponent, canActivate: [AuthGuard] },
+  { path: "cuestionario", component: CuestionarioComponent },
+
   {
     path: 'admin', component: AdminpageComponent,
     canActivate: [AngularFireAuthGuard],
     data: { authGuardPipe: isAdmin }
   },
-  {
+  /* {
     path: 'profile',
     component: ProfilepageComponent,
     canActivate: [AngularFireAuthGuard],
     data: { authGuardPipe: isUser }
-  },
+  }, */
   //{ path: '**', component: HomepageComponent }
 ];
 

@@ -30,7 +30,6 @@
                                                     <mat-error class="error-message" *ngIf="loginForm.get('correo').hasError(validation.type) && (loginForm.get('correo').dirty || loginForm.get('correo').touched)">{{validation.message}}</mat-error>
                                                 </mat-error>
                                                 <mat-icon matSuffix>email</mat-icon>
-
                                             </mat-form-field>
 
                                             <!--Password -->
@@ -50,9 +49,24 @@
                                                 <br>
                                                 <p *ngIf="passReset">Reseteo finalizado. Chequee su email electrónico
                                                 </p>
+
+                                                <p class="lead"> Ingresa con tus redes sociales </p>
+                                                <!-- Redes Sociales -->
+                                                <div class="container justify-content-center w-75">
+
+                                                    <div class="container text-center">
+                                                        <button class="btn btn-outline-danger btn-social btn-google btn-block" (click)="onLoginGoogle()">
+                                                                                    <span class="fab fa-google"></span> GOOGLE
+                                                                                </button>
+                                                        <button class="btn btn-outline-info btn-social btn-facebook btn-block" (click)="onLoginFacebook()">
+                                                                                    <span class="fab fa-facebook"></span>FACEBOOK
+                                                                                </button>
+                                                    </div>
+                                                </div>
                                             </mat-card-actions>
                                         </form>
                                     </mat-tab>
+
 
 
                                     <!-- Formulario Registro -->
@@ -115,7 +129,7 @@
                                             <!-- Password -->
                                             <mat-slide-toggle #toggleDetalle>Mostrar Detalles Password</mat-slide-toggle>
 
-                                            <mat-form-field appearance="outline" hintLabel="Min 8 characters" [color]="passwordComponent.color">
+                                            <mat-form-field appearance="outline" hintLabel="Min. 8 characters" [color]="passwordComponent.color">
 
                                                 <mat-label>Contraseña</mat-label>
                                                 <mat-pass-toggle-visibility #toggleVisbility matSuffix></mat-pass-toggle-visibility>
@@ -243,6 +257,7 @@
                                     </mat-tab>
 
                                 </mat-tab-group>
+
 
                             </div>
                         </div>

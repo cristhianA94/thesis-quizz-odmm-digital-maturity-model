@@ -24,17 +24,18 @@ import { RegisterpageComponent } from "./registerpage/registerpage.component";
 import { HomepageComponent } from "./home/homepage.component";
 import { AcercaDeComponent } from './acerca-de/acerca-de.component';
 import { AdminpageComponent } from './adminpage/adminpage.component';
-
-
+import { CuestionarioComponent } from './cuestionario/cuestionario.component';
 
 /* Servicios */
 import { AuthService } from '../../services/auth.service';
 import { AlertsService } from '../../services/alerts.service';
 import { ToastrModule } from 'ngx-toastr';
+import { PapaParseModule } from 'ngx-papaparse';
+
 
 /* Firebase */
-import { AngularFireModule } from '@angular/fire';
 import { environment } from '../../../environments/environment';
+import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
@@ -43,6 +44,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../material.module';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { MatPagesModule } from '@angular-material-extensions/pages';
+
 //import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
@@ -77,9 +80,11 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
+    PapaParseModule,
     // Modulos de angular material
     MaterialModule,
     MatPasswordStrengthModule.forRoot(),
+    MatPagesModule.forRoot(),
     //ScrollingModule,
 
 
@@ -89,7 +94,8 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
     RegisterpageComponent,
     HomepageComponent,
     AcercaDeComponent,
-    AdminpageComponent
+    AdminpageComponent,
+    CuestionarioComponent,
   ],
   exports: [
     ProfilepageComponent,

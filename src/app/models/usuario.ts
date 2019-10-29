@@ -1,11 +1,20 @@
+export interface Roles {
+    admin?: boolean;
+    subscriptor?: boolean;
+}
+
 export interface Usuario {
-    id?: string;
+    //Atributos para redes sociales
+    uid: string;
+    correo: string;
+    photoURL?: string;
     nombres: string;
-    apellidos: string;
-    cedula: string;
+    //Resto atributos
+    apellidos?: string;
+    cedula?: string;
     telefono: number;
     sexo?: string;
-    cargo: string;
-    correo: string;
-    clave: string;
+    cargo?: string;
+    clave?: string;
+    rol: Roles;
 }

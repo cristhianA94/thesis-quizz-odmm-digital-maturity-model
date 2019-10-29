@@ -37,6 +37,16 @@ export interface Tamanio_Empresa {
 })
 export class RegisterpageComponent implements OnInit, OnDestroy {
 
+  constructor(
+    public afAuth: AngularFireAuth,
+    private router: Router,
+    // servicio creado donde esta la logia de autenticacion
+    private authService: AuthService,
+    private formbuild: FormBuilder,
+    //Alertas tras login
+    private alerta: AlertsService,
+  ) { }
+
   isCollapsed = true;
 
   /* Forms */
@@ -346,16 +356,6 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
 
   passReset: boolean = false;
 
-  constructor(
-    public afAuth: AngularFireAuth,
-    private router: Router,
-    // servicio creado donde esta la logia de autenticacion
-    private authService: AuthService,
-    private formbuild: FormBuilder,
-    //Alertas tras login
-    private alerta: AlertsService,
-  ) { }
-
   @HostListener("document:mousemove", ["$event"]) onMouseMove(e) {
 
     var squares1 = document.getElementById("square1");
@@ -457,7 +457,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       apellidos: ['', Validators.required],
       cedula: ['', Validators.required],
       telefono: new FormControl('', Validators.required),
-      sexo: ['', ],
+      sexo: ['',],
       correo: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -475,47 +475,9 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       provincia: ['', Validators.required],
       canton: ['', Validators.required]
     });
-
-    //this.loginForm.valueChanges.subscribe(data => this.onValueChanged(data));
-    //this.registroForm.valueChanges.subscribe(data => this.onValueChanged(data));
-    //this.onValueChanged(); // reset validation messages
   }
 
-  // Updates validation state on form changes.
-  onValueChanged(data?: any) {
-    if (!this.loginForm && !this.registroForm) { return; }
-    const form = this.loginForm;
-    for (const field in this.formErrors) {
-      // clear previous error message (if any)
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
-  }
-
-  formErrors = {
-    'correo': '',
-    'clave': ''
-  };
-
-  validationMessages = {
-    'correo': {
-      'required': 'Se requiere un Email.',
-      'correo': 'Se requiere un Email válido.'
-    },
-    'clave': {
-      'required': 'Se requiere una contraseña.',
-      'pattern': 'La contraseña debe incluir letras y números.',
-      'minlength': 'La contraseña debe tener al menos 8 caracteres.',
-      'maxlength': 'La contraseña no debe superar los 40 caracteres.',
-    }
-  };
-
+  // Mensajes de validacion de inputs en tiempo real.
   account_validation_messages = {
     'username': [
       { type: 'required', message: 'Username is required' },
@@ -525,15 +487,15 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       { type: 'validUsername', message: 'Your username has already been taken' }
     ],
     'correo': [
-      { type: 'required', message: 'Email is required' },
-      { type: 'pattern', message: 'Enter a valid email' }
+      { type: 'required', message: 'El email es requerido' },
+      { type: 'pattern', message: 'Ingrese un email válido' }
     ],
     'confirm_password': [
       { type: 'required', message: 'Confirm password is required' },
       { type: 'areEqual', message: 'Password mismatch' }
     ],
     'clave': [
-      { type: 'required', message: 'Password is required' },
+      { type: 'required', message: 'La contraseña es requerida' },
       { type: 'minlength', message: 'Password must be at least 5 characters long' },
       { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
     ],
@@ -551,14 +513,12 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   onLoginGoogle(): void {
     this.authService.loginGoogleUser().then((res) => {
       console.log('resUser', res);
-
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
-    })
-      .catch(err => {
-        this.alerta.mensajeError('Error', err.message);
-        console.log('Algo salio mal :/ :', err.message);
-      });
+    }).catch(err => {
+      this.alerta.mensajeError('Error', err.message);
+      console.log('Algo salio mal :/ :', err.message);
+    });
   }
 
   /* Login Facebook */
@@ -567,11 +527,10 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
-    })
-      .catch(err => {
-        this.alerta.mensajeError('¡Error!', err.message);
-        console.log('Algo salio mal :/ :', err.message);
-      });
+    }).catch(err => {
+      this.alerta.mensajeError('¡Error!', err.message);
+      console.log('Algo salio mal :/ :', err.message);
+    });
   }
 
   /* Login Correo electronico */
@@ -580,11 +539,10 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
-    })
-      .catch(err => {
-        this.alerta.mensajeError('¡Error!', '¡Los campos ingresados son incorrectos o no existe una cuenta registrada!');
-        console.log('Algo salio mal :/ :', err.message);
-      });
+    }).catch(err => {
+      this.alerta.mensajeError('¡Error!', '¡Los campos ingresados son incorrectos o no existe una cuenta registrada!');
+      console.log('Algo salio mal :/ :', err.message);
+    });
 
   }
   /* Registro usuario */
