@@ -36,8 +36,8 @@ export class CuestionarioComponent implements OnInit {
     Validators.pattern:
     ^ - inicio de cadena (implícito en el patrón de expresión regular de cadena)
     (?=\D*\d) - debe haber 1 dígito
-    (?=[^a-z]*[a-z]) - debe haber 1 letra minúscula ASCII
-    (?=[^A-Z]*[A-Z]) - debe haber 1 letra ASCII mayúscula
+    (?=[^a-z]*[a-z]) - debe haber 1 varra minúscula ASCII
+    (?=[^A-Z]*[A-Z]) - debe haber 1 varra ASCII mayúscula
     .{8,30} - 8 a 30 caracteres distintos de los caracteres de salto de línea
     $ - fin de cadena (implícito en el patrón de expresión regular de cadena).
      */
@@ -68,16 +68,7 @@ export class CuestionarioComponent implements OnInit {
     'Liderazgo Tecnológico'
   ];
 
-  ConvertCSVtoJSON() {
-    console.log(JSON.stringify(this.test));
-    // let csvData = '"Hello","World!"';
-    // this.papa.parse(csvData, {
-    //   complete: (results) => {
-    //     console.log('Parsed  : ', results.data[0][1]);
-    //     // console.log(results.data.length);
-    //   }
-    // });
-  }
+  
   test = [];
 
   //Método para leer CSV y transformarlo a JSON
@@ -87,20 +78,25 @@ export class CuestionarioComponent implements OnInit {
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onload = (event: any) => {
-      let csv = event.target.result; // Content of CSV file
+      // Contenido del csv en texto plano
+      let csv = event.target.result;
+      // Saca las caracteristicas y datos del archivo csv
       this.papa.parse(csv, {
         skipEmptyLines: true,
         header: true,
-        complete: (results) => {
-          for (let i = 0; i < results.data.length; i++) {
+        complete: (result) => {
+          //console.log(result);
+          for (let i = 0; i < result.data.length; i++) {
             let orderDetails = {
-              order_id: results.data[i].Address,
-              age: results.data[i].Age
+              order_id: result.data[i].Categorias,
+              age: result.data[i].Metrica
             };
             this.test.push(orderDetails);
           }
-          // console.log(this.test);
-          console.log('Parsed: k', results.data);
+          console.log(this.test[1]);
+
+
+          console.log('Parsed: k', result.data[2]);
         }
       });
     }

@@ -30,6 +30,7 @@ import { CuestionarioComponent } from './cuestionario/cuestionario.component';
 import { AuthService } from '../../services/auth.service';
 import { AlertsService } from '../../services/alerts.service';
 import { ToastrModule } from 'ngx-toastr';
+//CSV
 import { PapaParseModule } from 'ngx-papaparse';
 
 

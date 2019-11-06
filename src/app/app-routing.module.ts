@@ -1,4 +1,3 @@
-import { CuestionarioComponent } from './components/pages/cuestionario/cuestionario.component';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BrowserModule } from "@angular/platform-browser";
@@ -9,6 +8,7 @@ import { RegisterpageComponent } from "./components/pages/registerpage/registerp
 import { HomepageComponent } from './components/pages/home/homepage.component';
 import { AcercaDeComponent } from './components/pages/acerca-de/acerca-de.component';
 import { AdminpageComponent } from './components/pages/adminpage/adminpage.component';
+import { CuestionarioComponent } from './components/pages/cuestionario/cuestionario.component';
 
 import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -35,6 +35,7 @@ const routes: Routes = [
   { path: "register", component: RegisterpageComponent },
   { path: "profile", component: ProfilepageComponent, canActivate: [AuthGuard] },
   { path: "cuestionario", component: CuestionarioComponent },
+  { path: "admin", component: AdminpageComponent },
 
   {
     path: 'admin', component: AdminpageComponent,

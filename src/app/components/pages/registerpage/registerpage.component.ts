@@ -1,4 +1,3 @@
-import { Tamanio_Empresa, Sector_Industrial } from './registerpage.component';
 import {
   Component, OnInit, OnDestroy, HostListener,
   ChangeDetectionStrategy, ViewEncapsulation
@@ -12,20 +11,17 @@ import { auth } from 'firebase/app';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertsService } from 'src/app/services/alerts.service';
 
-/* Angular MAterial */
+/* Interfaces */
+import { Empresa } from '../../../models/empresa';
+import { Usuario } from '../../../models/usuario';
+import { Sector_Industrial } from './../../../models/sector_industrial';
 
 
 /* Interfaces */
-export interface Sector_Industrial {
-  nombre: string;
-  view: string;
-}
-
 export interface Tamanio_Empresa {
   tipo_empresa: string;
   view: string;
 }
-
 
 
 @Component({
@@ -48,11 +44,18 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   ) { }
 
   isCollapsed = true;
+  passReset: boolean = false;
+  correoReset: string;
+  showDetails: boolean;
+
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
 
   /* Forms */
   loginForm: FormGroup;
   registroForm: FormGroup;
-
 
   /* Formulario sexo */
   required: boolean;
@@ -62,34 +65,33 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
     'Mujer'
   ];
 
-  showDetails: boolean;
 
   sector_industrial: string;
   sectores: Sector_Industrial[] = [
-    { nombre: 'A', view: 'Actividades financieras y de seguros' },
-    { nombre: 'B', view: 'Actividades inmobiliarias' },
-    { nombre: 'C', view: 'Actividades profesionales, científicas y técnicas' },
-    { nombre: 'D', view: 'Actividades administrativas y servicios auxliares' },
-    { nombre: 'E', view: 'Actividades sanitarias y de servicios sociales' },
-    { nombre: 'F', view: 'Actividades artísticas, recreativas y de entretenimiento' },
-    { nombre: 'G', view: 'Actividades de los hogares como empleadores de personal doméstico' },
-    { nombre: 'H', view: 'Actividades de los hogares como productores de bienes y servicios para uso propio' },
-    { nombre: 'I', view: 'Actividades de organizaciones y organismos extraterritoriales' },
-    { nombre: 'J', view: 'Administración Pública y defensa' },
-    { nombre: 'K', view: 'Agricultura, ganadería, silvicultura y pesca' },
-    { nombre: 'L', view: 'Comercio al por mayor y al por menor' },
-    { nombre: 'M', view: 'Construcción' },
-    { nombre: 'N', view: 'Educación' },
-    { nombre: 'O', view: 'Hostelería' },
-    { nombre: 'P', view: 'Industrias extractivas' },
-    { nombre: 'Q', view: 'Industria manufacturera' },
-    { nombre: 'R', view: 'Información y comunicaciones' },
-    { nombre: 'S', view: 'Otros servicios' },
-    { nombre: 'T', view: 'Reparación de vehículos de motor y motocicletas' },
-    { nombre: 'U', view: 'Seguridad Social obligatoria' },
-    { nombre: 'V', view: 'Suministro de energía eléctrica, gas, vapor y aire acondicionado' },
-    { nombre: 'W', view: 'Suministro de agua, actividades de saneamiento, gestión de residuos y descontaminación' },
-    { nombre: 'Z', view: 'Transporte y almacenamiento' }
+    { nombre: 'Actividades financieras y de seguros' },
+    { nombre: 'Actividades inmobiliarias' },
+    { nombre: 'Actividades profesionales, científicas y técnicas' },
+    { nombre: 'Actividades administrativas y servicios auxliares' },
+    { nombre: 'Actividades sanitarias y de servicios sociales' },
+    { nombre: 'Actividades artísticas, recreativas y de entretenimiento' },
+    { nombre: 'Actividades de los hogares como empleadores de personal doméstico' },
+    { nombre: 'Actividades de los hogares como productores de bienes y servicios para uso propio' },
+    { nombre: 'Actividades de organizaciones y organismos extraterritoriales' },
+    { nombre: 'Administración Pública y defensa' },
+    { nombre: 'Agricultura, ganadería, silvicultura y pesca' },
+    { nombre: 'Comercio al por mayor y al por menor' },
+    { nombre: 'Construcción' },
+    { nombre: 'Educación' },
+    { nombre: 'Hostelería' },
+    { nombre: 'Industrias extractivas' },
+    { nombre: 'Industria manufacturera' },
+    { nombre: 'Información y comunicaciones' },
+    { nombre: 'Otros servicios' },
+    { nombre: 'Reparación de vehículos de motor y motocicletas' },
+    { nombre: 'Seguridad Social obligatoria' },
+    { nombre: 'Suministro de energía eléctrica, gas, vapor y aire acondicionado' },
+    { nombre: 'Suministro de agua, actividades de saneamiento, gestión de residuos y descontaminación' },
+    { nombre: 'Transporte y almacenamiento' }
   ];
 
   area_alcance: string;
@@ -100,11 +102,11 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   ];
 
   tamanio_empresa: string;
-  empresas: Tamanio_Empresa[] = [
-    { tipo_empresa: 'Microempresa', view: 'Microempresa (menos de 10 personas)' },
-    { tipo_empresa: 'Pequeña empresa', view: 'Pequeña empresa (entre 10 y 50 personas)' },
-    { tipo_empresa: 'Mediana empresa', view: 'Mediana empresa (entre 50 y 250)' },
-    { tipo_empresa: 'Gran empresa', view: 'Gran empresa (más de 250 personas)' }
+  empresas: string[] = [
+    'Microempresa (menos de 10 personas)',
+    'Pequeña empresa (entre 10 y 50 personas)',
+    'Mediana empresa (entre 50 y 250)',
+    'Gran empresa (más de 250 personas)'
   ];
 
   provincia: string;
@@ -354,7 +356,6 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
     'Zimbabue'
   ];
 
-  passReset: boolean = false;
 
   @HostListener("document:mousemove", ["$event"]) onMouseMove(e) {
 
@@ -465,13 +466,15 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       clave: ['', Validators.required,
         //Validators.minLength(6), Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/)
       ],
-      razon_social: ['', Validators.required],
       cargo: ['Gerente', Validators.required],
+      razon_social: ['', Validators.required],
       sector_industrial: ['', Validators.required],
       tamanio_empresa: ['', Validators.required],
       anio_creacion: ['', Validators.required],
       franquicias: ['', Validators.required],
+      direccion: ['', Validators.required],
       area_alcance: ['', Validators.required],
+      pais: ['', Validators.required],
       provincia: ['', Validators.required],
       canton: ['', Validators.required]
     });
@@ -504,15 +507,9 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
     ]
   }
 
-  /* Validador robuztez contraseña */
-  onStrengthChanged(strength: number) {
-    console.log('password strength = ', strength);
-  }
-
   /* Login Google */
   onLoginGoogle(): void {
     this.authService.loginGoogleUser().then((res) => {
-      console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
     }).catch(err => {
@@ -522,7 +519,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   }
 
   /* Login Facebook */
-  onLoginFacebook(): void {
+  /* onLoginFacebook(): void {
     this.authService.loginFacebookUser().then((res) => {
       console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
@@ -531,7 +528,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       this.alerta.mensajeError('¡Error!', err.message);
       console.log('Algo salio mal :/ :', err.message);
     });
-  }
+  } */
 
   /* Login Correo electronico */
   login() {
@@ -547,7 +544,6 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   }
   /* Registro usuario */
   registro() {
-    console.log(this.registroForm.value)
     this.authService.registerUser(this.registroForm.value);
   }
 
@@ -556,8 +552,8 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
     this.router.navigate(['home']);
   }
   /* Metodo para resetear contraseña usuario */
-  resetPassword() {
-    this.authService.resetPassword(this.loginForm.value['correo'])
+  resetPassword(emailReset: string) {
+    this.authService.resetPassword(emailReset)
       .then(() => this.passReset = true)
   }
 

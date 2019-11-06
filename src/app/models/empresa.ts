@@ -7,4 +7,5 @@ export interface Empresa {
     franquicias: string;
     direccion: string;
     tamanio_empresa: string;
+    idUser?: string;
 }

@@ -27,7 +27,8 @@
                                                 <mat-label>Email</mat-label>
                                                 <input matInput type="email" formControlName="correo" required placeholder="Email" autofocus>
                                                 <mat-error *ngFor="let validation of account_validation_messages.correo">
-                                                    <mat-error class="error-message" *ngIf="loginForm.get('correo').hasError(validation.type) && (loginForm.get('correo').dirty || loginForm.get('correo').touched)">{{validation.message}}</mat-error>
+                                                    <mat-error class="error-message" *ngIf="loginForm.get('correo').hasError(validation.type) && (loginForm.get('correo').dirty || loginForm.get('correo').touched)">
+                                                        {{validation.message}}</mat-error>
                                                 </mat-error>
                                                 <mat-icon matSuffix>email</mat-icon>
                                             </mat-form-field>
@@ -35,36 +36,50 @@
                                             <!--Password -->
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Contraseña</mat-label>
-                                                <mat-pass-toggle-visibility #toggle matSuffix></mat-pass-toggle-visibility>
+                                                <mat-pass-toggle-visibility #toggle matSuffix>
+                                                </mat-pass-toggle-visibility>
                                                 <input matInput [type]="toggle.type" formControlName="clave" required placeholder="Password">
                                             </mat-form-field>
+
 
                                             <!-- Logeo -->
                                             <mat-card-actions class="text-center">
                                                 <button class="btn btn-success btn-block" type="submit" [disabled]='!loginForm.valid'>Enviar</button><br>
-                                                <span>¿Olvidó su contraseña?</span>
-                                                <br>
-                                                <button class="btn btn-warning" *ngIf="!passReset && loginForm.controls" [disabled]='!loginForm.valid' (click)="resetPassword()">Resetear
-                                                    Contraseña </button>
-                                                <br>
-                                                <p *ngIf="passReset">Reseteo finalizado. Chequee su email electrónico
-                                                </p>
-
-                                                <p class="lead"> Ingresa con tus redes sociales </p>
-                                                <!-- Redes Sociales -->
-                                                <div class="container justify-content-center w-75">
-
-                                                    <div class="container text-center">
-                                                        <button class="btn btn-outline-danger btn-social btn-google btn-block" (click)="onLoginGoogle()">
-                                                                                    <span class="fab fa-google"></span> GOOGLE
-                                                                                </button>
-                                                        <button class="btn btn-outline-info btn-social btn-facebook btn-block" (click)="onLoginFacebook()">
-                                                                                    <span class="fab fa-facebook"></span>FACEBOOK
-                                                                                </button>
-                                                    </div>
-                                                </div>
                                             </mat-card-actions>
                                         </form>
+
+
+                                        <!-- Reset Password -->
+                                        <button class="btn btn-link btn-warning mr-1" (click)="passReset = !passReset">¿Olvidó
+                                            su contraseña?</button>
+                                        <mat-form-field appearance="outline" *ngIf="passReset">
+                                            <mat-label>Email</mat-label>
+                                            <input matInput type="email" [(ngModel)]="correoReset" [formControl]="emailFormControl" required placeholder="Email">
+                                            <mat-icon matSuffix>email</mat-icon>
+                                            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                                                Please enter a valid email address
+                                            </mat-error>
+                                            <mat-error *ngIf="emailFormControl.hasError('required')">
+                                                Email is <strong>required</strong>
+                                            </mat-error>
+                                        </mat-form-field>
+                                        <button class="btn btn-warning" *ngIf="passReset" (click)="resetPassword(correoReset)">Resetear
+                                            Contraseña </button>
+
+                                        <!-- Redes sociales -->
+                                        <p class="lead"> Ingresa con tus redes sociales </p>
+                                        <!-- Redes Sociales -->
+                                        <div class="justify-content-center">
+                                            <div class="text-center">
+                                                <!-- Login with Google -->
+                                                <button class="btn btn-neutral btn-icon m-4 p-1" (click)="onLoginGoogle()">
+                                                    <img src="assets/img/google.svg">
+                                                </button>
+                                                <!-- <button class="btn btn-outline-info btn-social btn-facebook btn-block" (click)="onLoginFacebook()">
+                                                            <span class="fab fa-facebook"></span>FACEBOOK
+                                                        </button> -->
+                                            </div>
+                                        </div>
                                     </mat-tab>
 
 
@@ -120,19 +135,22 @@
                                                 <input matInput type="email" formControlName="correo" required>
                                                 <mat-icon matSuffix>email</mat-icon>
                                                 <mat-error *ngFor="let validation of account_validation_messages.correo">
-                                                    <mat-error class="error-message" *ngIf="registroForm.get('correo').hasError(validation.type) && (registroForm.get('correo').dirty || registroForm.get('correo').touched)">{{validation.message}}</mat-error>
+                                                    <mat-error class="error-message" *ngIf="registroForm.get('correo').hasError(validation.type) && (registroForm.get('correo').dirty || registroForm.get('correo').touched)">
+                                                        {{validation.message}}</mat-error>
                                                 </mat-error>
                                             </mat-form-field>
 
                                             <br>
 
                                             <!-- Password -->
-                                            <mat-slide-toggle #toggleDetalle>Mostrar Detalles Password</mat-slide-toggle>
+                                            <mat-slide-toggle #toggleDetalle>Mostrar Detalles Password
+                                            </mat-slide-toggle>
 
                                             <mat-form-field appearance="outline" hintLabel="Min. 8 characters" [color]="passwordComponent.color">
 
                                                 <mat-label>Contraseña</mat-label>
-                                                <mat-pass-toggle-visibility #toggleVisbility matSuffix></mat-pass-toggle-visibility>
+                                                <mat-pass-toggle-visibility #toggleVisbility matSuffix>
+                                                </mat-pass-toggle-visibility>
                                                 <input matInput #password formControlName="clave" type="password" [type]="toggleVisbility.type" placeholder="Password">
 
                                                 <mat-hint align="end" aria-live="polite">
@@ -141,7 +159,7 @@
                                             </mat-form-field>
 
                                             <!-- Validador password -->
-                                            <mat-password-strength #passwordComponent [min]="8" [max]="20" (onStrengthChanged)="onStrengthChanged($event)" [password]="password.value">
+                                            <mat-password-strength #passwordComponent [min]="8" [max]="20" [password]="password.value">
                                             </mat-password-strength>
 
                                             <!--Password info requeriments-->
@@ -169,7 +187,7 @@
                                                 <mat-label>Sector Industrial</mat-label>
                                                 <mat-select formControlName="sector_industrial">
                                                     <mat-option *ngFor="let sector of sectores" [value]="sector.nombre">
-                                                        {{sector.view}}
+                                                        {{ sector.nombre }}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
@@ -177,8 +195,8 @@
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Tamaño de la Empresa</mat-label>
                                                 <mat-select formControlName="tamanio_empresa">
-                                                    <mat-option *ngFor="let empresa of empresas" [value]="empresa.tipo_empresa">
-                                                        {{empresa.view}}
+                                                    <mat-option *ngFor="let empresa of empresas" [value]="empresa">
+                                                        {{empresa}}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
@@ -212,20 +230,20 @@
                                             </mat-form-field>
 
                                             <!-- Lugar Empresa -->
-                                            <!--
-                                                <mat-form-field appearance="outline">
+                                            <mat-form-field appearance="outline">
                                                 <mat-label>País</mat-label>
                                                 <mat-select formControlName="pais">
-                                                    <mat-option [value]="Ecuador">
+                                                    <mat-option *ngFor="let pais of paises" [value]="pais">
+                                                        {{ pais }}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
-                                        -->
+
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Provincia</mat-label>
                                                 <mat-select formControlName="provincia">
                                                     <mat-option *ngFor="let provi of provincias" [value]="provi">
-                                                        {{provi}}
+                                                        {{ provi }}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
@@ -235,20 +253,20 @@
                                                 <mat-label>Cantón</mat-label>
                                                 <mat-select formControlName="canton">
                                                     <mat-option *ngFor="let cant of cantones" [value]="cant">
-                                                        {{cant}}
+                                                        {{ cant }}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
 
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Dirección de la Empresa</mat-label>
-                                                <textarea matInput type="text" autocomplete="on"></textarea>
+                                                <textarea matInput type="text" autocomplete="on" formControlName="direccion"></textarea>
                                             </mat-form-field>
 
 
                                             <!-- Boton Registro-->
                                             <mat-card-actions>
-                                                <button class="btn btn-success btn-block" type="submit" [disabled]="registroForm.valid">Registrarme</button>
+                                                <button class="btn btn-success btn-block" type="submit" [disabled]="!registroForm.valid">Registrarme</button>
                                             </mat-card-actions>
                                             <br>
 

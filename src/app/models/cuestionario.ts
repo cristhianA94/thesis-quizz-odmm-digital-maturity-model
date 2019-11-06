@@ -8,11 +8,13 @@ export interface Recomendacion {
     detalle_nivel: string;
     recomendacion: string;
     nivel: string;
+    idRespuesta?: string;
 }
 
 export interface Respuesta {
     _id?: string;
     opcion: string;
+    idCuestionario?: string;
 }
 
 export interface Categoria {
@@ -28,4 +30,5 @@ export interface Metrica {
     pregunta: string;
     peso: number;
     detalle: string;
+    idCategoria: string;
 }
