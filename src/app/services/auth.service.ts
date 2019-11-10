@@ -1,5 +1,4 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Injectable, DoBootstrap } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Firebase
@@ -12,8 +11,8 @@ import {
   AngularFirestoreCollection
 } from '@angular/fire/firestore';
 
-import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 //Model
 import { Usuario } from './../models/usuario';
@@ -31,32 +30,32 @@ export class AuthService {
   usuarioCollection: AngularFirestoreCollection<Usuario>;
   usuarioDoc: AngularFirestoreDocument<Usuario>;
   usuarios: Observable<Usuario[]>;
-  public usuario: Observable<Usuario>;
+  usuario: Observable<Usuario>;
 
   empresaCollection: AngularFirestoreCollection<Empresa>;
   empresaDoc: AngularFirestoreDocument<Empresa>
   empresas: Observable<Empresa[]>;
-  public empresa: Observable<Empresa>
+  empresa: Observable<Empresa>
 
   sectorICollection: AngularFirestoreCollection<Sector_Industrial>;
   sectorIDoc: AngularFirestoreDocument<Sector_Industrial>
   sectoresI: Observable<Sector_Industrial[]>;
-  public sector_industrial: Observable<Sector_Industrial>
+  sector_industrial: Observable<Sector_Industrial>
 
   paisCollection: AngularFirestoreCollection<Pais>;
   paisDoc: AngularFirestoreDocument<Pais>
   paises: Observable<Pais[]>;
-  public pais: Observable<Pais>
+  pais: Observable<Pais>
 
   provinciaCollection: AngularFirestoreCollection<Provincia>;
   provinciaDoc: AngularFirestoreDocument<Provincia>
   provincias: Observable<Provincia[]>;
-  public provincia: Observable<Provincia>
+  provincia: Observable<Provincia>
 
   cantonCollection: AngularFirestoreCollection<Canton>;
   cantonDoc: AngularFirestoreDocument<Canton>
   cantones: Observable<Canton[]>;
-  public canton: Observable<Canton>
+  canton: Observable<Canton>
 
 
   public isLogged: any = false;
@@ -67,15 +66,7 @@ export class AuthService {
     private dbFire: AngularFirestore,
     private alerta: AlertsService,
   ) {
-    this.usuarioCollection = this.dbFire.collection('usuario');
-    this.usuarios = this.usuarioCollection.snapshotChanges().pipe(map(actions => {
-      return actions.map(a => {
-        const data = a.payload.doc.data() as Usuario;
-        data.uid = a.payload.doc.id;
-        return data;
-      })
-    }));
-
+    // Obtiene las empresas
     this.empresaCollection = this.dbFire.collection('empresa');
     this.empresas = this.empresaCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
@@ -83,18 +74,9 @@ export class AuthService {
         data._id = a.payload.doc.id;
         return data;
       })
-    }))
+    }));
 
-    /* //Comprueba si el usuario existe en Firestore
-    this.usuario = this.auth.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.dbFire.doc<Usuario>(`usuario/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    ) */
+
   }
 
   /* Metodo que comprueba si esta autenticado */
@@ -170,41 +152,28 @@ export class AuthService {
   //Obtiene un usuario
   getUser(uid) {
     this.usuarioDoc = this.dbFire.doc<Usuario>(`usuario/${uid}`);
-    return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map(action => {
-      if (action.payload.exists === false) {
-        return null;
-      } else {
-        const data = action.payload.data() as Usuario;
-        data.uid = action.payload.id;
-        return data;
-      }
-    }));
+    return this.usuario = this.usuarioDoc.snapshotChanges().pipe(
+      map(action => {
+        if (action.payload.exists === false) {
+          return null;
+        } else {
+          const data = action.payload.data() as Usuario;
+          data.uid = action.payload.id;
+          return data;
+        }
+      }));
   }
 
-  updateUsuario(user: Usuario) {
-    console.log("user: ", user);
-    
-    this.usuarioDoc = this.dbFire.doc(`usuario/${user.uid}`);
-    this.usuarioDoc.update(user);
-    console.log('Actualizado')
-  }
-
-  deleteUsuario(user: Usuario) {
-    this.usuarioDoc = this.dbFire.doc(`usuario/${user.uid}`);
-    this.usuarioDoc.delete();
-  }
-
-  registerUser(userForm) {
+  registerUser(formulario) {
     // Asigna valor del formulario a variable
-    const usuarioForm = userForm;
 
     return new Promise((resolve, reject) => {
       // Registra al usuario en Authentication
-      this.auth.auth.createUserWithEmailAndPassword(usuarioForm.correo, usuarioForm.clave)
+      this.auth.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
         .then(userData => {
-          resolve(userData),
-            // Registra al usuario en Firestore
-            this.createUserDB(userData.user, usuarioForm);
+          resolve(userData);
+          // Registra al usuario en Firestore
+          this.createUserDB(userData.user, formulario);
         })
         .catch(err => {
           console.log(reject(err))
@@ -215,19 +184,17 @@ export class AuthService {
 
 
   // Registra un usuario en firestore/usuario
-  private createUserDB(user, userForm) {
-    const usuarioForm = userForm;
-    //const formulario = (usuarioForm) ? usuarioForm : undefined;
+  createUserDB(user, formulario) {
     this.usuarioDoc = this.dbFire.doc(`usuario/${user.uid}`);
     const data: Usuario = {
       uid: user.uid,
-      nombres: usuarioForm.nombres,
-      apellidos: usuarioForm.apellidos,
-      cedula: usuarioForm.cedula,
+      nombres: formulario.nombres,
+      apellidos: formulario.apellidos,
+      cedula: formulario.cedula,
       correo: user.email,
-      telefono: usuarioForm.telefono,
-      sexo: usuarioForm.sexo,
-      cargo: usuarioForm.cargo,
+      telefono: formulario.telefono,
+      sexo: formulario.sexo,
+      cargo: formulario.cargo,
       rol: {
         subscriptor: true
       }
@@ -235,37 +202,85 @@ export class AuthService {
     this.usuarioDoc.set(data, { merge: true }).then(() => {
       this.alerta.mensajeExito('Exito!', 'Usuario registrado correctamente');
       // Crea la coleccion Empresa despues del registro de Usuario
-      this.createEmpresaDB(user, usuarioForm)
+      this.createEmpresaDB(user, formulario);
     });
   }
 
+  // Actualiza usuario
+  updateUsuario(user: Usuario) {
+    this.usuarioDoc = this.dbFire.doc(`usuario/${user.uid}`);
+    this.usuarioDoc.update(user);
+    this.alerta.mensajeExito('Exito!', 'Datos actualizados correctamente');
+    this.router.navigate(['/home']);
+  }
+
+  /*
+  // Borra usuario
+    deleteUsuario(user: Usuario) {
+    this.usuarioDoc = this.dbFire.doc(`usuario/${user.uid}`);
+    this.usuarioDoc.delete();
+  } */
 
   /* ----------------------Empresa CRUD----------------------- */
+
   // Obtiene las empresas
   getEmpresas() {
     return this.empresas;
-    //return this.dbFire.collection('/usuario').snapshotChanges();
   }
 
   //Obtiene una empresa
-  getEmpresa(uid) {
-    this.empresaDoc = this.dbFire.doc<Empresa>(`empresa/${uid}`);
-    return this.empresa = this.empresaDoc.snapshotChanges().pipe(map(action => {
+  getEmpresa() {
+    /* this.empresaCollection = this.dbFire.collection('empresa', ref => ref
+    .where('idUser', '==', idUser));
+    this.empresas = this.empresaCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Empresa;
+        data._id = a.payload.doc.id;
+        return data;
+      })
+    })); */
+
+    this.usuarioDoc = this.dbFire.doc<Usuario>('usuario');
+    return this.usuario = this.usuarioDoc.snapshotChanges().pipe(map(action => {
       if (action.payload.exists === false) {
         return null;
       } else {
-        const data = action.payload.data() as Empresa;
-        data._id = action.payload.id;
+        const data = action.payload.data() as Usuario;
+        data.uid = action.payload.id;
         return data;
       }
     }));
+
+  }
+
+  createEmpresaDB(user: any, formulario) {
+    const data: Empresa = {
+      razon_social: formulario.razon_social,
+      anio_creacion: formulario.anio_creacion,
+      area_alcance: formulario.area_alcance,
+      franquicias: formulario.franquicias,
+      direccion: formulario.direccion,
+      tamanio_empresa: formulario.tamanio_empresa,
+      idUser: user.uid,
+      idCanton: formulario.canton,
+      idSectorInd: formulario.sector_industrial
+    }
+    this.empresaCollection = this.dbFire.collection('empresa');
+    this.empresaCollection.add(data).then(() => {
+      this.alerta.mensajeExito('Exito!', 'Empresa registrada correctamente');
+      // Crea la coleccion Pais/Provincia/Canton despues del registro de Empresa
+      this.createPaisDB(formulario)
+      this.createSectorIndustrialDB(formulario)
+    }).catch(err => {
+      this.alerta.mensajeError('Error', err);
+    });
   }
 
   updateEmpresa(business: Empresa) {
-    console.log("user: ", business);
     this.empresaDoc = this.dbFire.doc(`empresa/${business._id}`);
     this.empresaDoc.update(business);
-    console.log('Empresa actualizada')
+    this.alerta.mensajeExito('Exito!', 'Datos actualizados correctamente');
+    this.router.navigate(['/home']);
   }
 
   deleteEmpresa(business: Empresa) {
@@ -274,26 +289,6 @@ export class AuthService {
     console.log("Empresa borrada");
   }
 
-  private createEmpresaDB(user, formulario) {
-    const empresaForm = formulario;
-    const data: Empresa = {
-      razon_social: empresaForm.razon_social,
-      sector_industrial: empresaForm.sector_industrial,
-      anio_creacion: empresaForm.anio_creacion,
-      area_alcance: empresaForm.area_alcance,
-      franquicias: empresaForm.franquicias,
-      direccion: empresaForm.direccion,
-      tamanio_empresa: empresaForm.tamanio_empresa,
-      idUser: user.uid
-    }
-    this.empresaDoc = this.dbFire.doc(`empresa/${data.razon_social}`);
-    return this.empresaDoc.set(data, { merge: true }).then(() => {
-      this.alerta.mensajeExito('Exito!', 'Empresa registrada correctamente');
-      // Crea la coleccion Pais/Provincia/Canton despues del registro de Empresa
-      this.createSectorIndustrialDB(empresaForm)
-      this.createPaisDB(empresaForm)
-    });
-  }
 
   /* --------------------Sector Industrial CRUD------------------------ */
   //Obtiene los Sectores_industriales
@@ -301,81 +296,69 @@ export class AuthService {
     return this.sectoresI;
   }
 
-  getSectorInd(uid) {
-    this.sectorIDoc = this.dbFire.doc<Sector_Industrial>(`sector_industrial/${uid}`);
+  getSectorInd(nombre) {
+    this.sectorIDoc = this.dbFire.doc<Sector_Industrial>(`sector_industrial/${nombre}`);
     return this.sector_industrial = this.sectorIDoc.snapshotChanges().pipe(map(action => {
       if (action.payload.exists === false) {
         return null;
       } else {
         const data = action.payload.data() as Sector_Industrial;
-        data._id = action.payload.id;
+        data.nombre = action.payload.id;
         return data;
       }
     }));
   }
 
-  updateSectorIndustrial(sector: Sector_Industrial) {
-    return this.sectorICollection.doc(`sector_industrial/${sector._id}`).update(sector);
-  }
-
-  deleteSectorIndustrial(sector: Sector_Industrial) {
-    return this.sectorICollection.doc(`sector_industrial/${sector._id}`).delete;
-  }
-
-  private createSectorIndustrialDB(formulario) {
-    const sectorForm = formulario;
+  createSectorIndustrialDB(formulario) {
     const data: Sector_Industrial = {
-      _id: sectorForm.sector_industrial,
-      nombre: sectorForm.sector_industrial,
-      idEmpresa: sectorForm.razon_social
+      nombre: formulario.sector_industrial,
     }
-    this.sectorIDoc = this.dbFire.doc(`sector_industrial`);
+    this.sectorIDoc = this.dbFire.doc(`sector_Industrial/${data.nombre}`);
     return this.sectorIDoc.set(data, { merge: true }).then(() => {
-
+      console.log("Sector creado");
     });
   }
 
-  private createPaisDB(formulario) {
-    const paisForm = formulario;
+  // Actualiza Sector Industrial
+  updateSectorIndustrial(sector: Sector_Industrial) {
+    this.sectorIDoc = this.dbFire.doc(`sector_Industrial/${sector.nombre}`);
+    this.sectorIDoc.update(sector);
+    this.alerta.mensajeExito('Exito!', 'Sector actualizados correctamente');
+    this.router.navigate(['/home']);
+  }
+
+
+  // pais/Ecuador
+  createPaisDB(formulario) {
     const data: Pais = {
-      idPais: paisForm.pais,
-      nombre: paisForm.pais,
-      idEmpresa: paisForm.razon_social
+      nombre: formulario.pais,
     }
     this.paisDoc = this.dbFire.doc(`pais/${data.nombre}`);
-
     return this.paisDoc.set(data, { merge: true }).then(() => {
-      this.alerta.mensajeExito('Exito!', 'Pais registrada correctamente');
-      // Crea la coleccion Pais/Provincia/Canton despues del registro de Empresa
-      this.createProvinciaDB(paisForm)
+      this.createProvinciaDB(formulario)
     });
   }
 
-  private createProvinciaDB(formulario) {
-    const provinciaForm = formulario;
+  // provincia/Loja
+  createProvinciaDB(formulario) {
     const data: Provincia = {
-      _id: provinciaForm.provincia,
-      nombre: provinciaForm.provincia,
-      idPais: provinciaForm.pais
+      nombre: formulario.provincia,
+      idPais: formulario.pais
     }
     this.provinciaDoc = this.dbFire.doc(`provincia/${data.nombre}`);
     return this.provinciaDoc.set(data, { merge: true }).then(() => {
-      this.alerta.mensajeExito('Exito!', 'Provincia registrada correctamente');
-      // Crea la coleccion Pais/Provincia/Canton despues del registro de Empresa
-      this.createCantonDB(provinciaForm)
+      this.createCantonDB(formulario)
     });
   }
-  private createCantonDB(formulario) {
-    const cantonForm = formulario;
+
+  // canton/Catamayo
+  createCantonDB(formulario) {
     const data: Canton = {
-      _id: cantonForm.canton,
-      nombre: cantonForm.canton,
-      idProvincia: cantonForm.provincia
+      nombre: formulario.canton,
+      idProvincia: formulario.provincia
     }
     this.cantonDoc = this.dbFire.doc(`canton/${data.nombre}`);
     return this.cantonDoc.set(data, { merge: true }).then(() => {
-      this.alerta.mensajeExito('Exito!', 'Canton registrada correctamente');
-      // Crea la coleccion Pais/Provincia/Canton despues del registro de Empresa
       this.router.navigate(['/home']);
     });
   }

@@ -1,7 +1,14 @@
+<div class="container admin-box">
+    <div class="row align-content-center">
+        <button class="btn btn-info btn-block" [disabled]="editAll == true" (click)="editingForms()">Editar
+            campos</button>
+    </div>
+</div>
 <div class="wrapper">
 
+
     <!-- User -->
-    <section class="section">
+    <section class="section" *ngIf="editAll == true">
         <div class="container admin-box">
             <div class="row">
                 <div class="col-md-7">
@@ -11,7 +18,7 @@
                                 <h1 class="profile-title text-left">Datos Usuario</h1>
                                 <h5 class="text-on-back text-">01</h5>
                             </div>
-                            <div class="col-md-6" *ngFor="let u of usuarioObj">
+                            <div class="col-md-6" *ngFor="let u of usuariosList">
                                 <img alt="User image" class="img-fluid rounded-circle shadow-lg" src="{{ u.photoURL }}" style="width: 150px;" />
                             </div>
                         </div>
@@ -19,12 +26,12 @@
 
                         <div class="card-body">
 
-                            <form class="example-container mt-4" [formGroup]="userForm" (ngSubmit)="updateUsuario()" autocomplete="on" *ngFor="let user of usuariosList">
+                            <form class="example-container mt-4" #editarUsuarioForm="ngForm" (ngSubmit)="updateUsuario()" autocomplete="on" *ngFor="let user of usuariosList">
                                 <div class="row mx-auto inputs-row">
                                     <div class="col-md-6">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Nombres</mat-label>
-                                            <input matInput formControlName="nombres" type="text" placeholder="Nombres" value="{{ user.nombres }}">
+                                            <input matInput name="nombres" type="text" placeholder="Nombres" [(ngModel)]="editingUsuario.nombres" value="{{ user.nombres }}">
                                             <mat-icon matSuffix>face</mat-icon>
                                         </mat-form-field>
                                     </div>
@@ -32,7 +39,7 @@
                                     <div class="col-md-6">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Apellidos</mat-label>
-                                            <input matInput formControlName="apellidos" type="text" placeholder="Apellidos" value="{{ user.apellidos }}">
+                                            <input matInput name="apellidos" type="text" placeholder="Apellidos" [(ngModel)]="editingUsuario.apellidos" value="{{ user.apellidos }}">
                                             <mat-icon matSuffix>face</mat-icon>
                                         </mat-form-field>
                                     </div>
@@ -40,18 +47,18 @@
 
                                 <mat-form-field appearance="fill">
                                     <mat-label>Cedula</mat-label>
-                                    <input matInput formControlName="cedula" type="text" placeholder="C.I." value="{{ user.cedula }}">
+                                    <input matInput name="cedula" type="text" placeholder="C.I." [(ngModel)]="editingUsuario.cedula" value="{{ user.cedula }}">
                                     <mat-icon matSuffix>fingerprint</mat-icon>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="fill">
                                     <span matPrefix>+593 &nbsp;</span>
-                                    <input type="number" matInput formControlName="telefono" placeholder="Teléfono" value="{{ user.telefono }}">
+                                    <input type="number" matInput name="telefono" placeholder="Teléfono" [(ngModel)]="editingUsuario.telefono" value="{{ user.telefono }}">
                                     <mat-icon matSuffix>local_phone</mat-icon>
                                 </mat-form-field>
 
                                 <mat-label>Sexo</mat-label>
-                                <mat-radio-group aria-labelledby="sexo" formControlName="sexo">
+                                <mat-radio-group aria-labelledby="sexo" name="sexo" [(ngModel)]="editingUsuario.sexo">
                                     <mat-radio-button *ngFor="let itemGenero of genero" [value]="itemGenero">
                                         {{ itemGenero }}
                                     </mat-radio-button>
@@ -59,16 +66,16 @@
 
                                 <mat-form-field appearance="fill">
                                     <mat-label>Cargo del Responsable</mat-label>
-                                    <input matInput formControlName="cargo" type="text" placeholder="Cargo que desempeña" value="{{ user.cargo }}">
+                                    <input matInput name="cargo" type="text" placeholder="Cargo que desempeña" [(ngModel)]="editingUsuario.cargo" value="{{ user.cargo }}">
                                     <mat-icon matSuffix>work</mat-icon>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline">
                                     <mat-label>Correo</mat-label>
-                                    <input matInput type="email" formControlName="correo" required value="{{ user.correo }}">
+                                    <input matInput type="email" name="correo" required [(ngModel)]="editingUsuario.correo" value="{{ user.correo }}">
                                     <mat-icon matSuffix>email</mat-icon>
                                     <mat-error *ngFor="let validation of account_validation_messages.correo">
-                                        <mat-error class="error-message" *ngIf="userForm.get('correo').hasError(validation.type) && (userForm.get('correo').dirty || userForm.get('correo').touched)">
+                                        <mat-error class="error-message" *ngIf="editarUsuarioForm.form.get('correo').hasError(validation.type) && (editarUsuarioForm.form.get('correo').dirty || editarUsuarioForm.form.get('correo').touched)">
                                             {{validation.message}}</mat-error>
                                     </mat-error>
                                 </mat-form-field>
@@ -79,7 +86,7 @@
 
                                 <mat-card-actions>
                                     <button class="btn btn-info btn-block" [disabled]="editing == true" (click)="editUsuario($event, user)">Editar</button>
-                                    <button class="btn btn-success btn-block" type="submit" [disabled]="editing == true  &&!userForm.valid ">Actualizar</button>
+                                    <button class="btn btn-success btn-block" type="submit" [disabled]="editing == true  && !editarUsuarioForm.form.valid ">Actualizar</button>
                                 </mat-card-actions>
                             </form>
                         </div>
@@ -97,6 +104,7 @@
                             <p>
                                 Bld Mihail Kogalniceanu, nr. 8, <br /> 7652 Bucharest, <br /> Romania
                             </p>
+
                         </div>
                     </div>
 
@@ -105,9 +113,10 @@
         </div>
     </section>
 
-    <!-- ----------------------------------------------------------------------------------------------------------------- -->
-    <!-- Empresa -->
-    <section class="section">
+
+    <!-- -------------------------------------------------------------------------------------------------- -->
+
+    <section class="section" *ngIf="editAll == true">
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
@@ -119,17 +128,26 @@
 
                         <div class="card-body">
 
-                            <form class="example-container mt-4" [formGroup]="empresaForm" (ngSubmit)="updateEmpresa()" *ngFor="let busines of empresasList" autocomplete="on">
+                            <form class="example-container mt-4" #editarEmpresaForm="ngForm" (ngSubmit)="updateEmpresa()" *ngFor="let busines of empresasListUser" autocomplete="on">
                                 <!-- Datos de la Empresa -->
                                 <mat-form-field appearance="fill">
                                     <mat-label>Razón Social</mat-label>
-                                    <input matInput formControlName="razon_social" type="text" placeholder="Nombre de su empresa" value="{{ busines.razon_social }}">
+                                    <input matInput name="razon_social" type="text" placeholder="Nombre de su empresa" [(ngModel)]="editingEmpresa.razon_social" value="{{ busines.razon_social }}">
                                     <mat-icon matSuffix>business</mat-icon>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline">
+                                    <mat-label>Sector Industrial</mat-label>
+                                    <mat-select name="sector_industrial" [(ngModel)]="editingEmpresa.idSectorInd">
+                                        <mat-option *ngFor="let sector of sectores" [value]="sector.nombre" value="{{ busines.idSectorInd }}">
+                                            {{ sector.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline">
                                     <mat-label>Tamaño de la Empresa</mat-label>
-                                    <mat-select formControlName="tamanio_empresa">
+                                    <mat-select name="tamanio_empresa" [(ngModel)]="editingEmpresa.tamanio_empresa">
                                         <mat-option *ngFor="let empresa of empresas" [value]="empresa" value="{{ busines.tamanio_empresa }}">
                                             {{empresa}}
                                         </mat-option>
@@ -140,7 +158,7 @@
                                     <div class="col-md-6">
                                         <mat-form-field appearance="standard">
                                             <mat-label>Años de Actividad de la Empresa</mat-label>
-                                            <input matInput formControlName="anio_creacion" type="number" value="{{ busines.anio_creacion }}">
+                                            <input matInput name="anio_creacion" type="number" [(ngModel)]="editingEmpresa.anio_creacion" value="{{ busines.anio_creacion }}">
                                             <mat-icon matSuffix>business</mat-icon>
                                         </mat-form-field>
                                     </div>
@@ -148,7 +166,7 @@
                                     <div class="col-md-6">
                                         <mat-form-field appearance="standard">
                                             <mat-label>Franquicias</mat-label>
-                                            <input matInput formControlName="franquicias" type="number" value="{{ busines.franquicias }}">
+                                            <input matInput name="franquicias" type="number" [(ngModel)]="editingEmpresa.franquicias" value="{{ busines.franquicias }}">
                                             <mat-icon matSuffix>business</mat-icon>
                                         </mat-form-field>
                                     </div>
@@ -157,7 +175,7 @@
 
                                 <mat-form-field appearance="outline">
                                     <mat-label>Área Alcance</mat-label>
-                                    <mat-select formControlName="area_alcance">
+                                    <mat-select name="area_alcance" [(ngModel)]="editingEmpresa.area_alcance">
                                         <mat-option *ngFor="let area of areas" [value]="area">
                                             {{area}}
                                         </mat-option>
@@ -166,98 +184,149 @@
 
                                 <mat-form-field appearance="fill">
                                     <mat-label>Dirección de la Empresa</mat-label>
-                                    <textarea matInput type="text" autocomplete="on" formControlName="direccion" value="{{ busines.direccion }}"></textarea>
+                                    <textarea matInput type="text" autocomplete="on" name="direccion" [(ngModel)]="editingEmpresa.direccion" value="{{ busines.direccion }}"></textarea>
                                 </mat-form-field>
 
-                                <!-- Boton Registro-->
-                                <mat-card-actions>
-                                    <button class="btn btn-info btn-block" [disabled]="editing == true" (click)="editEmpresa($event, busines)">Editar</button>
-                                    <button class="btn btn-success btn-block" type="submit" [disabled]="editing == true  &&!empresaForm.valid ">Actualizar</button>
-                                </mat-card-actions>
-                                <br>
+                                <!-- Lugar Empresa -->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>País</mat-label>
+                                    <mat-select name="pais">
+                                        <mat-option *ngFor="let pais of paises" [value]="pais">
+                                            {{ pais }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Provincia</mat-label>
+                                    <mat-select name="provincia">
+                                        <mat-option *ngFor="let provi of provincias" [value]="provi">
+                                            {{ provi }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cantón</mat-label>
+                                    <mat-select name="canton" [(ngModel)]="editingEmpresa.idCanton">
+                                        <mat-option *ngFor="let cant of cantones" [value]="cant" value="{{ busines.idCanton }}">
+                                            {{ cant }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!-- Editar y eliminar-->
+                                <mat-card-actions>
+                                    <button class="btn btn-info btn-block" [disabled]="editing2 == true" (click)="editEmpresa($event, busines)">Editar</button>
+                                    <button class="btn btn-success btn-block" type="submit" [disabled]="editing2 == true  && !editarEmpresaForm.form.valid ">Actualizar</button>
+                                    <br>
+                                    <button class="btn btn-warning btn-block" (click)="deleteEmpresa($event, busines)">
+                                        <i class="material-icons"> delete
+                                        </i>
+                                    </button>
+                                </mat-card-actions>
                             </form>
                         </div>
                     </div>
                 </div>
+            </div>
 
 
-                <!-- Nota lateral -->
-                <div class="col-md-5 ml-auto">
-                    <div class="info info-horizontal">
-                        <div class="icon icon-danger">
-                            <i class="tim-icons icon-square-pin"> </i>
-                        </div>
-                        <div class="description">
-                            <h4 class="info-title">Find us at the office</h4>
-                            <p>
-                                Bld Mihail Kogalniceanu, nr. 8, <br /> 7652 Bucharest, <br /> Romania
-                            </p>
-                        </div>
+            <!-- Nota lateral -->
+            <div class="col-md-5 ml-auto">
+                <div class="info info-horizontal">
+                    <div class="icon icon-danger">
+                        <i class="tim-icons icon-square-pin"> </i>
                     </div>
-
+                    <div class="description">
+                        <h4 class="info-title">Find us at the office</h4>
+                        <p>
+                            Bld Mihail Kogalniceanu, nr. 8, <br /> 7652 Bucharest, <br /> Romania
+                        </p>
+                    </div>
                 </div>
+
             </div>
         </div>
+
     </section>
     <!-- ----------------------------------------------------------------------------------------------------------------- -->
-    <!-- Sector Industrial -->
-    <section class="section">
+
+    <!-- ----------------------------------------------------------------------------------------------------------------- -->
+    <!-- Empresa -->
+    <section class="section" *ngIf="noexistEmpresa == true">
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
                     <div class="card card-register">
                         <div class="card-header">
-                            <h1 class="profile-title text-left">Sector Industrial</h1>
-                            <h5 class="text-on-back">03</h5>
+                            <h1 class="profile-title text-left">Datos Empresa</h1>
+                            <h5 class="text-on-back">02</h5>
                         </div>
-
                         <div class="card-body">
-
-                            <form class="example-container mt-4" [formGroup]="sectorIndForm" (ngSubmit)="updateSectorIndustrial()" *ngFor="let sectorInd of sectorIndustrialesList" autocomplete="on">
+                            <form class="example-container mt-4" #crearEmpresaForm="ngForm" (ngSubmit)="registerEmpresa(crearEmpresaForm)" autocomplete="on">
                                 <!-- Datos de la Empresa -->
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Razón Social</mat-label>
+                                    <input matInput name="razon_social" type="text" placeholder="Nombre de su empresa" [(ngModel)]="creatingEmpresa.razon_social">
+                                    <mat-icon matSuffix>business</mat-icon>
+                                </mat-form-field>
+
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Sector Industrial</mat-label>
-                                    <mat-select formControlName="sector_industrial">
-                                        <mat-option *ngFor="let sector of sectores" [value]="sector.nombre">
-                                            {{ sector.nombre }}
+                                    <mat-label>Tamaño de la Empresa</mat-label>
+                                    <mat-select name="tamanio_empresa" [(ngModel)]="creatingEmpresa.tamanio_empresa">
+                                        <mat-option *ngFor="let empresa of empresas" [value]="empresa">
+                                            {{empresa}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
 
+                                <div class="row mx-auto">
+                                    <div class="col-md-6">
+                                        <mat-form-field appearance="standard">
+                                            <mat-label>Años de Actividad de la Empresa</mat-label>
+                                            <input matInput name="anio_creacion" type="number" [(ngModel)]="creatingEmpresa.anio_creacion">
+                                            <mat-icon matSuffix>business</mat-icon>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <mat-form-field appearance="standard">
+                                            <mat-label>Franquicias</mat-label>
+                                            <input matInput name="franquicias" type="number" [(ngModel)]="creatingEmpresa.franquicias">
+                                            <mat-icon matSuffix>business</mat-icon>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Área Alcance</mat-label>
+                                    <mat-select name="area_alcance" [(ngModel)]="creatingEmpresa.area_alcance">
+                                        <mat-option *ngFor="let area of areas" [value]="area">
+                                            {{area}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Dirección de la Empresa</mat-label>
+                                    <textarea matInput type="text" autocomplete="on" name="direccion" [(ngModel)]="creatingEmpresa.direccion"></textarea>
+                                </mat-form-field>
+
                                 <!-- Boton Registro-->
                                 <mat-card-actions>
-                                    <button class="btn btn-info btn-block" [disabled]="editing == true" (click)="editSectorInd($event, sectorInd)">Editar</button>
-                                    <button class="btn btn-success btn-block" type="submit" [disabled]="editing == true  &&!sectorIndForm.valid ">Actualizar</button>
-                                </mat-card-actions>
-                                <br>
+                                    <button class="btn btn-success btn-block" type="submit" [disabled]=" !crearEmpresaForm.form.valid ">Guardar</button>
+                                    <br>
 
+                                </mat-card-actions>
                             </form>
                         </div>
                     </div>
                 </div>
-
-
-                <!-- Nota lateral -->
-                <div class="col-md-5 ml-auto">
-                    <div class="info info-horizontal">
-                        <div class="icon icon-danger">
-                            <i class="tim-icons icon-square-pin"> </i>
-                        </div>
-                        <div class="description">
-                            <h4 class="info-title">Find us at the office</h4>
-                            <p>
-                                Bld Mihail Kogalniceanu, nr. 8, <br /> 7652 Bucharest, <br /> Romania
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
             </div>
         </div>
     </section>
-    <!-- ----------------------------------------------------------------------------------------------------------------- -->
-
-    <!-- Lugar -->
 
 </div>

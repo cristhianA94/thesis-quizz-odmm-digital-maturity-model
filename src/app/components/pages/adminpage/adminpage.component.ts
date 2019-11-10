@@ -1,16 +1,8 @@
-import { Pais } from './../../../models/lugar';
-import { Empresa } from './../../../models/empresa';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 
 /* Firebase */
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/services/auth.service';
-import { AlertsService } from 'src/app/services/alerts.service';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
@@ -19,8 +11,11 @@ import {
 
 /* Interfaces */
 import { Usuario } from 'src/app/models/usuario';
-
 import { Sector_Industrial } from './../../../models/sector_industrial';
+import { Pais } from './../../../models/lugar';
+import { Empresa } from './../../../models/empresa';
+import { NgForm } from '@angular/forms';
+
 export interface Tamanio_Empresa {
   tipo_empresa: string;
   view: string;
@@ -33,21 +28,20 @@ export interface Tamanio_Empresa {
 })
 export class AdminpageComponent implements OnInit, OnDestroy {
 
-  private idUser;
-
+  editAll: boolean = false;
   editing: boolean = false;
+  editing2: boolean = false;
+  editing3: boolean = false;
 
-  usuarioCollection: AngularFirestoreCollection<Usuario>;
-  usuarioDoc: AngularFirestoreDocument<Usuario>;
-  usuarioObj = {} as Usuario;
-  usuariosList: any = [];
+  noexistEmpresa: boolean = false;
+
+  usuariosList = [];
   editingUsuario: Usuario; //Variable para editar usuario
 
-  empresaCollection: AngularFirestoreCollection<Empresa>;
-  empresaDoc: AngularFirestoreDocument<Empresa>;
-  empresaObj = {} as Empresa;
   empresasList = [];
+  empresasListUser = [];
   editingEmpresa: Empresa; //Variable para editar empresa
+  creatingEmpresa: Empresa; //Variable para editar empresa
 
   sectorIndCollection: AngularFirestoreCollection<Sector_Industrial>;
   sectorIndDoc: AngularFirestoreDocument<Sector_Industrial>;
@@ -64,34 +58,27 @@ export class AdminpageComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    public afAuth: AngularFireAuth,
-    private router: Router,
-    // servicio creado donde esta la logia de autenticacion
+    private afAuth: AngularFireAuth,
     private authService: AuthService,
-    private formbuild: FormBuilder,
-    //Alertas tras login
-    private alerta: AlertsService,
+    private dbFire: AngularFirestore,
   ) { }
 
   ngOnInit() {
     var body = document.getElementsByTagName("body")[0];
     body.classList.add("profile-page");
-    this.buildForm();
-    this.getUsers();
+    this.getUser();
     this.getEmpresas();
-
-
+    console.log("No existe empresa",this.noexistEmpresa);
+    console.log("Edit",this.editAll);
   }
+
+
   ngOnDestroy() {
     var body = document.getElementsByTagName("body")[0];
     body.classList.remove("profile-page");
+    this.getEmpresas()
+    this.getUser()
   }
-
-  // Form
-  userForm: FormGroup;
-  empresaForm: FormGroup;
-  sectorIndForm: FormGroup;
-  lugarForm: FormGroup;
 
   /* Formulario sexo */
   required: boolean;
@@ -393,42 +380,6 @@ export class AdminpageComponent implements OnInit, OnDestroy {
     'Zimbabue'
   ];
 
-  buildForm(): void {
-    this.userForm = this.formbuild.group({
-      nombres: ['', Validators.required],
-      apellidos: ['', Validators.required],
-      cedula: ['', Validators.required],
-      telefono: new FormControl('', Validators.required),
-      sexo: ['',],
-      correo: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ])),
-      cargo: ['Gerente', Validators.required],
-    });
-
-
-    this.empresaForm = this.formbuild.group({
-      razon_social: ['', Validators.required],
-      tamanio_empresa: ['', Validators.required],
-      anio_creacion: ['', Validators.required],
-      franquicias: ['', Validators.required],
-      area_alcance: ['', Validators.required],
-      direccion: ['', Validators.required]
-    });
-
-    this.sectorIndForm = this.formbuild.group({
-      nombre: ['', Validators.required],
-    });
-
-    /*  this.lugarForm = this.formbuild.group({
-       pais: ['', Validators.required],
-       provincia: ['', Validators.required],
-       canton: ['', Validators.required]
-     }); */
-
-  }
-
   // Mensajes de validacion de inputs en tiempo real.
   account_validation_messages = {
     'username': [
@@ -456,86 +407,101 @@ export class AdminpageComponent implements OnInit, OnDestroy {
     ]
   }
 
-  getUsers() {
-    /* this.authService.getUsuarios().subscribe(users => {
-      this.usuariosList = users;
-      console.log(this.usuariosList);
-      console.log(this.usuariosList[0].rol);
 
-    }); */
+  // Si no existe empresa
+  registerEmpresa(form: NgForm) {
+    console.log(this.empresasListUser[0].idUser);
+    console.log(form.value);
 
-    this.authService.getAuth().subscribe(data => {
-      this.authService.getUser(data.uid).subscribe(user => {
-        this.usuarioObj = user;
-        this.usuariosList = this.usuarioObj
-        console.log(this.usuarioObj);
-        
-        this.idUser = user.uid
-        // Recupera el id
-        this.editingUsuario.uid = this.idUser;
-        //this.editingUsuario.rol = this.usuariosList
-      })
-    })
+    this.authService.createEmpresaDB(this.empresasListUser[0].idUser, form.value);
+    this.getEmpresas()
+    form.reset()
+    this.noexistEmpresa = false;
   }
+
+  getUser() {
+    this.authService.getAuth().subscribe(user => {
+      this.authService.getUser(user.uid).subscribe(user => {
+        this.usuariosList.push(user);
+      })
+    });
+    /*
+      this.authService.getUsuarios().subscribe(users => {
+      this.usuariosList = users;
+    }); */
+  }
+
 
   getEmpresas() {
-    this.authService.getEmpresas().subscribe(empresas => {
-      this.empresasList = empresas;
+    this.authService.getAuth().subscribe(user => {
+      this.authService.empresas.subscribe(busines => {
+        // Guarda todas las empresas
+        this.empresasList = busines;
+        // Busca las empresas relacionadas con el usuario y las guarda
+        for (let i = 0; i < this.empresasList.length; i++) {
+          if (user.uid == this.empresasList[i].idUser) {
+            this.empresasListUser.push(this.empresasList[i])
+            // Comprueba si el usuario tiene alguna empresa
+            if (this.empresasListUser.length == 0) {
+              this.noexistEmpresa = true;
+            }
+          }
+        }
+      });
     });
-
-    this.authService.getAuth().subscribe(data => {
-      this.authService.getUser(data.uid).subscribe(user => {
-        // Recupera el id
-        this.editingEmpresa.idUser = this.idUser;
-      })
-    })
   }
 
+
+  editingForms($event){
+    this.editAll = !this.editAll;
+  }
   editUsuario(event, user) {
     this.editing = !this.editing;
     this.editingUsuario = user;
-    console.log("BL: ", user);
-
   }
 
-  editEmpresa(event, business) {
-    this.editing = !this.editing;
-    this.editEmpresa = business;
-    console.log("BL: ", business);
+  editEmpresa(event, empresa) {
+    this.editing2 = !this.editing2;
+    this.editingEmpresa = empresa;
   }
+  editSectorI(event, sectorInd) {
+    this.editing3 = !this.editing3;
+    this.editingUsuario = sectorInd;
+  }
+
 
   editSectorInd(event, sectorIn) {
-    this.editing = !this.editing;
-    this.editSectorInd = sectorIn;
+    this.editing3 = !this.editing3;
+    this.editingSectorInd = sectorIn;
   }
 
 
   /* Update usuario */
   updateUsuario() {
-    this.authService.updateUsuario(this.userForm.value);
-    this.editingUsuario = {} as Usuario;
+    this.authService.updateUsuario(this.editingUsuario);
     this.editing = false;
   }
 
-  /* Update empresa */
+  // Update empresa
   updateEmpresa() {
-    this.editingEmpresa = this.empresaForm.value;
-    list
-    this.authService.updateEmpresa(this.empresaForm.value);
-    this.editing = false;
+    this.authService.updateEmpresa(this.editingEmpresa);
+    this.editing2 = false;
   }
 
-  /* Update Secttor Industrial */
+  // Update Secttor Industrial
   updateSectorIndustrial() {
-    this.authService.updateSectorIndustrial(this.sectorIndForm.value);
+    this.authService.updateSectorIndustrial(this.editingSectorInd);
     this.editingSectorInd = {} as Sector_Industrial;
     this.editing = false;
   }
 
-  /* Update usuario */
-  updateLocation() {
-    this.authService.registerUser(this.userForm.value);
+  deleteEmpresa(event, empresa) {
+    if (confirm('¿Está seguro de eliminar esta empresa?')) {
+      console.log(empresa);
+      this.authService.deleteEmpresa(empresa);
+    }
   }
+
 
 
 }

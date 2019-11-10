@@ -466,7 +466,7 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
       clave: ['', Validators.required,
         //Validators.minLength(6), Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/)
       ],
-      cargo: ['Gerente', Validators.required],
+      cargo: ['', Validators.required],
       razon_social: ['', Validators.required],
       sector_industrial: ['', Validators.required],
       tamanio_empresa: ['', Validators.required],
@@ -533,7 +533,6 @@ export class RegisterpageComponent implements OnInit, OnDestroy {
   /* Login Correo electronico */
   login() {
     this.authService.loginCorreo(this.loginForm.value).then((res) => {
-      console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
     }).catch(err => {
