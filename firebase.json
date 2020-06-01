@@ -4,7 +4,8 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "dist/thesis-quizz-odmm-digital-maturity-model",
+    "target": "material-dashboard-angular",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
