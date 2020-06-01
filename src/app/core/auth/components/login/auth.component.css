@@ -1,0 +1,15 @@
+.mat-tab-label {
+    border-radius: 100% 100% 0% 0%;
+    color: black;
+    font-weight: bold;
+}
+
+.mat-tab-header {
+    border-radius: 100% 100% 0% 0%;
+    background-color: #59d3e3;
+}
+
+.mat-ink-bar {
+    width: 100px;
+    color:
+}

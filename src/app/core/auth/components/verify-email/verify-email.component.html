@@ -1,0 +1,46 @@
+<!-- <div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">Edit Profile</h4>
+                        <p class="card-category">Complete your profile</p>
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Chivo -->
+<div class="displayTable">
+    <div class="displayTableCell">
+
+        <div class="authBlock">
+            <h3>¡Gracias por registrarte!</h3>
+
+            <div class="formGroup" *ngIf="_authService.userData as Usuario">
+                <p class="text-center">Hemos enviado un mensaje de confirmacion al email <strong>{{Usuario.correo}}</strong>.</p>
+                <p class="text-center">Verifique su correo electrónico y haga clic en el enlace para verificar su dirección de correo electrónico.</p>
+            </div>
+
+            <!-- Volver a reenviar correo por si no llego -->
+            <div class="formGroup">
+                <button type="button" class="btn btnPrimary" (click)="_authService.emailVerification()">
+          <i class="fas fa-redo-alt"></i>
+          Reenviar email de verification
+        </button>
+            </div>
+
+        </div>
+
+        <div class="redirectToLogin">
+            <span>¿Ir hacia atrás?<span class="redirect" [routerLink]="['/login']"> Log in</span></span>
+        </div>
+
+    </div>
+</div>

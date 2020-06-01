@@ -1,0 +1,57 @@
+<form class="mt-4" [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="on">
+    <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="correo" required placeholder="Email" autofocus>
+        <mat-error *ngFor="let validation of account_validation_messages.correo">
+            <mat-error class="error-message" *ngIf="loginForm.get('correo').hasError(validation.type) && (loginForm.get('correo').dirty || loginForm.get('correo').touched)">
+                {{validation.message}}</mat-error>
+        </mat-error>
+        <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <!--Password -->
+    <mat-form-field appearance="outline">
+        <mat-label>Enter your password</mat-label>
+        <input matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <!-- Logeo -->
+    <mat-card-actions class="text-center">
+        <button class="btn btn-success btn-block" type="submit" [disabled]="loginForm.invalid">Acceder</button><br>
+    </mat-card-actions>
+</form>
+
+
+<!-- Reset Password -->
+<button class="btn btn-warning mb-4" (click)="passReset =! passReset">¿Olvidó su contraseña? <i class="fas fa-key"></i>
+</button>
+<br>
+<mat-form-field appearance="outline" *ngIf="passReset">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" [(ngModel)]="correoReset" [formControl]="emailFormControl" required placeholder="Email" class="mt-2">
+    <mat-icon matSuffix>email</mat-icon>
+    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+        Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+        Email es <strong>requerido</strong>
+    </mat-error>
+</mat-form-field>
+<button class="btn btn-default mb-2" *ngIf="passReset" (click)="resetPassword(correoReset)">Resetear
+    Contraseña </button>
+<hr>
+<!-- Redes Sociales -->
+<h5> Ingresa con tus redes sociales </h5>
+<div class="justify-content-center mb-4">
+    <div class="text-center">
+        <!-- Login with Google -->
+        <button (click)="onLoginGoogle()" mat-fab color="warn" aria-label="Login google" class="mr-2">
+            <i class="fab fa-google"></i>
+        </button>
+        <!-- <button (click)="onLoginFacebook()" mat-fab color="primary" aria-label="Login facebook">
+                                            <i class="fab fa-facebook"></i></button> -->
+    </div>
+</div>
