@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private formbuild: FormBuilder,
     //Alertas tras login
-    private alerta: AlertsService,
+    private alertaService: AlertsService,
   ) { }
 
   ngOnInit(): void {
@@ -76,9 +76,9 @@ export class LoginComponent implements OnInit {
   /* Login Google */
   onLoginGoogle(): void {
     this.authService.loginGoogleUser().then(() => {
-      this.alerta.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+      this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
       this.router.navigate(['/home']);
-    }).catch(err => this.alerta.mensajeError('Error', err.message));
+    }).catch(err => this.alertaService.mensajeError('Error', err.message));
   }
 
 
@@ -86,24 +86,25 @@ export class LoginComponent implements OnInit {
   /* onLoginFacebook(): void {
     this.authService.loginFacebookUser().then((res) => {
       console.log('resUser', res);
-      this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
+      this.alertaService.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
     }).catch(err => {
-      this.alerta.mensajeError('¡Error!', err.message);
+      this.alertaService.mensajeError('¡Error!', err.message);
       console.log('Algo salio mal :/ :', err.message);
     });
   } */
 
   /* Login Correo electronico */
   login() {
-    this.authService.loginCorreo(this.loginForm.value).then(() => {
-      this.alerta.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
-      this.router.navigate(['/home']);
-      // TODO Cambiar hasta encontrar solucion
-      /* setInterval(() => {
-        window.location.reload();
-      }, 1000) */
-    }).catch(err => this.alerta.mensajeError('Error', err.message));
+    this.authService.loginCorreo(this.loginForm.value)
+      .then(() => {
+        console.log("Loged");
+        //this.router.navigate(['/home']);
+        // TODO Cambiar hasta encontrar solucion
+        /* setInterval(() => {
+          window.location.reload();
+        }, 1000) */
+      }).catch(err => this.alertaService.mensajeError('Error', err.message));
   }
 
 

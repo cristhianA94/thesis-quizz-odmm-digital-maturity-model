@@ -19,6 +19,8 @@ export class VerifyEmailComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isAuth().subscribe((user) => {
+      console.log(user);
+      
       this.userLoged = user;
     });
 

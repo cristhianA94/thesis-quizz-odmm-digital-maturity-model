@@ -12,6 +12,8 @@
         <mat-label>Nombres</mat-label>
         <input matInput formControlName="nombres" type="text" placeholder="Nombres" required autofocus>
         <mat-icon matSuffix>face</mat-icon>
+        <mat-error *ngIf="registroForm.controls['nombres'].hasError('required')">El nombre es requerido
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -24,6 +26,8 @@
         <mat-label>Cedula</mat-label>
         <input maxlength="11" matInput formControlName="cedula" type="text" placeholder="C.I." required>
         <mat-icon matSuffix>fingerprint</mat-icon>
+        <mat-error *ngIf="registroForm.controls['nombres'].hasError('required')">El campo es requerido
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -58,7 +62,7 @@
     <mat-form-field appearance="fill" hintLabel="Min. 8 characters" [color]="passwordComponent.color">
         <mat-label>Contraseña</mat-label>
         <mat-pass-toggle-visibility #toggleVisbility matSuffix></mat-pass-toggle-visibility>
-        <input maxlength="15" minlength="8" matInput #password formControlName="clave" type="password" [type]="toggleVisbility.type" placeholder="Password">
+        <input maxlength="15" minlength="8" matInput #password formControlName="clave" type="password" [type]="toggleVisbility.type" placeholder="Password" required>
     </mat-form-field>
     <mat-hint *ngIf="password.value != 0" align="end" aria-live="polite">
         {{password.value.length}} / {{passwordComponent.max}}
@@ -84,7 +88,7 @@
     <!-- Datos de la Empresa -->
     <mat-form-field appearance="fill">
         <mat-label>Razón Social</mat-label>
-        <input matInput formControlName="razon_social" type="text" placeholder="Nombre de su empresa ">
+        <input matInput formControlName="razon_social" type="text" placeholder="Nombre de su empresa" required>
         <mat-icon matSuffix>business</mat-icon>
         <mat-error *ngIf="registroForm.controls['razon_social'].hasError('required')">Ingrese el nombre de la empresa o razón social</mat-error>
     </mat-form-field>
@@ -98,22 +102,24 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Sector Industrial</mat-label>
-        <mat-select formControlName="idSectorIndustrial" required>
+        <mat-select formControlName="idSectorInd" required>
             <mat-option *ngFor="let sector of sectoresInds" [value]="sector.id ">
                 {{ sector.nombre }}
             </mat-option>
         </mat-select>
-        <mat-error *ngIf="registroForm.controls['idSectorIndustrial'].hasError('required')">Elija un sector industrial
+        <mat-error *ngIf="registroForm.controls['idSectorInd'].hasError('required')">Elija un sector industrial
         </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
         <mat-label>Tamaño de la Empresa</mat-label>
-        <mat-select formControlName="tamanio_empresa">
+        <mat-select formControlName="tamanio_empresa" required>
             <mat-option *ngFor="let empresa of empresas" [value]="empresa">
                 {{empresa}}
             </mat-option>
         </mat-select>
+        <mat-error *ngIf="registroForm.controls['tamanio_empresa'].hasError('required')">Elija el tipo de empresa
+        </mat-error>
     </mat-form-field>
 
     <div class="row mx-auto ">
@@ -137,17 +143,19 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Área Alcance</mat-label>
-        <mat-select formControlName="area_alcance">
+        <mat-select formControlName="area_alcance" required>
             <mat-option *ngFor="let area of areas" [value]="area">
                 {{area}}
             </mat-option>
         </mat-select>
+        <mat-error *ngIf="registroForm.controls['area_alcance'].hasError('required')">Elija el tipo de empresa
+        </mat-error>
     </mat-form-field>
 
     <!-- Lugar Empresa -->
     <mat-form-field appearance="fill">
         <mat-label>País</mat-label>
-        <mat-select formControlName="idPais" name="pais">
+        <mat-select formControlName="idPais" name="pais" required>
             <mat-option *ngFor="let pais of paises" [value]="pais.id">
                 {{ pais.nombre }}
             </mat-option>
@@ -158,7 +166,7 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Provincia</mat-label>
-        <mat-select formControlName="idProvincia" name="provincia">
+        <mat-select formControlName="idProvincia" name="provincia" required>
             <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
                 {{ provincia.nombre }}
             </mat-option>
@@ -168,7 +176,7 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Cantón</mat-label>
-        <mat-select formControlName="idCanton">
+        <mat-select formControlName="idCanton" required>
             <mat-option *ngFor="let canton of cantones" [value]="canton.id">
                 {{ canton.nombre }}
             </mat-option>
@@ -178,7 +186,8 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Dirección de la Empresa</mat-label>
-        <textarea matInput type="text" autocomplete="on" formControlName="direccion"></textarea>
+        <textarea matInput type="text" autocomplete="on" formControlName="direccion" required></textarea>
+        <mat-error *ngIf="registroForm.controls['idCanton'].hasError('required')">Elija un cantón</mat-error>
     </mat-form-field>
 
 

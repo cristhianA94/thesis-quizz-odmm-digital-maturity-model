@@ -59,12 +59,14 @@ export class AuthService {
         } else {
           this.ngZone.run(() => {
             //this.isAuth();
-            this.guardarStorage(userAuth.user.uid);
           });
+          this.guardarStorage(userAuth.user.uid);
+          this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+          this.router.navigate(['/home']);
         }
       })
       .catch((err) => {
-        this.alertaService.mensajeError(err, "Error");
+        return this.alertaService.mensajeError(err, "Error");
       });
   }
 

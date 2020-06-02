@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // Models
@@ -7,7 +6,6 @@ import { Sector_Industrial } from 'app/shared/models/sector_industrial';
 import { Provincia, Canton, Pais } from 'app/shared/models/ubicacion';
 
 // Servicios
-import { AlertsService } from 'app/core/services/notificaciones/alerts.service';
 import { AuthService } from 'app/core/auth/service/auth.service';
 import { SectorIndustrialService } from 'app/core/services/user/sectorIndustrial/sector-industrial.service';
 import { PaisService } from 'app/core/services/user/pais/pais.service';
@@ -30,6 +28,7 @@ export class RegisterComponent implements OnInit {
     'Hombre',
     'Mujer'
   ];
+
   areas: string[] = [
     'Local',
     'Nacional',
@@ -45,12 +44,10 @@ export class RegisterComponent implements OnInit {
 
   sectoresInds: Sector_Industrial[] = [];
 
-  provincia: any;
   provincias: Provincia[] = [];
 
   cantones: Canton[] = [];
 
-  pais: any;
   paises: Pais[] = [];
 
   // Mensajes de validacion de inputs en tiempo real.
@@ -80,12 +77,9 @@ export class RegisterComponent implements OnInit {
 
 
   constructor(
-    private router: Router,
     private formbuild: FormBuilder,
     // Services
-    private alerta: AlertsService,
     private authService: AuthService,
-    private alertaService: AlertsService,
     private sectorIService: SectorIndustrialService,
     private paisService: PaisService,
     private provinciaService: ProvinciaService,
@@ -144,7 +138,7 @@ export class RegisterComponent implements OnInit {
       idPais: ['', Validators.required],
       idProvincia: ['', Validators.required],
       idCanton: ['', Validators.required],
-      idSectorIndustrial: ['', Validators.required]
+      idSectorInd: ['', Validators.required]
     });
   }
 

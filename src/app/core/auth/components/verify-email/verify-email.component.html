@@ -2,37 +2,46 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-10 mx-auto">
-                <div class="card">
-                    <div class="card-header card-header-icon card-header-rose">
-                        <div class="card-icon">
-                            <i class="material-icons">user</i>
+            <div class="col-md-12 col-md-12 col-sm-12">
+
+                <div class="displayTable">
+                    <div class="displayTableCell">
+
+                        <div class="authBlock text-center">
+                            <h2><strong>¡Gracias por registrarte!</strong></h2>
+
+                            <div class="formGroup">
+                                <p class="text-center">Hemos enviado un mensaje de confirmacion al email
+                                    <strong>{{ userLoged.email }}</strong>.</p>
+                                <p class="text-center">Verifique su correo electrónico (revise en a la sección de "Correo no deseado"), y haga clic en el enlace para verificar su dirección de correo electrónico.</p>
+                            </div>
+
+                            <!-- Calling SendVerificationMail() method using authService Api -->
+                            <div class="formGroup text-center">
+                                <hr>
+                                <span>¿No le llega aún el email de verificación?</span>
+                                <br>
+                                <button type="button" mat-raised-button class="btn btn-info mt-3" (click)="reenviarEmail()">
+                                    <i class="fas fa-redo-alt"></i>
+                                    Reenviar email de verificación
+                                </button>
+
+                            </div>
+
                         </div>
-                        <div class="text-center">
-                            <h3 class="card-title">¡Gracias por registrarte!</h3>
-                        </div>
-                    </div>
-                    <div class="card-body text-center" *ngIf="userLoged">
-                        <p>Hemos enviado un mensaje de confirmacion al email <strong>{{ userLoged.email }}</strong>.</p>
-                        <div>
-                            <p>Verifique su correo electrónico y haga clic en el enlace para verificar su dirección de correo electrónico.</p>
-                        </div>
-                        <!-- Volver a reenviar correo por si no llego -->
-                        <button type="button" mat-raised-button class="btn btn-info" (click)="reenviarEmail()">
-                            <i class="fas fa-redo-alt"></i>
-                            Reenviar email de verification
-                        </button>
-                        <hr>
-                        <div class="text-center">
-                            <span>¿Ir hacia atrás?</span>
-                            <br>
-                            <button [routerLink]="['/login']" mat-raised-button class="btn btn-warning">Log in</button>
+
+                        <div class="redirectToLogin">
+                            <div class="text-center">
+                                <span>¿Regresar?</span>
+                                <br>
+                                <button [routerLink]="['/login']" mat-raised-button class="btn btn-secondary mt-3">Log
+                                    in</button>
+                            </div>
                         </div>
 
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
+</div>

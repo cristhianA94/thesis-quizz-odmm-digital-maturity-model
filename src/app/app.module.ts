@@ -7,10 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 
-import { AppRoutingModule } from './core/auth/components/verify-email/app.routing';
 
 import { AppComponent } from './app.component';
-import { PagesComponent } from './core/pages/pages.component';
+import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './shared/components.module';
 
 /* Firebase */
@@ -26,6 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 // Pag para verificar el email
 import { VerifyEmailComponent } from './core/auth/components/verify-email/verify-email.component';
+import { AuthService } from './core/auth/service/auth.service';
 
 
 @NgModule({
@@ -65,6 +65,7 @@ import { VerifyEmailComponent } from './core/auth/components/verify-email/verify
 
   ],
   providers: [
+    AuthService,
     // Storage Firebase
     { provide: StorageBucket, useValue: 'gs://fir-auth-web-75274.appspot.com' }
   ],
