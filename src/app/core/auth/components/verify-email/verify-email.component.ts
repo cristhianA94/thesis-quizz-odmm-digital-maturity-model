@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsuarioService } from '../../../services/user/usuarios/usuario.service';
 import { AuthService } from '../../service/auth.service';
 
 @Component({
@@ -8,11 +9,23 @@ import { AuthService } from '../../service/auth.service';
 })
 export class VerifyEmailComponent implements OnInit {
 
+
+  userLoged: any;
+
   constructor(
-    public _authService: AuthService
+    public usuarioService: UsuarioService,
+    public authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.isAuth().subscribe((user) => {
+      this.userLoged = user;
+    });
+
+  }
+
+  reenviarEmail() {
+    this.authService.emailVerification();
   }
 
 }

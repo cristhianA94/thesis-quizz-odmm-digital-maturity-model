@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
     ],
     'correo': [
       { type: 'required', message: 'El email es requerido' },
-      { type: 'pattern', message: 'Ingrese un email válido' }
+      { type: 'email', message: 'Ingrese un email válido' }
     ],
     'confirm_password': [
       { type: 'required', message: 'Confirm password is required' },
@@ -72,8 +72,6 @@ export class RegisterComponent implements OnInit {
     ],
     'clave': [
       { type: 'required', message: 'La contraseña es requerida' },
-      { type: 'minlength', message: 'Password must be at least 5 characters long' },
-      { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
     ],
     'terms': [
       { type: 'pattern', message: 'You must accept terms and conditions' }
@@ -87,6 +85,7 @@ export class RegisterComponent implements OnInit {
     // Services
     private alerta: AlertsService,
     private authService: AuthService,
+    private alertaService: AlertsService,
     private sectorIService: SectorIndustrialService,
     private paisService: PaisService,
     private provinciaService: ProvinciaService,
@@ -99,17 +98,27 @@ export class RegisterComponent implements OnInit {
   }
 
   cargarServicios() {
+    // Carga sectores industriales
     this.sectorIService.getSectoresIndustrialesDB().subscribe(sectoresInds => {
       this.sectoresInds = sectoresInds;
     });
+    // Carga paises
     this.paisService.getPaisesDB().subscribe(paises => {
       this.paises = paises;
     });
-    this.provinciaService.getProvinciasDB().subscribe(provincias => {
-      this.provincias = provincias;
-    });
-    this.cantonService.getCantonesDB().subscribe(cantones => {
-      this.cantones = cantones;
+
+    // Carga provincias segun pais
+    this.registroForm.get('idPais').valueChanges.subscribe(idPais => {
+      this.provinciaService.getProvincias_PaisDB(idPais).subscribe(provincias => {
+        this.provincias = provincias;
+      });
+    })
+
+    // Carga canton segun provincia
+    this.registroForm.get('idProvincia').valueChanges.subscribe(idProvincia => {
+      this.cantonService.getCantones_ProvinciasDB(idProvincia).subscribe(cantones => {
+        this.cantones = cantones;
+      });
     });
   }
 
@@ -120,50 +129,28 @@ export class RegisterComponent implements OnInit {
       nombres: ['', Validators.required],
       apellidos: [''],
       cedula: ['', Validators.required],
-      telefono: [''],
+      telefono: ['', [Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
       sexo: [''],
       correo: ['', [Validators.required, Validators.email]],
-      clave: ['', [Validators.required, Validators.minLength(8)]],
+      clave: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
       cargo: ['', Validators.required],
       // Empresa
       razon_social: ['', Validators.required],
       anio_creacion: ['', Validators.required],
       area_alcance: ['', Validators.required],
-      franquicias: ['0'],
+      franquicias: [''],
       direccion: ['', Validators.required],
       tamanio_empresa: ['', Validators.required],
+      idPais: ['', Validators.required],
+      idProvincia: ['', Validators.required],
       idCanton: ['', Validators.required],
       idSectorIndustrial: ['', Validators.required]
     });
   }
 
-  cambiarPais(id: any) {
-    console.log(id);
-    this.pais = id;
-    console.log("llego", this.pais);
-
-    this.provinciaService.getProvincias_PaisDB(id).subscribe(provincias => {
-      this.provincias = provincias;
-      console.log(this.provincias);
-    });
-
-    /* this._hospitalService.obtenerHospital(id)
-      .subscribe(hospital => this.hospital = hospital); */
-  }
-
   /* Registro usuario */
   registro() {
-    console.log(this.registroForm.value);
-    //this.authService.registerUser(this.registroForm.value);
-  }
-
-  /* Metodo para redirigir ruta tras logeo */
-  onLoginRedirect(): void {
-    this.router.navigate(['home']);
-    // TODO Cambiar hasta encontrar solucion
-    setInterval(() => {
-      window.location.reload();
-    }, 1000)
+    this.authService.registerUser(this.registroForm.value)
   }
 
 

@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
                 this.mobile_menu_visible = 0;
             }
         });
-        this.getCurrentUser();
+        this.isUserLogged();
     }
 
     sidebarOpen() {
@@ -127,19 +127,15 @@ export class NavbarComponent implements OnInit {
                 return this.listTitles[item].title;
             }
         }
-        return 'Dashboard';
+        return 'Home';
     }
 
-    /* AUTH */
-
-    /* Metodo que comprueba si el usuario esta logeado */
-    getCurrentUser() {
-        this.authService.isAuth().subscribe(auth => {
-            if (auth) {
-                console.log('User logged');
+    // Comprueba si hay un usuario logueado
+    isUserLogged() {
+        this.authService.isAuth().subscribe((authUser) => {
+            if (authUser) {
                 this.authService.isLogged = true;
             } else {
-                console.log('NOT user logged');
                 this.authService.isLogged = false;
             }
         });

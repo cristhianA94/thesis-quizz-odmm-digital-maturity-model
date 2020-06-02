@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 /*  Firebase */
@@ -7,8 +7,9 @@ import { AlertsService } from '../../services/notificaciones/alerts.service';
 import { auth } from 'firebase/app';
 // Auth
 import { AngularFireAuth } from '@angular/fire/auth';
-import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
 
+import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
+import { EmpresaService } from '../../services/user/empresas/empresa.service';
 
 
 @Injectable({
@@ -16,14 +17,15 @@ import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service'
 })
 export class AuthService {
 
-  userData: any; // Save logged in user data
-  isLogged: any = false;
+  isLogged: boolean = false;
 
   constructor(
     private router: Router,
-    private authFire: AngularFireAuth,
+    private afs: AngularFireAuth,
     private alertaService: AlertsService,
     private usuarioService: UsuarioService,
+    private empresaService: EmpresaService,
+    public ngZone: NgZone // NgZone service to remove outside scope warning
   ) { }
 
   // Permite guardar en el storage los datos del user
@@ -33,7 +35,7 @@ export class AuthService {
 
   // Autentication Google
   async loginGoogleUser() {
-    const credential = await this.authFire.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    const credential = await this.afs.auth.signInWithPopup(new auth.GoogleAuthProvider());
     this.guardarStorage(credential.user.uid)
     this.usuarioService.createUserSocial(credential.user);
   }
@@ -46,45 +48,52 @@ export class AuthService {
   }
  */
 
-  async loginCorreo(user) {
-    await this.authFire.auth
-      .signInWithEmailAndPassword(user.correo, user.clave)
-      .then((data) => {
-        this.guardarStorage(data.user.uid);
+  async loginCorreo(user: any) {
+    await this.afs.auth.signInWithEmailAndPassword(user.correo, user.clave)
+      .then((userAuth) => {
+
+        // Verifica si el usuario ya confirmo por email
+        if (userAuth.user.emailVerified == false) {
+          this.emailVerification();
+          this.alertaService.mensajeError("Error", "Por favor, valide su dirección de correo electrónico. Por favor, compruebe su bandeja de entrada.");
+        } else {
+          this.ngZone.run(() => {
+            //this.isAuth();
+            this.guardarStorage(userAuth.user.uid);
+          });
+        }
       })
       .catch((err) => {
         this.alertaService.mensajeError(err, "Error");
-        console.log("TCL: UsuarioService -> login -> err", err);
       });
   }
 
-  registerUser(formulario: any) {
-    // Asigna valor del formulario a variable
-    return new Promise((_resolve, reject) => {
-      // Registra al usuario en Authentication
-      this.authFire.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
-        .then(userData => {
-          // Envia correo de verificacion
-          this.emailVerification();
-          // Registra al usuario en Firestore
-          this.usuarioService.createUserDB(userData.user, formulario);
-        })
-        .catch(err => {
-          console.log(reject(err))
-        })
-    });
+
+  async registerUser(formulario: any) {
+
+    // Registra al usuario en Authentication
+    await this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
+      .then(userData => {
+        // Registra al usuario en Firestore
+        this.usuarioService.createUserDB(userData.user, formulario);
+        // Crea la coleccion Empresa despues del registro de Usuario
+        this.empresaService.createEmpresaDB(userData.user, formulario);
+        // Envia correo de verificacion
+        this.emailVerification();
+      })
+      .catch(error => this.alertaService.mensajeError("Error", error));
   }
 
   // Comprueba si hay un usuario logueado
   isAuth() {
-    return this.authFire.authState;
+    return this.afs.authState;
   }
 
 
   // Actualizar contraseña usuario
   async updateSession(user: any) {
     try {
-      await this.authFire.auth.currentUser.reauthenticateWithCredential(user);
+      await this.afs.auth.currentUser.reauthenticateWithCredential(user);
       return console.log("Password changed");
     }
     catch (error) {
@@ -95,7 +104,7 @@ export class AuthService {
   // Metodo para resetear contraseña de usuario
   async resetPassword(passwordReset: string) {
     try {
-      await this.authFire.auth.sendPasswordResetEmail(passwordReset);
+      await this.afs.auth.sendPasswordResetEmail(passwordReset);
       this.alertaService.mensajeExito('¡Éxito!', 'Se ha enviado un email, su contraseña ha sido reseteada, revise su bandeja de entrada.');
     }
     catch (error) {
@@ -105,13 +114,21 @@ export class AuthService {
 
   // Metodo para mandar un email de verificacion al usuario
   async emailVerification() {
-    await this.authFire.auth.currentUser.sendEmailVerification();
-    this.router.navigate(['verify-email']);
+    /* let user: any = this.afs.auth.currentUser;
+    user.sendEmailVerification(); */
+    try {
+      await this.afs.auth.currentUser.sendEmailVerification();
+      this.alertaService.mensajeExito("Email enviado", "Revisa tu correo electrónico para verificar tu cuenta. Gracias");
+      this.router.navigate(['/verify-email']);
+    }
+    catch (error) {
+      return this.alertaService.mensajeError("Error", error);
+    }
   }
 
   /* Metodo para salir de la cuenta */
   async logout() {
-    await this.authFire.auth.signOut().then(() => {
+    await this.afs.auth.signOut().then(() => {
       // Elimina los datos del usuario en el local storage
       localStorage.removeItem("uidUser");
       localStorage.removeItem("usuario");

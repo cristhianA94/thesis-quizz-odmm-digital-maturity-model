@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-
   // Mensajes de validacion de inputs en tiempo real.
   account_validation_messages = {
     'username': [
@@ -37,7 +36,7 @@ export class LoginComponent implements OnInit {
     ],
     'correo': [
       { type: 'required', message: 'El email es requerido' },
-      { type: 'pattern', message: 'Ingrese un email válido' }
+      { type: 'email', message: 'Ingrese un email válido' }
     ],
     'confirm_password': [
       { type: 'required', message: 'Confirm password is required' },
@@ -56,7 +55,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private _authService: AuthService,
+    private authService: AuthService,
     private formbuild: FormBuilder,
     //Alertas tras login
     private alerta: AlertsService,
@@ -76,19 +75,16 @@ export class LoginComponent implements OnInit {
 
   /* Login Google */
   onLoginGoogle(): void {
-    this._authService.loginGoogleUser().then((res) => {
-      this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
-      this.onLoginRedirect();
-    }).catch(err => {
-      this.alerta.mensajeError('Error', err.message);
-      console.log('Algo salio mal :/ :', err.message);
-    });
+    this.authService.loginGoogleUser().then(() => {
+      this.alerta.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+      this.router.navigate(['/home']);
+    }).catch(err => this.alerta.mensajeError('Error', err.message));
   }
 
 
   /* Login Facebook */
   /* onLoginFacebook(): void {
-    this._authService.loginFacebookUser().then((res) => {
+    this.authService.loginFacebookUser().then((res) => {
       console.log('resUser', res);
       this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
       this.onLoginRedirect();
@@ -100,27 +96,21 @@ export class LoginComponent implements OnInit {
 
   /* Login Correo electronico */
   login() {
-    this._authService.loginCorreo(this.loginForm.value).then((res) => {
-      this.alerta.mensajeExito('¡Éxito!', 'Acceso al sistema.');
-      this.onLoginRedirect();
-    }).catch(err => {
-      this.alerta.mensajeError('¡Error!', '¡Los campos ingresados son incorrectos o no existe una cuenta registrada!');
-    });
+    this.authService.loginCorreo(this.loginForm.value).then(() => {
+      this.alerta.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+      this.router.navigate(['/home']);
+      // TODO Cambiar hasta encontrar solucion
+      /* setInterval(() => {
+        window.location.reload();
+      }, 1000) */
+    }).catch(err => this.alerta.mensajeError('Error', err.message));
   }
 
-  /* Metodo para redirigir ruta tras logeo */
-  onLoginRedirect(): void {
-    this.router.navigate(['home']);
-    // TODO Cambiar hasta encontrar solucion
-    setInterval(() => {
-      window.location.reload();
-    }, 1000)
-  }
 
 
   /* Metodo para resetear contraseña usuario */
   resetPassword(emailReset: string) {
-    this._authService.resetPassword(emailReset)
+    this.authService.resetPassword(emailReset)
       .then(() => this.passReset = true)
   }
 

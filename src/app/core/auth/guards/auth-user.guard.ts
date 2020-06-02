@@ -30,7 +30,7 @@ export class AuthUserGuard implements CanActivate {
       return true;
     }
     console.error('¡Accesso denegado! - ¡Necesitas estar logueado!')
-    this.router.navigate(['/register']);
+    this.router.navigate(['/login']);
     /*
     //Guard production
     return this.auth.user.pipe(

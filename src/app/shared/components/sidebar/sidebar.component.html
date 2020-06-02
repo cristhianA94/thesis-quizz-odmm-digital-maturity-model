@@ -9,27 +9,40 @@
     <div *ngIf="isMobileMenu()">
         <form class="navbar-form">
             <span class="bmd-form-group">
-        <div class="input-group no-border">
-          <input type="text" value="" class="form-control" placeholder="Search...">
-          <button mat-raised-button type="submit" class="btn btn-white btn-round btn-just-icon">
-            <i class="material-icons">search</i>
-            <div class="ripple-container"></div>
-          </button>
-        </div>
-      </span>
+                <div class="input-group no-border">
+                    <input type="text" value="" class="form-control" placeholder="Search...">
+                    <button mat-raised-button type="submit" class="btn btn-white btn-round btn-just-icon">
+                        <i class="material-icons">search</i>
+                        <div class="ripple-container"></div>
+                    </button>
+                </div>
+            </span>
         </form>
-        <ul class="nav navbar-nav nav-mobile-menu">
 
-            <li class="nav-item">
-                <a class="nav-link" href="javascript:void(0)">
-                    <i class="material-icons">person</i>
-                    <p>
-                        <span class="d-lg-none d-md-block">Account</span>
-                    </p>
-                </a>
+        <ul class="nav navbar-nav nav-mobile-menu">
+            <li class="nav-item" *ngIf="authService.isLogged">
+                <div class="dropdown text-center">
+                    <button class="btn dropdown-toggle btnAdmin" data-toggle="dropdown" aria-expanded="true">
+                        <span class="material-icons mr-2">person_pin</span>Usuario
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a [routerLink]="['/user-profile']"><i class="material-icons mr-2">person</i>Editar
+                                Perfil</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a (click)="onLogout()">
+                                <i class="material-icons mr-2 mr-2">subdirectory_arrow_left</i>Cerrar Sesión
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>
+
     <ul class="nav">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
             <a class="nav-link" [routerLink]="[menuItem.path]">
@@ -41,15 +54,13 @@
         <li class="nav-item ml-3">
             <div class="dropdown mx-auto">
                 <button [routerLink]="['/admin-panel']" class="btn dropdown-toggle btn-danger btnAdmin" data-toggle="dropdown" aria-expanded="true">
-                    <span class="material-icons">
-                        supervisor_account
-                        </span>
-                    
+                    <span class="material-icons">supervisor_account</span>
                     Admin Dashboard
                 </button>
                 <ul class="dropdown-menu">
                     <li><a [routerLink]="['/admin-panel/ubicacion-panel']">Administrar Ubicaciones</a></li>
-                    <li><a [routerLink]="['/admin-panel/sector-industrial-panel']">Administrar Sector Industrial</a></li>
+                    <li><a [routerLink]="['/admin-panel/sector-industrial-panel']">Administrar Sector Industrial</a>
+                    </li>
                     <li><a [routerLink]="['/admin-panel/cuestionario-panel']">Administrar Cuestionario</a></li>
                 </ul>
             </div>

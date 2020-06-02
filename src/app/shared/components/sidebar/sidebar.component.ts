@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../core/auth/service/auth.service';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -9,6 +10,7 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
   { path: '/home', title: 'Home', icon: 'house', class: '' },
+  { path: '/acerca-de', title: 'Acerca De', icon: 'info', class: '' },
   { path: '/dashboard', title: 'Dashboard', icon: 'dashboard', class: '' },
   { path: '/user-profile', title: 'Perfil Usuario', icon: 'person', class: '' },
   { path: '/login', title: 'Login', icon: 'vpn_key', class: '' },
@@ -28,7 +30,9 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
 
-  constructor() { }
+  constructor(
+    public authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -39,4 +43,10 @@ export class SidebarComponent implements OnInit {
     }
     return true;
   };
+
+
+  /* Metodo para salir de la cuenta */
+  onLogout() {
+    this.authService.logout();
+  }
 }
