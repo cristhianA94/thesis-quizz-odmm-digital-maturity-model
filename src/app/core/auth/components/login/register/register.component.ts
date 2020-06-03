@@ -52,13 +52,6 @@ export class RegisterComponent implements OnInit {
 
   // Mensajes de validacion de inputs en tiempo real.
   account_validation_messages = {
-    'username': [
-      { type: 'required', message: 'Username is required' },
-      { type: 'minlength', message: 'Username must be at least 5 characters long' },
-      { type: 'maxlength', message: 'Username cannot be more than 25 characters long' },
-      { type: 'pattern', message: 'Your username must contain only numbers and letters' },
-      { type: 'validUsername', message: 'Your username has already been taken' }
-    ],
     'correo': [
       { type: 'required', message: 'El email es requerido' },
       { type: 'email', message: 'Ingrese un email válido' }
@@ -69,9 +62,6 @@ export class RegisterComponent implements OnInit {
     ],
     'clave': [
       { type: 'required', message: 'La contraseña es requerida' },
-    ],
-    'terms': [
-      { type: 'pattern', message: 'You must accept terms and conditions' }
     ]
   }
 
@@ -144,7 +134,7 @@ export class RegisterComponent implements OnInit {
 
   /* Registro usuario */
   registro() {
-    this.authService.registerUser(this.registroForm.value)
+    this.authService.registerUser(this.registroForm.value);
   }
 
 

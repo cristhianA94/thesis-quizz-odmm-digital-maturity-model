@@ -71,10 +71,10 @@ export class AuthService {
   }
 
 
-  async registerUser(formulario: any) {
+  registerUser(formulario: any) {
 
     // Registra al usuario en Authentication
-    await this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
+    this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
       .then(userData => {
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);

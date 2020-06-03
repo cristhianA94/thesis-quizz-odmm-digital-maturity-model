@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -9,58 +9,86 @@ import {
 } from '@angular/fire/firestore';
 
 import { Empresa } from 'app/shared/models/empresa';
-import { Router } from '@angular/router';
-import { UsuarioService } from '../usuarios/usuario.service';
 import { AlertsService } from '../../notificaciones/alerts.service';
+import { UsuarioService } from '../usuarios/usuario.service';
+import { Resolve } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmpresaService {
+export class EmpresaService implements Resolve<any>{
 
-  idUser: string;
+  public idUser: string;
 
   empresaCollection: AngularFirestoreCollection<Empresa>;
-  empresaDoc: AngularFirestoreDocument<Empresa>
+  empresaDoc: AngularFirestoreDocument<Empresa>;
+  empresas: Empresa[];
+  onEmpresaChanged: BehaviorSubject<any>;
 
   constructor(
     private afs: AngularFirestore,
     private alertaService: AlertsService,
+    private usuarioService: UsuarioService,
   ) {
-    this.idUser = localStorage.getItem("uidUser");
-
+    this.idUser = usuarioService.idUser;
+    this.onEmpresaChanged = new BehaviorSubject(Empresa);
   }
 
+  resolve(): Observable<any> | Promise<any> | any {
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.getEmpresasUserDB()
+      ]).then(
+        () => {
+          resolve();
+        },
+        reject
+      );
+    });
+  }
+
+  // Obtiene las empresas del usuario logeado
+  getEmpresasUserDB() {
+    return new Promise((resolve, reject) => {
+      this.empresaCollection = this.afs.collection("empresas", ref => {
+        return ref.orderBy('razon_social').where('idUser', '==', this.idUser)
+      });
+      return this.empresaCollection.snapshotChanges()
+        .pipe(
+          map(actions =>
+            actions.map(res => {
+              const data = res.payload.doc.data() as Empresa;
+              const id = res.payload.doc.id;
+              return { id, ...data };
+            })
+          )
+        ).subscribe(response => {
+          this.empresas = response;
+          this.onEmpresaChanged.next(this.empresas);
+          resolve(this.empresas);
+        },
+          reject
+        )
+    })
+  }
+
+  // Obtiene todas las empresas
   getEmpresasDB(): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresa", ref => {
+    this.empresaCollection = this.afs.collection("empresas", ref => {
       return ref.orderBy('razon_social')
     });
     return this.empresaCollection.snapshotChanges().pipe(
       map(actions =>
-        actions.map(a => {
-          const data = a.payload.doc.data() as Empresa;
-          const id = a.payload.doc.id;
+        actions.map(res => {
+          const data = res.payload.doc.data() as Empresa;
+          const id = res.payload.doc.id;
           return { id, ...data };
         }))
     );
   }
 
-  // Obtiene las empresas
-  getEmpresasUserDB(): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresa", ref => {
-      return ref.orderBy('razon_social').where('idUser', '==', this.idUser)
-    });
-    return this.empresaCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(a => {
-          const data = a.payload.doc.data() as Empresa;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        }))
-    );
-  }
 
-  async createEmpresaDB(user: any, formulario) {
+  createEmpresaDB(user: any, formulario: any) {
 
     const data: Empresa = {
       razon_social: formulario.razon_social,
@@ -71,27 +99,25 @@ export class EmpresaService {
       tamanio_empresa: formulario.tamanio_empresa,
       idUser: user.uid,
       idCanton: formulario.idCanton,
-      idSectorInd: formulario.idSectorIndustrial
+      idSectorInd: formulario.idSectorInd
     }
 
-    this.empresaCollection = this.afs.collection('empresa');
-    try {
-      await this.empresaCollection.add(data);
-      this.alertaService.mensajeExito('¡Éxito!', 'Empresa registrada correctamente');
-    }
-    catch (err) {
-      return this.alertaService.mensajeError('Error', err);
-    }
+    this.empresaCollection = this.afs.collection('empresas');
+    this.empresaCollection.add(data)
+      .then(() => this.alertaService.mensajeExito('¡Éxito!', 'Empresa registrada correctamente'))
+      .catch((error) => this.alertaService.mensajeError('Error', error))
+
   }
 
   updateEmpresa(empresa: Empresa) {
-    this.empresaDoc = this.afs.doc(`empresa/${empresa._id}`);
+    this.empresaDoc = this.afs.doc(`empresas/${empresa._id}`);
+    delete empresa._id;
     this.empresaDoc.update(empresa);
     this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
   }
 
-  deleteEmpresa(business: Empresa) {
-    this.empresaDoc = this.afs.doc(`empresa/${business._id}`);
+  deleteEmpresa(empresa: Empresa) {
+    this.empresaDoc = this.afs.doc(`empresas/${empresa._id}`);
     this.empresaDoc.delete();
     this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
   }

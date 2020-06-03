@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h4 class="card-title">Editar Perfil</h4>
+                <p class="card-category">Complete su perfil</p>
+            </div>
+            <div class="card-body">
+                <!-- Usuario -->
+                <h3>Datos Usuario</h3>
+
+                <form class="mt-4" [formGroup]="usuarioForm" (ngSubmit)="actualizarUsuario() " autocomplete="on">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Nombres</mat-label>
+                                <input matInput formControlName="nombres" type="text" placeholder="Nombres" required autofocus>
+                                <mat-icon matSuffix>face</mat-icon>
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required')">El nombre es requerido
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Apellidos</mat-label>
+                                <input matInput formControlName="apellidos" type="text" placeholder="Apellidos ">
+                                <mat-icon matSuffix>face</mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Cedula</mat-label>
+                                <input maxlength="11" matInput formControlName="cedula" type="text" placeholder="C.I." required>
+                                <mat-icon matSuffix>fingerprint</mat-icon>
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required')">El campo es requerido
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <span matPrefix>+593 &nbsp;</span>
+                                <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="Teléfono">
+                                <mat-icon matSuffix>local_phone</mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-label>Sexo</mat-label>
+                            <br>
+                            <mat-radio-group aria-labelledby="sexo" formControlName="sexo">
+                                <mat-radio-button *ngFor="let genero of sexo" [value]="genero" class="mr-4">
+                                    {{ genero }}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Cargo del Responsable</mat-label>
+                                <input matInput formControlName="cargo" type="text" placeholder="Cargo que desempeña" required>
+                                <mat-icon matSuffix>work</mat-icon>
+                                <mat-error *ngIf="usuarioForm.controls['cargo'].hasError('required')">Ingrese un cargo
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-5">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Correo</mat-label>
+                                <input matInput type="email" formControlName="correo" required>
+                                <mat-icon matSuffix>email</mat-icon>
+                                <mat-error *ngFor="let validation of account_validation_messages.correo ">
+                                    <mat-error class="error-message" *ngIf="usuarioForm.get('correo').hasError(validation.type) && (usuarioForm.get('correo').dirty || usuarioForm.get('correo').touched)">
+                                        {{validation.message}}
+                                    </mat-error>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Enter your password</mat-label>
+                                <input maxlength="15" minlength="8" matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
+                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <button mat-raised-button type="submit" class="btn btn-success pull-right">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Img -->
+    <div class="col-md-4">
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <a href="javascript:void(0)">
+                    <img class="img" [src]="usuario.photoURL" />
+                </a>
+            </div>
+            <div class="card-body">
+                <h6 class="card-category text-gray"> {{ usuario.rol}} </h6>
+                <h4 class="card-title"> {{ usuario.nombres }} {{ usuario.apellidos }} </h4>
+            </div>
+        </div>
+    </div>
+</div>
