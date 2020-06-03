@@ -28,8 +28,8 @@ Basado en **[Material Dashboard Angular](https://www.creative-tim.com/product/ma
 
 Quick start options:
 
-- [Download from Github](https://github.com/tiniestory/material-dashboard-angular2/archive/master.zip).
-- [Download from Creative Tim](http://www.creative-tim.com/product/material-dashboard-angular2).
+- [Download from Github](https://github.com/cristhianA94/thesis-quizz-odmm-digital-maturity-model).
+
 
 ## Terminal Commands
 
@@ -131,24 +131,21 @@ En la actualidad, nuestro objetivo oficial es apoyar las dos últimas versiones 
 
 ## Reporting Issues
 
-We use GitHub Issues as the official bug tracker for the Material Dashboard. Here are some advices for our users that want to report an issue:
+Usamos GitHub Issues como el rastreador oficial de errores para el repositorio. Aquí hay algunos consejos para los usuarios que quieran reportar un problema:
 
-1. Asegúrese de que está usando la última versión del Tablero de Materiales. Revise el CHANGELOG
+1. Asegúrese de que está usando la última versión del repositorio. Revise el CHANGELOG
 2. Proporcionarnos pasos reproducibles para el asunto reducirá el tiempo que se tarda en arreglarlo.
 3. Algunos problemas pueden ser específicos de un navegador, así que especificar en qué navegador se encontró el problema podría ayudar.
 
 ## Useful Links
 
 - [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w)
-- [Freebies](https://www.creative-tim.com/bootstrap-themes/free) from Creative Tim
 
 ## Licensing
 
-- Licensed under GNU (https://github.com/cristhianA94/thesis-quizz-odmm-digital-maturity-model/blob/master/LICENSE.md)
+- [Licensed under GNU](https://github.com/cristhianA94/thesis-quizz-odmm-digital-maturity-model/blob/master/LICENSE.md)
 
-- Copyright 2018 Creative Tim (https://www.creative-tim.com/)
-
-- Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-angular2/blob/master/LICENSE.md)
+- [Licensed under MIT](https://github.com/creativetimofficial/material-dashboard-angular2/blob/master/LICENSE.md)
 
 ### Social Media
 
