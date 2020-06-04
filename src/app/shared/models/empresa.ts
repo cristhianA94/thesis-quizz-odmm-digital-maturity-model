@@ -1,5 +1,5 @@
 export class Empresa {
-    _id?: string;
+    id?: string;
     razon_social: string;
     anio_creacion: string;
     area_alcance: string;
@@ -12,7 +12,7 @@ export class Empresa {
 
     constructor(empresa?) {
         empresa = empresa || {};
-        this._id = empresa._id || "";
+        this.id = empresa.id || "";
         this.razon_social = empresa.razon_social || "";
         this.anio_creacion = empresa.anio_creacion || "";
         this.area_alcance = empresa.area_alcance || "";

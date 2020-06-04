@@ -43,11 +43,8 @@ export class RegisterComponent implements OnInit {
   ];
 
   sectoresInds: Sector_Industrial[] = [];
-
   provincias: Provincia[] = [];
-
   cantones: Canton[] = [];
-
   paises: Pais[] = [];
 
   // Mensajes de validacion de inputs en tiempo real.
@@ -79,6 +76,9 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.registroForm = this.registerBuildForm();
     this.cargarServicios();
+    console.log(this.sectoresInds);
+    
+
   }
 
   cargarServicios() {

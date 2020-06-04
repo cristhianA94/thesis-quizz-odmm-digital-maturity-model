@@ -87,7 +87,7 @@ export class EmpresaService implements Resolve<any>{
     );
   }
 
-
+  // Registro nueva empresa
   createEmpresaDB(user: any, formulario: any) {
 
     const data: Empresa = {
@@ -110,16 +110,18 @@ export class EmpresaService implements Resolve<any>{
   }
 
   updateEmpresa(empresa: Empresa) {
-    this.empresaDoc = this.afs.doc(`empresas/${empresa._id}`);
-    delete empresa._id;
+    this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
+    delete empresa.id;
     this.empresaDoc.update(empresa);
     this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
   }
 
   deleteEmpresa(empresa: Empresa) {
-    this.empresaDoc = this.afs.doc(`empresas/${empresa._id}`);
+    console.log(empresa);
+    
+    this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
     this.empresaDoc.delete();
-    this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
+    //this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
   }
 
 }
