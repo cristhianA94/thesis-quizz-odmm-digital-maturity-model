@@ -1,0 +1,25 @@
+<h1 mat-dialog-title><strong>{{action}}</strong></h1>
+<div mat-dialog-content>
+    <form [formGroup]="dataForm" *ngIf="action != 'Borrar'; else elseTemplate">
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccione el país</mat-label>
+            <mat-select formControlName="idPais" required>
+                <mat-option *ngFor="let pais of paises" [value]="pais.id">
+                    {{ pais.nombre }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input formControlName="nombre" placeholder="Provincia" matInput [value]="local_data.nombre" required>
+        </mat-form-field>
+    </form>
+    <ng-template #elseTemplate>
+        <p>¿Está seguro de borrar </p>
+        <b>{{local_data.nombre}}</b>?
+        <hr>
+    </ng-template>
+</div>
+<div mat-dialog-actions class="dialog-actions" align="center">
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+</div>
