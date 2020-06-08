@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-left ml-5 mt-2">
+            <p>Cargar archivo .csv</p>
+            <input type="file" #fileImportInput name="File Upload" id="csvFileUpload" (change)="fileChangeListener($event)" accept=".csv" />
+            <button [disabled]="!fileSelected" (click)="cargarData()" mat-raised-button class="btn btn-success">Cargar data</button>
+        </div>
+    </div>
+</div>
