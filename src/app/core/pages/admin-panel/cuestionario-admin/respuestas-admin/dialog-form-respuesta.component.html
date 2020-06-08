@@ -1,0 +1,34 @@
+<h1 mat-dialog-title><strong>{{action}}</strong></h1>
+<div mat-dialog-content>
+    <form [formGroup]="dataForm">
+        <div *ngIf="action != 'Borrar'; else elseTemplate">
+            <!-- Load data services -->
+            <mat-form-field appearance="fill">
+                <mat-label>Seleccione una métrica </mat-label>
+                <mat-select formControlName="idMetrica">
+                    <mat-option *ngFor="let metrica of metricas" [value]="metrica.id">
+                        {{ metrica.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- Fields common -->
+            <mat-form-field>
+                <mat-label>Opción</mat-label>
+                <input formControlName="opcion" placeholder="Opción de respuesta para la métrica" matInput required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Peso</mat-label>
+                <input matInput formControlName="peso" type="number" placeholder="Peso respuesta [0,2,4,6,8,10]" required>
+            </mat-form-field>
+        </div>
+    </form>
+    <ng-template #elseTemplate>
+        <p>¿Está seguro de borrar </p>
+        <b>{{local_data.nombre}}</b>?
+        <hr>
+    </ng-template>
+</div>
+<div mat-dialog-actions class="dialog-actions" align="center">
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+</div>

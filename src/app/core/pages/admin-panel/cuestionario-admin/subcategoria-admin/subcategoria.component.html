@@ -1,0 +1,118 @@
+<div class="row">
+
+    <div class="card">
+        <div class="card-header card-header-rose">
+            <h3 class="card-title"> <strong>Administrar Subcategorías</strong></h3>
+            <p class="card-category">Permite agregar, actualizar o eliminar una subcategoría de una categoría del cuestionario</p>
+        </div>
+        <br>
+        <mat-divider></mat-divider>
+
+        <!-- CSV -->
+        <app-csv-load-data tipo="Subcategoria"></app-csv-load-data>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+                        <div class="card-header card-header-icon card-header-rose">
+                            <div class="card-icon">
+                                <i class="material-icons">category</i>
+                            </div>
+                            <h3 class="card-title"> <strong>Subcategorías</strong></h3>
+                            <div class="text-right mr-2">
+
+                                <button mat-raised-button (click)="openDialog('Agregar',{}, 'Subcategoria')" color="primary" aria-label="Agrega una provincia">
+                                    <mat-icon>add</mat-icon> Agregar
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="card-body">
+
+                            <mat-accordion class="headers-align" multi>
+                                <mat-expansion-panel>
+
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <i class="material-icons mr-2">visibility</i> Ver subcategorías
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            Desplegar/Contraer
+                                            <mat-icon>category</mat-icon>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+
+
+                                    <!-- Tabla -->
+                                    <mat-form-field>
+                                        <mat-label>Filtrar</mat-label>
+                                        <input matInput (keyup)="buscarSubcategoria($event)" placeholder="...">
+                                    </mat-form-field>
+
+
+                                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                                        <!-- Namee Column -->
+                                        <ng-container matColumnDef="Nombre">
+                                            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                                            <td mat-cell *matCellDef="let element" style="width: 135px;">
+                                                {{element.nombre }} </td>
+                                        </ng-container>
+
+                                        <!-- Descripción Column -->
+                                        <ng-container matColumnDef="Descripción">
+                                            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                                            <td mat-cell *matCellDef="let element" style="width: auto;">
+                                                {{element.descripcion }} </td>
+                                        </ng-container>
+
+                                        <!-- Peso Column -->
+                                        <ng-container matColumnDef="Peso">
+                                            <th mat-header-cell *matHeaderCellDef> Peso </th>
+                                            <td mat-cell *matCellDef="let element" style="width: 70px;">
+                                                {{element.peso }} </td>
+                                        </ng-container>
+
+                                        <!-- Categoría Column -->
+                                        <ng-container matColumnDef="Categoría">
+                                            <th mat-header-cell *matHeaderCellDef> Categoría </th>
+                                            <td mat-cell *matCellDef="let element" style="width: 120px;">
+                                                {{element.nombreCategoria }} </td>
+                                        </ng-container>
+
+
+                                        <!-- Actions -->
+                                        <ng-container matColumnDef=" ">
+                                            <th mat-header-cell *matHeaderCellDef> </th>
+                                            <td mat-cell *matCellDef="let element" style="width: 130px;">
+                                                <div class="button-container">
+                                                    <button (click)="openDialog('Actualizar',element, 'Subcategoria')" mat-mini-fab color="accent" aria-label="Edit">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                    <button (click)="openDialog('Borrar',element, 'Subcategoria')" mat-mini-fab color="warn" aria-label="Delete">
+                                                        <mat-icon>delete</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
+                                    </table>
+                                    <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20, 25, 30] " showFirstLastButtons>
+                                    </mat-paginator>
+
+                                    <!-- End Table -->
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

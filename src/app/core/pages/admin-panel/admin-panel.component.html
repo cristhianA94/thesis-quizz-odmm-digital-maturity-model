@@ -1,0 +1,81 @@
+<router-outlet></router-outlet>
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+            <div class="col-md-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-info">
+                        <div class="card-icon">
+                            <i class="material-icons"></i>
+                        </div>
+                        <h3 class="card-title"> <strong>Gestión de Ubicaciones </strong></h3>
+                    </div>
+                    <hr>
+                    <div class="card-body" align="center">
+                        <h4>
+                            Accede al panel de administración (agregar, actualizar, eliminar, buscar) de PAÍSES, PROVINCIAS Y CANTONES.
+                        </h4>
+                        <button [routerLink]="['ubicacion-panel']" mat-fab color="primary" aria-label="Gestionar Ubicaciones" class="m-2">
+                            <mat-icon>launch</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+            <div class="col-md-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-success">
+                        <div class="card-icon">
+                            <i class="material-icons">business</i>
+                        </div>
+                        <h3 class="card-title"> <strong>Gestión de Sectores Industriales </strong></h3>
+                    </div>
+                    <hr>
+                    <div class="card-body" align="center">
+                        <h4>
+                            Accede al panel de administración (agregar, actualizar, eliminar, buscar) de SECTORES INDUSTRIALES.
+                        </h4>
+                        <button routerLink="sector-industrial-panel" mat-fab color="primary" aria-label="Gestionar Ubicaciones" class="m-2">
+                            <mat-icon>launch</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Admin cuestionario (Dimensiones, Subdimensiones, Capacidades, Metricas y respuestas -->
+            <div class="col-md-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-rose">
+                        <div class="card-icon">
+                            <i class="material-icons">receipt_long</i>
+                        </div>
+                        <h3 class="card-title"> <strong>Gestión de Cuestionario</strong></h3>
+                    </div>
+                    <hr>
+                    <div class="card-body" align="center">
+                        <h4>
+                            Accede al panel de administración (agregar, actualizar, eliminar, buscar) de CATEGORÍAS, SUBCATEGORÍAS, CAPACIDADES, MÉTRICAS, RESPUESTAS Y RECOMENDACIONES .
+                        </h4>
+                        <button routerLink="cuestionario-panel" mat-fab color="primary" aria-label="Gestionar Cuestionario" class="m-2">
+                            <mat-icon>launch</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
