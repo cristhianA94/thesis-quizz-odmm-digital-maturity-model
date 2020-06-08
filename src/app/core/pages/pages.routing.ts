@@ -10,12 +10,21 @@ import { AuthComponent } from 'app/core/auth/components/login/auth.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { EmpresaService } from '../services/user/empresas/empresa.service';
+import { CuestionaryComponent } from './cuestionary/cuestionary.component';
+import { CategoriasService } from '../services/cuestionario/categorias/categorias.service';
 
 export const PagesRoutes: Routes = [
 
     { path: 'home', component: HomeComponent },
     { path: 'acerca-de', component: AboutComponent },
     { path: 'dashboard', component: DashboardComponent },
+    {
+        path: 'cuestionario',
+        component: CuestionaryComponent,
+        loadChildren: () => import('./cuestionary/cuestionary.module').then(m => m.CuestionaryModule)
+        //resolve: { CategoriasService }
+
+    },
     { path: 'login', component: AuthComponent },
     {
         path: 'user-profile',
@@ -37,7 +46,8 @@ export const PagesRoutes: Routes = [
     exports: [RouterModule],
     providers: [
         UsuarioService,
-        EmpresaService
+        EmpresaService,
+        CategoriasService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

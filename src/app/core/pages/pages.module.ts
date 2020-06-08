@@ -8,6 +8,7 @@ import { PagesRoutingModule } from './pages.routing';
 import { ComponentsModule } from 'app/shared/components.module';
 
 // Components
+import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EmpresaEditComponent } from './user-profile/empresa-edit/empresa-edit.component';
@@ -17,11 +18,13 @@ import { AboutComponent } from './about/about.component';
 import { AuthComponent } from '../auth/components/login/auth.component';
 import { RegisterComponent } from '../auth/components/login/register/register.component';
 import { LoginComponent } from '../auth/components/login/login/login.component';
-import { PagesComponent } from './pages.component';
+import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 
 // Angular Material
 import { MaterialModule } from './material.module';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+
+import { CuestionaryModule } from './cuestionary/cuestionary.module';
 
 // Services
 import { UsuarioService } from '../services/user/usuarios/usuario.service';
@@ -31,7 +34,6 @@ import { ProvinciaService } from '../services/user/provincia/provincia.service';
 import { SectorIndustrialService } from '../services/user/sectorIndustrial/sector-industrial.service';
 
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -39,9 +41,10 @@ import { SectorIndustrialService } from '../services/user/sectorIndustrial/secto
     ReactiveFormsModule,
     RouterModule,
     PagesRoutingModule,
-    MaterialModule,
     ComponentsModule,
+    MaterialModule,
     MatPasswordStrengthModule,
+    CuestionaryModule
   ],
   declarations: [
     PagesComponent,
@@ -54,6 +57,7 @@ import { SectorIndustrialService } from '../services/user/sectorIndustrial/secto
     UserProfileComponent,
     EmpresaEditComponent,
     UsuarioEditComponent,
+    CuestionaryComponent,
   ],
   providers: [
     UsuarioService,

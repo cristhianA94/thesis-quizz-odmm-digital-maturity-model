@@ -11,7 +11,7 @@ import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service'
 })
 export class UsuarioEditComponent implements OnInit {
 
-
+  load: Boolean = false;
   usuario: Usuario;
   usuarioForm: FormGroup;
 
@@ -52,6 +52,7 @@ export class UsuarioEditComponent implements OnInit {
       this.usuario = usuario
     });
     this.usuarioForm = this.userbuildForm();
+    this.load = true;
   }
 
 
@@ -83,7 +84,7 @@ export class UsuarioEditComponent implements OnInit {
       correo: this.usuarioForm.value.correo,
       rol: this.usuario.rol
     }
-    
+
     this.userService.updateUsuario(userEdit)
   }
 

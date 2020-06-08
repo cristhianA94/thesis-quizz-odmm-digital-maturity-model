@@ -7,7 +7,6 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFormProvinciaComponent } from './dialog-form-provincia.component';
 
-import { Pais } from '../../../../../shared/models/ubicacion';
 import { ProvinciaService } from '../../../../services/user/provincia/provincia.service';
 import { Provincia } from 'app/shared/models/ubicacion';
 import { PaisService } from 'app/core/services/user/pais/pais.service';
@@ -30,8 +29,9 @@ export class AdminProvinciaComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   //@ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  
   constructor(
     public paisService: PaisService,
     public provinciaService: ProvinciaService,
@@ -45,8 +45,6 @@ export class AdminProvinciaComponent implements OnInit {
       // Agrega los datos a la tabla
       this.dataSource.data = this.provincias;
       //this.paisService.getPaisDB(this.provincias[].id)
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
     })
 
     /* 

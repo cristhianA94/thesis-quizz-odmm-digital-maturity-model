@@ -1,4 +1,6 @@
-<div class="row">
+<app-loader *ngIf="!load"></app-loader>
+
+<div class="row" *ngIf="load">
     <div class="col-md-8">
 
         <div class="card">

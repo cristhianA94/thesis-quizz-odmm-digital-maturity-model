@@ -24,6 +24,7 @@ import Swal from 'sweetalert2';
 })
 export class EmpresaEditComponent implements OnInit {
 
+  load: boolean = false;
   idUser: string;
   editEmpresa: boolean = false;
   newEmpresa: boolean = false;
@@ -68,6 +69,8 @@ export class EmpresaEditComponent implements OnInit {
     this.empresaForm = this.empresabuildForm();
     this.cargarEmpresas();
     this.cargarServicios();
+    // Quita la barra de cargando
+    this.load = true;
 
   }
 
@@ -228,5 +231,9 @@ export class EmpresaEditComponent implements OnInit {
     });
   }
 
+  cancelar() {
+    this.newEmpresa = false;
+    this.editEmpresa = false;
+  }
 
 }

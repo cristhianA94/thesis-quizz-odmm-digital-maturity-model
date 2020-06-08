@@ -19,9 +19,7 @@ export class ProvinciaService {
   }
 
   getProvinciasDB(): Observable<Provincia[]> {
-    this.provinciaCollection = this.afs.collection("provincia", ref => {
-      return ref.orderBy('nombre')
-    });
+    this.provinciaCollection = this.afs.collection("provincia")
     return this.provinciaCollection.snapshotChanges().pipe(
       map(actions =>
         actions.map(a => {

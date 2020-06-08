@@ -1,4 +1,6 @@
-<div class="row">
+<app-loader *ngIf="!load"></app-loader>
+
+<div class="row" *ngIf="load">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header card-header-icon card-header-info">
@@ -9,7 +11,7 @@
             </div>
             <hr>
             <div class="text-right">
-                <button mat-raised-button (click)="empresaUpdateForm({}, 'Agregar')" color="primary" aria-label="Agrega una provincia">
+                <button mat-raised-button (click)="empresaUpdateForm({}, 'Agregar')" color="primary" aria-label="Agrega una empresa" class="mr-4">
                     <mat-icon>add</mat-icon> Agregar
                 </button>
             </div>
@@ -20,6 +22,7 @@
                         <div class="card">
                             <div class="card-header text-center">
                                 <h4 class="card-title">{{empresa.razon_social}}</h4>
+                                <h4 class="card-title"><strong>Dirección: </strong>{{empresa.direccion}}</h4>
                             </div>
                             <div class="card-body">
                                 <!-- <button (click)="openDialog('Actualizar', empresa)" mat-raised-button class="btn btn-info btn-block">Seleccionar</button> -->
@@ -36,19 +39,21 @@
 </div>
 
 
-<div class="row" *ngIf="editEmpresa || newEmpresa">
+<div class="row" *ngIf="editEmpresa || newEmpresa || !load">
     <div class="col-md-12">
 
         <div class="card">
             <div class="card-header card-header-info">
-                <h4 class="card-title">Editar Perfil</h4>
-                <p class="card-category">Complete su perfil</p>
+                <h4 class="card-title">Editar Empresa</h4>
+                <p class="card-category">Complete los datos</p>
             </div>
             <div class="card-body">
                 <!-- Empresa/s -->
-                <h3>Datos Empresa/s</h3>
 
                 <form class="mt-4" [formGroup]="empresaForm" autocomplete="on">
+                    <h3>
+                        <mat-icon matSuffix>business</mat-icon> Datos Empresa: {{ empresa.razon_social }}</h3>
+                    <hr>
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field appearance="fill">
@@ -163,6 +168,7 @@
                     </div>
                     <button *ngIf="newEmpresa" (click)="crearEmpresa()" mat-raised-button type="submit" class="btn btn-success pull-right">Registrar</button>
                     <button *ngIf="editEmpresa" (click)="actualizarEmpresa()" mat-raised-button type="submit" class="btn btn-info pull-right">Guardar cambios</button>
+                    <button (click)="cancelar()" mat-raised-button type="submit" class="btn btn-danger pull-right ml-3">Cancelar</button>
                 </form>
             </div>
         </div>
