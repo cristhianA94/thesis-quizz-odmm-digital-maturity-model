@@ -13,7 +13,6 @@ const db = admin.firestore();
 //
 exports.obtenerCuestionarios = functions.https.onRequest((req, res) => {
     let categoria = {}
-    const capacidadesArr = []
     return db.doc(`categorias/5OVQbaauPmEA7Jt7HiSK`).get().then(categoriaSnap => {
         const categoriaRef = categoriaSnap.ref;
         categoria = categoriaSnap.data();
@@ -32,24 +31,34 @@ exports.obtenerCuestionarios = functions.https.onRequest((req, res) => {
         categoria.subcategorias = subcategorias;
         return Promise.all(capacidades)
     }).then((capacidadesSnap) => {
-        // esto tienes que hacer en metriecas
+        const metricas = []
         capacidadesSnap.forEach((capacidades) => {
             capacidades.forEach(capacidad => {
                 const capacidadUid = capacidad.id;
                 const capacidadObj = capacidad.data();
                 capacidadObj.id = capacidadUid;
+                capacidadObj.metricas = [];
                 const idSubcategoria = capacidadObj.idSubcategoria.id
-                capacidadObj.idSubcategoria = idSubcategoria
-                capacidadesArr.push(capacidadObj)
+                var elementPos = categoria.subcategorias.map((x) => { return x.id; }).indexOf(idSubcategoria);
+                categoria.subcategorias[elementPos].capacidades.push(capacidadObj);
+                metricas.push(db.collection(`metricas`).where("idCapacidad", "==", capacidad.ref).get())
             })
         });
-        capacidadesArr.forEach(capacidad => {
-            const idSubcategoria = capacidad.idSubcategoria;
-            var elementPos = categoria.subcategorias.map((x) => { return x.id; }).indexOf(idSubcategoria);
-            delete capacidad.idSubcategoria;
-            categoria.subcategorias[elementPos].capacidades.push(capacidad);
+        return Promise.all(metricas)
+    }).then((metricasSnap) => {
+        const metricasArr = []
+        // hasta aqui ya obtienes las metricas solo te falta agregarlas al objeto de categoria
+        metricasSnap.forEach((metricas) => {
+            metricas.forEach(metrica => {
+                const metricaUid = metrica.id;
+                const metricaObj = metrica.data();
+                metricaObj.id = metricaUid;
+                // const idSubcategoria = metricaObj.idSubcategoria.id
+                // var elementPos = categoria.subcategorias.map((x) => { return x.id; }).indexOf(idSubcategoria);
+                // categoria.subcategorias[elementPos].capacidad.metricas.push(metricaObj);
+                metricasArr.push(metricaObj)
+            })
         });
-
-        return res.send(categoria)
+        return res.send({ categoria, metricasArr })
     })
 });
