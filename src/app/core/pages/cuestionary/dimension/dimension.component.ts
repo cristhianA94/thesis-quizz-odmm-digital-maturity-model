@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Categoria, Subcategoria } from 'app/shared/models/cuestionario';
 import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
 import { CapacidadesService } from '../../../services/cuestionario/capacidades/capacidades.service';
-import { RespuestasService } from '../../../services/cuestionario/respuestas/respuestas.service';
 import { MetricasService } from '../../../services/cuestionario/metricas/metricas.service';
 import { Capacidad, Metrica, Respuesta } from '../../../../shared/models/cuestionario';
 import { ActivatedRoute } from '@angular/router';
@@ -45,7 +44,6 @@ export class DimensionComponent implements OnInit {
     private subcategoriasServices: SubcategoriasService,
     private metricasServices: MetricasService,
     private capacidadesServices: CapacidadesService,
-    private respuestasServices: RespuestasService,
     private fb: FormBuilder,
     private actRoute: ActivatedRoute
   ) { }

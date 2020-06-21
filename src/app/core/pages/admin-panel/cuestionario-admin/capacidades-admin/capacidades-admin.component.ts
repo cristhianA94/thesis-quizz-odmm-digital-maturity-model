@@ -5,10 +5,11 @@ import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
 
-import { Capacidad } from "../../../../../shared/models/cuestionario";
-import { CapacidadesService } from "../../../../services/cuestionario/capacidades/capacidades.service";
-import { DialogFormLoadDataComponent } from "../dialog-form/dialog-form-loadData.component";
+
 import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
+import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
+import { DialogFormLoadDataComponent } from '../dialog-form/dialog-form-loadData.component';
+import { Capacidad } from 'app/shared/models/cuestionario';
 
 @Component({
   selector: "app-capacidades-admin",

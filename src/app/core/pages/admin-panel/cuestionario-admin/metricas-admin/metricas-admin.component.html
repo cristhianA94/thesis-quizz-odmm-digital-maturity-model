@@ -92,7 +92,7 @@
                                                     <button (click)="openDialog('Actualizar',element)" mat-mini-fab color="accent" aria-label="Edit">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
-                                                    <button (click)="openDialog('Borrar',element)" mat-mini-fab color="warn" aria-label="Delete">
+                                                    <button (click)="borarMetrica(element.id)" mat-mini-fab color="warn" aria-label="Delete">
                                                         <mat-icon>delete</mat-icon>
                                                     </button>
                                                 </div>
@@ -100,7 +100,7 @@
                                         </ng-container>
 
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                     </table>
                                     <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20, 25, 30] " showFirstLastButtons>
                                     </mat-paginator>

@@ -4,7 +4,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
-import { DialogFormMetricaComponent } from './dialog-form-metrica.component';
+import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 
 import { Metrica } from "../../../../../shared/models/cuestionario";
 import { MetricasService } from "../../../../services/cuestionario/metricas/metricas.service";
@@ -32,31 +32,27 @@ export class MetricasAdminComponent implements OnInit {
     public metricasService: MetricasService,
     public capacidadesService: CapacidadesService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.metricasService.getMetricasDB()
-      .subscribe((metricas) => {
-        // Recorre cada metrica
-        metricas.forEach((metrica) => {
-          // Obtiene la coleccion asociada
-          metrica.idCapacidad.get().then((capacidad) => {
+    this.metricasService.getMetricasDB().subscribe((metricas) => {
+      // Recorre cada metrica
+      metricas.forEach((metrica) => {
+        // Obtiene la coleccion asociada
+        this.dataSource.data = metricas;
+        // metrica.idCapacidad.get().then((capacidad) => {
+        //   const metricaObj: Metrica = {
+        //     id: metrica.id,
+        //     nombre: metrica.nombre,
+        //     pregunta: metrica.pregunta,
+        //     peso: metrica.peso,
+        //     idCapacidad: capacidad.data(),
+        //   };
 
-            const metricaObj: Metrica = {
-              id: metrica.id,
-              nombre: metrica.nombre,
-              pregunta: metrica.pregunta,
-              peso: metrica.peso,
-              idCapacidad: capacidad.data(),
-            };
-
-            this.metricas.push(metricaObj);
-            this.dataSource.data = this.metricas;
-
-          });
-        })
-        
+        //   this.metricas.push(metricaObj);
+        // });
       });
+    });
   }
 
   // Table
@@ -85,7 +81,7 @@ export class MetricasAdminComponent implements OnInit {
       width: "450px",
       data: {
         obj,
-        action: action
+        action,
       },
     });
 
@@ -96,44 +92,37 @@ export class MetricasAdminComponent implements OnInit {
         return;
       }
 
-      this.metrica = result.data;
+      this.metrica = result;
+      console.log(result);
       // Si NO es nuevo se le agrega el id
-      if (result.id) {
-        this.metrica.id = result.id;
-      }
+      // if (result.id) {
+      //   this.metrica.id = result.id;
+      // }
 
-      if (result.event == "Agregar") {
-        this.createMetrica(this.metrica);
-      } else if (result.event == "Actualizar") {
-        this.updateMetrica(this.metrica);
-      } else if (result.event == "Borrar") {
-        this.deleteMetrica(this.metrica);
+      if (action === "Agregar") {
+        this.createMetrica(result);
+      } else {
       }
+      //  else if (action === "Actualizar") {
+      //   this.updateMetrica(this.metrica);
+      // } else if (action === "Borrar") {
+      //   this.deleteMetrica(this.metrica);
+      // }
 
-      this.metricas = [];
+      // this.metricas = [];
     });
   }
-
-  createMetrica(obj: any) {
-    const metricaNew: Metrica = {
-      nombre: obj.nombre,
-      pregunta: obj.pregunta,
-      peso: obj.peso,
-      idCapacidad: obj.idCapacidad,
-    };
-
-    this.metricasService.createMetricaDB(metricaNew);
+  borarMetrica(id) {
+    this.metricasService.deleteMetricaDB(id);
   }
 
-  updateMetrica(obj: any) {
-    const metricaEdit: Metrica = {
-      id: obj.id,
-      nombre: obj.nombre,
-      pregunta: obj.pregunta,
-      peso: obj.peso,
-      idCapacidad: obj.idCapacidad,
-    };
-    this.metricasService.updateMetricaDB(metricaEdit);
+  createMetrica(obj: Metrica) {
+    delete obj.id;
+    this.metricasService.createMetricaDB(obj);
+  }
+
+  updateMetrica(obj: Metrica) {
+    this.metricasService.updateMetricaDB(obj);
   }
 
   deleteMetrica(metrica: any) {

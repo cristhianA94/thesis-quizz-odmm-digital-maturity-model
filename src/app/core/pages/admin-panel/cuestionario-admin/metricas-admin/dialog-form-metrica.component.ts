@@ -1,37 +1,38 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
-import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
-import { Capacidad } from './../../../../../shared/models/cuestionario';
-import { Component, Inject, Optional } from '@angular/core';
+import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
+import { Capacidad } from "./../../../../../shared/models/cuestionario";
+import { Component, Inject, Optional } from "@angular/core";
 
 @Component({
-  selector: 'app-dialog-form-metrica',
-  templateUrl: './dialog-form-metrica.component.html',
+  selector: "app-dialog-form-metrica",
+  templateUrl: "./dialog-form-metrica.component.html",
   styles: [
     `
-    .dialog-actions button{
-      margin: 7px;
-      display: flex;
-    }
-    `
-  ]
+      .dialog-actions button {
+        margin: 7px;
+        display: flex;
+      }
+    `,
+  ],
 })
 export class DialogFormMetricaComponent {
-
   capacidades: Capacidad[] = [];
   dataForm: FormGroup;
   action: string;
   local_data: any;
+  pesos = [0, 2, 4, 6, 8, 10];
 
   constructor(
     public dialogRef: MatDialogRef<DialogFormMetricaComponent>,
     public capacidadesService: CapacidadesService,
     public fb: FormBuilder,
     //@Optional() is used to prevent error if no data is passed
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     // Carga los capacidades
-    this.capacidadesService.getCapacidadesDB().subscribe(capacidades => {
+    this.capacidadesService.getCapacidadesDB().subscribe((capacidades) => {
       this.capacidades = capacidades;
     });
     // Agrega el objeto a un objeto local
@@ -44,36 +45,45 @@ export class DialogFormMetricaComponent {
   }
 
   addRespuesta() {
-    this.respuestas.push(this.fb.control(''));
+    this.respuestas.push(
+      this.fb.group({
+        opcion: [""],
+        pesoRespuesta: [""],
+        observacion: [""],
+      })
+    );
   }
 
   get respuestas() {
-    return this.dataForm.get('respuestas') as FormArray;
+    return this.dataForm.get("respuestas") as FormArray;
   }
 
+  borrarRespuesta(i) {
+    this.respuestas.removeAt(i);
+  }
 
   doAction() {
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
-    this.dialogRef.close({ event: this.action, data: this.dataForm.value, id: this.local_data.id });
+    this.dialogRef.close({
+      event: this.action,
+      data: this.dataForm.value,
+    });
   }
 
   closeDialog() {
-    this.dialogRef.close({ event: 'Cancelar' });
+    this.dialogRef.close({ event: "Cancelar" });
   }
 
   buildForm(): FormGroup {
     return this.fb.group({
-      idCapacidad: [' ', Validators.required],
+      idCapacidad: [""],
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
       pesoPregunta: [this.local_data.peso, Validators.required],
-      respuestas: this.fb.array([
-        //opcion: ['', Validators.required],
-        this.fb.group({
-          opcion: ['', Validators.required],
-          pesoRespuesta: ['', Validators.required],
-        }),
-      ])
+      respuestas: this.fb.array(
+        []
+        // ,[Validators.required, Validators.maxLength(6)]
+      ),
     });
   }
 }
