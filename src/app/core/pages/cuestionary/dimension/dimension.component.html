@@ -1,57 +1,54 @@
-<app-loader *ngIf="!loadData"></app-loader>
-
 <div class="main-content">
-    <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
         <div class="row">
+          <div class="card text-center">
+            <div class="card-header card-header-primary">
+              <h2 class="card-title">
+                <strong>{{ categoria.nombre | uppercase }}</strong>
+              </h2>
+            </div>
+            <div class="card-body">
+              {{ categoria.descripcion }}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <!-- Subcategoria 1 -->
+        
+        <div class="row" *ngFor="let subcategoria of subcategorias">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons"></i>
+              </div>
+              <h3 class="card-title">
+                Subcategoria: {{ subcategoria.nombre }}
+              </h3>
+            </div>
+            <div class="card-body">
+              {{ subcategoria.descripcion }}
+            </div>
+            <hr />
 
-            <div class="col-md-12" *ngIf="!loadData">
-
-                <div class="row ">
-                    <div class="card text-center">
-                        <div class="card-header card-header-primary">
-                            <h2 class="card-title"> <strong>{{ categoria.nombre | uppercase}}</strong></h2>
-                        </div>
-                        <div class="card-body">
-                            {{ categoria.descripcion }}
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <!-- Subcategoria 1 -->
-                <div class="row" *ngFor="let subcategoria of subcategorias">
-                    <div class="card">
-                        <div class="card-header card-header-icon card-header-rose">
-                            <div class="card-icon">
-                                <i class="material-icons"></i>
-                            </div>
-                            <h3 class="card-title">Subcategoria: {{ subcategoria.nombre }}</h3>
-                        </div>
-                        <div class="card-body">
-                            {{ subcategoria.descripcion }}
-                        </div>
-                        <hr>
-
-
-                        <!-- Capacidades -->
-                        <!-- <div class="row">
+            <!-- Capacidades -->
+            <!-- <div class="row">
                             <div class="col-md-11 mx-auto">
                                 <h4>Capacidad: <small>{{ capacidades[0].nombre }}</small> </h4>
                                 <p>{{ capacidades[0].descripcion }} </p>
                             </div>
                         </div>
                         <hr> -->
+          </div>
+        </div>
 
+        <hr />
 
-                    </div>
-
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-10 mx-auto">
-                        <!-- Respuestas -->
-                        <!-- <form [formGroup]="dimension2Form">
+        <div class="row">
+          <div class="col-md-10 mx-auto">
+            <!-- Respuestas -->
+            <!-- <form [formGroup]="dimension2Form">
                             <h4>{{ metricas[0].nombre}}</h4>
                             <h3> <strong> {{ metricas[0].pregunta }} </strong></h3>
                             <label id="example-radio-group-label"> <small>Elija la opción más asequible a su
@@ -63,20 +60,23 @@
                                 </mat-radio-button>
                             </mat-radio-group>
                         </form> -->
-                    </div>
-                </div>
-
-                <div class="text-right">
-                    <button class="mr-3" mat-fab color="primary" aria-label="categoría anterior">
-                        <mat-icon>arrow_back_ios</mat-icon>
-                    </button>
-                    <button mat-fab color="primary" aria-label="categoría posterior">
-                        <mat-icon>arrow_forward_ios</mat-icon>
-                    </button>
-                </div>
-
-
-            </div>
+          </div>
         </div>
+
+        <div class="text-right">
+          <button
+            class="mr-3"
+            mat-fab
+            color="primary"
+            aria-label="categoría anterior"
+          >
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <button mat-fab color="primary" aria-label="categoría posterior">
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

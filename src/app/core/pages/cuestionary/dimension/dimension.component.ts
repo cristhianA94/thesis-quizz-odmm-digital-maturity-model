@@ -1,35 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Categoria, Subcategoria } from 'app/shared/models/cuestionario';
-import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
-import { CapacidadesService } from '../../../services/cuestionario/capacidades/capacidades.service';
-import { MetricasService } from '../../../services/cuestionario/metricas/metricas.service';
-import { Capacidad, Metrica, Respuesta } from '../../../../shared/models/cuestionario';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  Categoria,
+  Subcategoria,
+  Capacidad,
+  Metrica,
+  Respuesta,
+} from "app/shared/models/cuestionario";
+import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
+
+import { ActivatedRoute } from "@angular/router";
+import { Observable, Subject } from "rxjs";
+import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
+import { takeUntil } from "rxjs/operators";
+import { MetricasService } from "app/core/services/cuestionario/metricas/metricas.service";
+import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
 
 @Component({
-  selector: 'app-dimension',
-  templateUrl: './dimension.component.html',
+  selector: "app-dimension",
+  templateUrl: "./dimension.component.html",
   styles: [
     `
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      margin: 15px 0;
-    }
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+        margin: 15px 0;
+      }
 
-    .radio-button {
-      margin: 5px;
-    }
-    `
-  ]
+      .radio-button {
+        margin: 5px;
+      }
+    `,
+  ],
 })
-export class DimensionComponent implements OnInit {
-
-  loadData: boolean = false;
-
+export class DimensionComponent implements OnInit, OnDestroy {
   idCategoria: string;
   dimension2Form: FormGroup;
   categoria: Categoria;
@@ -37,7 +41,7 @@ export class DimensionComponent implements OnInit {
   capacidades: Capacidad[] = [];
   metricas: Metrica[] = [];
   respuestas: Respuesta[] = [];
-
+  private _unsubscribeAll: Subject<any>;
 
   constructor(
     private categoriasServices: CategoriasService,
@@ -46,39 +50,24 @@ export class DimensionComponent implements OnInit {
     private capacidadesServices: CapacidadesService,
     private fb: FormBuilder,
     private actRoute: ActivatedRoute
-  ) { }
-
-  ngOnInit(): void {
-
-    this.actRoute.params.subscribe(params => {
-      this.idCategoria = params.id;
-    });
-
-    this.cargarSubcategorias(this.idCategoria);
-
-    //this.dimension2Form = this.buildForm();
+  ) {
+    this._unsubscribeAll = new Subject();
   }
 
-  cargarSubcategorias(id: string) {
-    this.categoriasServices.getCategoriaDB(id).subscribe(categoria => {
-      // Carga la categoria
-      this.categoria = {
-        id: id,
-        nombre: categoria.nombre,
-        descripcion: categoria.descripcion,
-        peso: categoria.peso
-      };
-
-      // Cargar las subcategorias que corresponden a la categoria
-      this.subcategoriasServices.getSubcategorias_CategoriaDB(id).subscribe(subcategorias => {
+  ngOnInit(): void {
+    //this.dimension2Form = this.buildForm();
+    this.categoriasServices.onCategoriaChanged
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((categoria) => {
+        console.log(categoria);
+        this.categoria = categoria;
+      });
+    this.subcategoriasServices.onSubcategoriaChanged
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((subcategorias) => {
         console.log(subcategorias);
         this.subcategorias = subcategorias;
-        
-        //this.cargarCapacidades(this.subcategorias)
-      })
-
-    });
-
+      });
   }
 
   cargarCapacidades(subs: any) {
@@ -92,21 +81,19 @@ export class DimensionComponent implements OnInit {
         //console.log("CAPACIDADES", this.capacidades);
       }) */
     });
-
-
-
   }
 
   cargarCapacidades2(subcategorias: Subcategoria[]) {
-
     /* Carga subcategoria 1: Vigilancia de la marca*/
     //console.log(subcategorias);
 
     // Capacidades
-    this.capacidadesServices.getCapacidades_SubcategoriaDB(subcategorias[2].id).subscribe(capacidades => {
-      console.log(capacidades);
-      this.capacidades = capacidades;
-    });
+    this.capacidadesServices
+      .getCapacidades_SubcategoriaDB(subcategorias[2].id)
+      .subscribe((capacidades) => {
+        console.log(capacidades);
+        this.capacidades = capacidades;
+      });
 
     /* this.subcategorias.forEach(subcateg => {
       // Capacidades
@@ -136,14 +123,15 @@ export class DimensionComponent implements OnInit {
       })
 
     }) */
-
-
   }
 
   buildForm(): FormGroup {
     return this.fb.group({
-      opcion: ['', Validators.required],
+      opcion: ["", Validators.required],
     });
   }
-
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
 }

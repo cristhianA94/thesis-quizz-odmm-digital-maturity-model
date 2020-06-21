@@ -61,7 +61,7 @@
         "@angular/compiler": "9.0.5",
         "@angular/core": "9.0.5",
         "@angular/fire": "^5.4.2",
-        "@angular/flex-layout": "^10.0.0-beta.32",
+        "@angular/flex-layout": "^9.0.0-beta.29",
         "@angular/forms": "9.0.5",
         "@angular/material": "9.2.4",
         "@angular/platform-browser": "9.0.5",

@@ -55,36 +55,47 @@
 
         <div *ngFor="let respuesta of respuestas.controls; let i = index">
           <!-- The repeated respuesta template -->
-          <div [formGroupName]="i">
-            <mat-form-field appearance="outline">
-              <mat-label>Opción {{ i + 1 }}</mat-label>
-              <input
-                formControlName="opcion"
-                placeholder="Opción de respuesta para la métrica"
-                matInput
-                required
-              />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Peso</mat-label>
-              <mat-select formControlName="pesoRespuesta">
-                <mat-option *ngFor="let peso of pesos" [value]="peso">{{
-                  peso
-                }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Observación</mat-label>
-              <textarea
-                matInput
-                formControlName="observacion"
-                placeholder="Observación"
-                required
-              ></textarea>
-            </mat-form-field>
-            <button mat-mini-fab (click)="borrarRespuesta(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <div
+            [formGroupName]="i"
+            fxLayout="column"
+            fxLayoutAlign="space-around start"
+          >
+            <div fxLayout="row" fxLayout.lt-sm="column" >
+              <mat-form-field appearance="outline" fxFlex="45">
+                <mat-label>Opción {{ i + 1 }}</mat-label>
+                <input
+                  formControlName="opcion"
+                  placeholder="Opción de respuesta para la métrica"
+                  matInput
+                  required
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" fxFlex="45">
+                <mat-label>Peso</mat-label>
+                <mat-select formControlName="pesoRespuesta">
+                  <mat-option *ngFor="let peso of pesos" [value]="peso">{{
+                    peso
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <div fxFlex="85">
+                <mat-form-field appearance="outline">
+                  <mat-label>Observación</mat-label>
+                  <textarea
+                    matInput
+                    formControlName="observacion"
+                    placeholder="Observación"
+                    required
+                  ></textarea>
+                </mat-form-field>
+              </div>
+              <button mat-mini-fab (click)="borrarRespuesta(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>

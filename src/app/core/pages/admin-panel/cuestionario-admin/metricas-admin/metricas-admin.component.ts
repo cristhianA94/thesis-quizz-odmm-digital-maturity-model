@@ -36,22 +36,7 @@ export class MetricasAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.metricasService.getMetricasDB().subscribe((metricas) => {
-      // Recorre cada metrica
-      metricas.forEach((metrica) => {
-        // Obtiene la coleccion asociada
-        this.dataSource.data = metricas;
-        // metrica.idCapacidad.get().then((capacidad) => {
-        //   const metricaObj: Metrica = {
-        //     id: metrica.id,
-        //     nombre: metrica.nombre,
-        //     pregunta: metrica.pregunta,
-        //     peso: metrica.peso,
-        //     idCapacidad: capacidad.data(),
-        //   };
-
-        //   this.metricas.push(metricaObj);
-        // });
-      });
+      this.dataSource.data = metricas;
     });
   }
 

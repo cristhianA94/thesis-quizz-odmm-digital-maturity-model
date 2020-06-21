@@ -32,6 +32,7 @@ import { CuestionarioAdminModule } from './cuestionario-admin/cuestionario-admin
 
 // CSV
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { SharedModule } from 'app/shared.module';
 
 
 
@@ -46,7 +47,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     ComponentsModule,
     CuestionarioAdminModule,
     // CSV
-    NgxCsvParserModule
+    NgxCsvParserModule,
+    SharedModule
   ],
   declarations: [
     AdminPanelComponent,
@@ -59,6 +61,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     DialogFormCantonComponent,
     SectorIndustrialAdminComponent,
     DialogFormSectorIndustrialComponent,
+
     
   ],
   providers:[

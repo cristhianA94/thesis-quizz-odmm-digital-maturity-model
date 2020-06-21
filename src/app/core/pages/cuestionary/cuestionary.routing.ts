@@ -1,13 +1,11 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CuestionaryComponent } from './cuestionary.component';
-import { DimensionComponent } from './dimension/dimension.component';
-import { CategoriasService } from '../../services/cuestionario/categorias/categorias.service';
-
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { CuestionaryComponent } from "./cuestionary.component";
+import { DimensionComponent } from "./dimension/dimension.component";
+import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
 
 export const cuestionaryRoutes: Routes = [
-
-    /* {
+  /* {
         path: '',
         component: CuestionaryComponent,
         children: [
@@ -15,16 +13,19 @@ export const cuestionaryRoutes: Routes = [
             
         ]
     }, */
-    {
-        path: 'dimension/:id',
-        component: DimensionComponent
+  {
+    path: "dimension/:id",
+    component: DimensionComponent,
+    resolve: {
+      data: CategoriasService,
     },
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(cuestionaryRoutes)],
-    exports: [RouterModule],
-    providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [RouterModule.forChild(cuestionaryRoutes)],
+  exports: [RouterModule],
+  providers: [CategoriasService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class CuestionaryRoutingModule { }
+export class CuestionaryRoutingModule {}

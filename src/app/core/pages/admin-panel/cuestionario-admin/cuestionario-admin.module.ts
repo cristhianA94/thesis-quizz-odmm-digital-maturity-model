@@ -23,6 +23,7 @@ import { CuestionarioAdminComponent } from "./cuestionario-admin.component";
 // Components reutilizables
 import { DialogFormLoadDataComponent } from "./dialog-form/dialog-form-loadData.component";
 import { ComponentsModule } from "../../../../shared/components.module";
+import { SharedModule } from 'app/shared.module';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { ComponentsModule } from "../../../../shared/components.module";
     ReactiveFormsModule,
     MaterialModule,
     RouterModule,
+    SharedModule,
     ComponentsModule,
   ],
   declarations: [
