@@ -1,5 +1,5 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
 import { Capacidad } from './../../../../../shared/models/cuestionario';
@@ -27,7 +27,7 @@ export class DialogFormMetricaComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogFormMetricaComponent>,
     public capacidadesService: CapacidadesService,
-    public _formBuilder: FormBuilder,
+    public fb: FormBuilder,
     //@Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     // Carga los capacidades
@@ -43,6 +43,14 @@ export class DialogFormMetricaComponent {
     this.dataForm = this.buildForm();
   }
 
+  addRespuesta() {
+    this.respuestas.push(this.fb.control(''));
+  }
+
+  get respuestas() {
+    return this.dataForm.get('respuestas') as FormArray;
+  }
+
 
   doAction() {
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
@@ -54,11 +62,14 @@ export class DialogFormMetricaComponent {
   }
 
   buildForm(): FormGroup {
-    return this._formBuilder.group({
+    return this.fb.group({
       idCapacidad: [' ', Validators.required],
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
       peso: [this.local_data.peso, Validators.required],
+      respuestas: this.fb.array([
+        this.fb.control('')
+      ])
     });
   }
 }

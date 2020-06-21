@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Subcategoria } from "../../../../../shared/models/cuestionario";
+import { Subcategoria } from '../../../../../shared/models/cuestionario';
 import { MatAccordion } from "@angular/material/expansion";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
@@ -10,9 +10,6 @@ import { CategoriasService } from "../../../../services/cuestionario/categorias/
 import { SubcategoriasService } from "../../../../services/cuestionario/subcategorias/subcategorias.service";
 import { DialogFormLoadDataComponent } from "../dialog-form/dialog-form-loadData.component";
 
-//Libreria para leer CSV
-import { NgxCsvParser } from 'ngx-csv-parser';
-import { NgxCSVParserError } from 'ngx-csv-parser';
 
 @Component({
   selector: "app-subcategoria",
@@ -21,13 +18,9 @@ import { NgxCSVParserError } from 'ngx-csv-parser';
 })
 export class SubcategoriaComponent implements OnInit {
 
-  csvRecords: any[] = [];
-  header = true;
-
   @ViewChild(MatAccordion) subcategoriasItems: MatAccordion;
 
   subcategorias: Subcategoria[] = [];
-  subcategorias2: Subcategoria[] = [];
   subcategoria: Subcategoria;
 
   displayedColumns: string[] = [
@@ -40,14 +33,13 @@ export class SubcategoriaComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Subcategoria>();
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     public categoriaService: CategoriasService,
     public subcategoriasService: SubcategoriasService,
     public dialog: MatDialog,
-    private ngxCsvParser: NgxCsvParser
   ) { }
 
   ngOnInit(): void {
@@ -59,27 +51,23 @@ export class SubcategoriaComponent implements OnInit {
       .getSubcategoriasDB()
       .subscribe((subcategorias) => {
         // Recorre cada subcategoria
-        subcategorias.forEach((element) => {
-          // Busca la categoria segun el idCategoria
-          this.categoriaService
-            .getCategoriaDB(element.idCategoria)
-            .subscribe((categoria) => {
-              const subCategoriaObj: Subcategoria = {
-                id: element.id,
-                nombre: element.nombre,
-                descripcion: element.descripcion,
-                peso: element.peso,
-                idCategoria: element.idCategoria,
-                nombreCategoria: categoria.nombre,
-              };
+        subcategorias.forEach((subcategoria) => {
+          subcategoria.idCategoria.get().then((categoria) => {
 
-              this.subcategorias.push(subCategoriaObj);
-              this.dataSource.data = this.subcategorias;
-            });
-          // Agrega los datos a la tabla
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        });
+            const subCategoriaObj: Subcategoria = {
+              id: subcategoria.id,
+              nombre: subcategoria.nombre,
+              descripcion: subcategoria.descripcion,
+              peso: subcategoria.peso,
+              idCategoria: categoria.data(),
+            };
+
+            this.subcategorias.push(subCategoriaObj);
+            this.dataSource.data = this.subcategorias;
+
+          });
+        })
+
       });
   }
 
@@ -140,6 +128,7 @@ export class SubcategoriaComponent implements OnInit {
   }
 
   createSubcategoria(obj: any) {
+
     const subCategoriaNew: Subcategoria = {
       nombre: obj.nombre,
       descripcion: obj.descripcion,
@@ -164,34 +153,4 @@ export class SubcategoriaComponent implements OnInit {
     this.subcategoriasService.deleteSubcategoriaDB(subcategoria.id);
   }
 
-
-  /* CSV */
-  @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
-
-  // Your applications input change listener for the CSV File
-  fileChangeListener($event: any): void {
-
-    // Select the files from the event
-    const files = $event.srcElement.files;
-
-    // Parse the file you want to select for the operation along with the configuration
-    this.ngxCsvParser.parse(files[0], { header: this.header, delimiter: ';' })
-      .pipe().subscribe((result: Array<any>) => {
-
-        //console.log('Result', result);
-        this.subcategorias2 = result;
-        this.pasarData(this.subcategorias2);
-      }, (error: NgxCSVParserError) => {
-        console.log('Error', error);
-      });
-
-  }
-
-  pasarData(data: any) {
-    this.subcategorias2.forEach(element => {
-      this.subcategoriasService.createSubcategoriaDB(element as Subcategoria)
-    });
-    //this.subcategoriasService.inserting(this.subcategorias2);
-
-  }
 }

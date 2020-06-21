@@ -16,6 +16,7 @@ import { SubcategoriasService } from "app/core/services/cuestionario/subcategori
   styleUrls: ["./capacidades-admin.component.css"],
 })
 export class CapacidadesAdminComponent implements OnInit {
+
   @ViewChild(MatAccordion) capacidadesItems: MatAccordion;
 
   capacidades: Capacidad[] = [];
@@ -32,34 +33,32 @@ export class CapacidadesAdminComponent implements OnInit {
     public capacidadesService: CapacidadesService,
     public subcategoriasService: SubcategoriasService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.capacidadesService.getCapacidadesDB().subscribe((capacidades) => {
-      // Recorre cada subcategoria
-      capacidades.forEach((element) => {
-        // Busca la categoria segun el idCategoria
-        this.subcategoriasService
-          .getSubcategoriaDB(element.idSubcategoria)
-          .subscribe((subcategoria) => {
+    this.capacidadesService.getCapacidadesDB()
+      .subscribe((capacidades) => {
+        
+        // Recorre cada capacidad
+        capacidades.forEach((capacidad) => {
+          // Obtiene la coleccion asociada
+          capacidad.idSubcategoria.get().then((subcategoria) => {
+
             const capacidadObj: Capacidad = {
-              id: element.id,
-              nombre: element.nombre,
-              descripcion: element.descripcion,
-              peso: element.peso,
-              idSubcategoria: element.idSubcategoria,
-              nombreSubcategoria: subcategoria.nombre,
+              id: capacidad.id,
+              nombre: capacidad.nombre,
+              descripcion: capacidad.descripcion,
+              peso: capacidad.peso,
+              idSubcategoria: subcategoria.data(),
             };
 
             this.capacidades.push(capacidadObj);
             this.dataSource.data = this.capacidades;
+
           });
-        // Agrega los datos a la tabla
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        })
+
       });
-      
-    });
 
   }
 

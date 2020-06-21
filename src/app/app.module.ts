@@ -45,7 +45,7 @@ import { AuthService } from './core/auth/service/auth.service';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AngularFirestoreModule.enablePersistence(),
+    //AngularFirestoreModule.enablePersistence(),
     // Alertas
     SweetAlert2Module.forRoot(),
     // Notificaciones

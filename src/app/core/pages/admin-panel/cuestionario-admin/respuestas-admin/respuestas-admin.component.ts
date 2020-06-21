@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Respuesta } from '../../../../../shared/models/cuestionario';
 import { RespuestasService } from '../../../../services/cuestionario/respuestas/respuestas.service';
 import { DialogFormRespuestaComponent } from './dialog-form-respuesta.component';
+import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
 
 @Component({
   selector: 'app-respuestas-admin',
@@ -33,30 +33,29 @@ export class RespuestasAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.respuestasService.getRespuestasDB().subscribe((respuestas) => {
-      // Recorre cada subcategoria
-      respuestas.forEach((element) => {
-        // Busca la categoria segun el idCategoria
-        this.metricasService
-          .getMetricaDB(element.idMetrica)
-          .subscribe((metrica) => {
+
+    this.respuestasService.getRespuestasDB()
+      .subscribe(respuestas => {
+        // Recorre cada respuesta
+        respuestas.forEach((respuesta) => {
+
+          // Obtiene la coleccion asociada
+          respuesta.idMetrica.get().then((metrica) => {
 
             const respuestaObj: Respuesta = {
-              id: element.id,
-              opcion: element.opcion,
-              peso: element.peso,
-              idMetrica: element.idMetrica,
-              nombreMetrica: metrica.nombre,
+              id: respuesta.id,
+              opcion: respuesta.opcion,
+              peso: respuesta.peso,
+              idMetrica: metrica.data(),
             };
 
             this.respuestas.push(respuestaObj);
             this.dataSource.data = this.respuestas;
+
           });
-        // Agrega los datos a la tabla
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        })
+
       });
-    });
   }
 
   // Table

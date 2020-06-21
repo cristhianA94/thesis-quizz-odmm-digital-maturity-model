@@ -35,31 +35,28 @@ export class MetricasAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.metricasService.getMetricasDB().subscribe((metricas) => {
-      // Recorre cada subcategoria
-      metricas.forEach((element) => {
-        // Busca la categoria segun el idCategoria
-        this.capacidadesService
-          .getCapacidadDB(element.idCapacidad)
-          .subscribe((capacidad) => {
-            
+    this.metricasService.getMetricasDB()
+      .subscribe((metricas) => {
+        // Recorre cada metrica
+        metricas.forEach((metrica) => {
+          // Obtiene la coleccion asociada
+          metrica.idCapacidad.get().then((capacidad) => {
+
             const metricaObj: Metrica = {
-              id: element.id,
-              nombre: element.nombre,
-              pregunta: element.pregunta,
-              peso: element.peso,
-              idCapacidad: element.idCapacidad,
-              nombreCapacidad: capacidad.nombre,
+              id: metrica.id,
+              nombre: metrica.nombre,
+              pregunta: metrica.pregunta,
+              peso: metrica.peso,
+              idCapacidad: capacidad.data(),
             };
 
             this.metricas.push(metricaObj);
             this.dataSource.data = this.metricas;
+
           });
-        // Agrega los datos a la tabla
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        })
+        
       });
-    });
   }
 
   // Table

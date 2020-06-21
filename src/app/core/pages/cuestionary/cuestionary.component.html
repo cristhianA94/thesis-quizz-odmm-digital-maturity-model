@@ -1,0 +1,43 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <app-loader *ngIf="!load"></app-loader>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row" *ngIf="!select">
+            <div class="col-md-12">
+                <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+            </div>
+            <div class="col-md-4" *ngFor="let categoria of categorias">
+                <div class="card card-chart">
+                    <div class="card-header card-header-info">
+                        <div class="ct-chart" id="dailySalesChart"></div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-center"> <strong> <i class="material-icons">category</i>
+                                {{categoria.nombre | uppercase}}</strong></h3>
+                        <p class="card-category">
+                            <span class="text-success">{{ categoria.descripcion }} </span> </p>
+                    </div>
+                    <div class="text-center">
+                        <button (click)="evaluarCategoria(categoria)" class="btn-block " mat-flat-button color="primary" aria-label="elegir anterior ">
+                            <mat-icon>arrow_forward_ios</mat-icon> Evaluar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="select">
+            <div class="col-md-12">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+
+
+    </div>
+</div>

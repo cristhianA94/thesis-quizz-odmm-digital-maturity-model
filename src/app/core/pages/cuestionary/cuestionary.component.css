@@ -1,0 +1,30 @@
+/* MatPages */
+
+.cuestionarioPanel {
+    width: 100%;
+}
+
+
+/* Content  */
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+
+.example-radio-button {
+    margin: 5px;
+}
+
+
+/* vertical steper */
+
+
+/* .mat-stepper-horizontal {
+    margin-top: 8px;
+}
+
+.mat-form-field {
+    margin-top: 16px;
+} */
