@@ -51,14 +51,9 @@ export class MetricasService {
   }
 
   createMetricaDB(metrica: Metrica) {
-    metrica = {
-      nombre: metrica.nombre,
-      pregunta: metrica.pregunta,
-      peso: metrica.peso,
-      // Asigna el objeto relacionado
-      idCapacidad: this.afs.collection("capacidades").doc(metrica.idCapacidad).ref,
-    }
-    this.metricasCollection = this.afs.collection('metricas');
+    metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
+
+    this.metricasCollection = this.afs.collection('metricas').doc(metrica.id);
     this.metricasCollection.add(metrica);
   }
 

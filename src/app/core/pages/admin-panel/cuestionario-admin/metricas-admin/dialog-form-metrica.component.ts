@@ -66,9 +66,13 @@ export class DialogFormMetricaComponent {
       idCapacidad: [' ', Validators.required],
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
-      peso: [this.local_data.peso, Validators.required],
+      pesoPregunta: [this.local_data.peso, Validators.required],
       respuestas: this.fb.array([
-        this.fb.control('')
+        //opcion: ['', Validators.required],
+        this.fb.group({
+          opcion: ['', Validators.required],
+          pesoRespuesta: ['', Validators.required],
+        }),
       ])
     });
   }
