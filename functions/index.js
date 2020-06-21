@@ -32,6 +32,7 @@ exports.obtenerCuestionarios = functions.https.onRequest((req, res) => {
         categoria.subcategorias = subcategorias;
         return Promise.all(capacidades)
     }).then((capacidadesSnap) => {
+        // esto tienes que hacer en metriecas
         capacidadesSnap.forEach((capacidades) => {
             capacidades.forEach(capacidad => {
                 const capacidadUid = capacidad.id;
@@ -44,12 +45,11 @@ exports.obtenerCuestionarios = functions.https.onRequest((req, res) => {
         });
         capacidadesArr.forEach(capacidad => {
             const idSubcategoria = capacidad.idSubcategoria;
-            var item = categoria.subcategorias.find(subcategoria => subcategoria.id === idSubcategoria);
             var elementPos = categoria.subcategorias.map((x) => { return x.id; }).indexOf(idSubcategoria);
-            // categoria.subcategorias[elementPos].capacidades.push(item);
-            // objectFound.capacidades.push(item)
+            delete capacidad.idSubcategoria;
+            categoria.subcategorias[elementPos].capacidades.push(capacidad);
         });
 
-        return res.send({ categoria, capacidades: capacidadesArr })
+        return res.send(categoria)
     })
 });
