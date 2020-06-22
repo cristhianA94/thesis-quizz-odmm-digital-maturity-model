@@ -6,9 +6,9 @@ import {
 } from "@angular/fire/firestore";
 import { Observable, BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
-import { Categoria } from "../../../../shared/models/cuestionario";
 import { Resolve, ActivatedRouteSnapshot } from "@angular/router";
 import { SubcategoriasService } from "../subcategorias/subcategorias.service";
+import { Categoria } from 'app/shared/models/categoria';
 
 @Injectable({
   providedIn: "root",

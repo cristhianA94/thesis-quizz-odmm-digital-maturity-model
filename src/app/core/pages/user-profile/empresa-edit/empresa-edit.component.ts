@@ -3,9 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // Models
 import { Sector_Industrial } from 'app/shared/models/sector_industrial';
-import { Pais } from 'app/shared/models/ubicacion';
-import { Provincia, Canton } from 'app/shared/models/ubicacion';
 import { Empresa } from 'app/shared/models/empresa';
+import { Canton } from 'app/shared/models/canton';
+import { Pais } from 'app/shared/models/pais';
 
 // Services
 import { PaisService } from 'app/core/services/user/pais/pais.service';
@@ -15,6 +15,7 @@ import { CantonService } from 'app/core/services/user/canton/canton.service';
 import { EmpresaService } from 'app/core/services/user/empresas/empresa.service';
 // Alertas
 import Swal from 'sweetalert2';
+import { Provincia } from 'app/shared/models/provincia';
 
 
 @Component({

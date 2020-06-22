@@ -1,8 +1,8 @@
-import { Component, Inject, Optional, OnInit } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PaisService } from '../../../../services/user/pais/pais.service';
-import { Pais } from '../../../../../shared/models/ubicacion';
+import { Pais } from 'app/shared/models/pais';
+import { PaisService } from 'app/core/services/user/pais/pais.service';
 
 @Component({
   selector: 'app-dialog-form-provincia',

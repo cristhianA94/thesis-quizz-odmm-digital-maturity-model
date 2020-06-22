@@ -1,9 +1,9 @@
+import { Component, Inject, Optional } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
 import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
-import { Capacidad } from "./../../../../../shared/models/cuestionario";
-import { Component, Inject, Optional } from "@angular/core";
+import { Capacidad } from 'app/shared/models/capacidad';
 
 @Component({
   selector: "app-dialog-form-metrica",
@@ -49,7 +49,7 @@ export class DialogFormMetricaComponent {
       this.fb.group({
         opcion: [""],
         pesoRespuesta: [""],
-        observacion: [""],
+        recomendacion: [""],
       })
     );
   }

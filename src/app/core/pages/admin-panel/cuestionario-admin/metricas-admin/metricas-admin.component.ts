@@ -6,9 +6,9 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 
-import { Metrica } from "../../../../../shared/models/cuestionario";
-import { MetricasService } from "../../../../services/cuestionario/metricas/metricas.service";
 import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
+import { Metrica } from 'app/shared/models/metrica';
+import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
 
 @Component({
   selector: "app-metricas-admin",

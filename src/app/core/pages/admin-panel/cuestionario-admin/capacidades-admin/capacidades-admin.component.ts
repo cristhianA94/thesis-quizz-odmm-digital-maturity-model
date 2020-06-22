@@ -9,7 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
 import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
 import { DialogFormLoadDataComponent } from '../dialog-form/dialog-form-loadData.component';
-import { Capacidad } from 'app/shared/models/cuestionario';
+import { Capacidad } from 'app/shared/models/capacidad';
 
 @Component({
   selector: "app-capacidades-admin",

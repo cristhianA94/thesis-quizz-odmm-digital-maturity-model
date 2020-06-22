@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { Pais } from 'app/shared/models/ubicacion';
+import { Pais } from 'app/shared/models/pais';
 
 
 @Injectable({

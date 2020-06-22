@@ -3,7 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // Models
 import { Sector_Industrial } from 'app/shared/models/sector_industrial';
-import { Provincia, Canton, Pais } from 'app/shared/models/ubicacion';
+import { Provincia } from 'app/shared/models/provincia';
+import { Canton } from 'app/shared/models/canton';
+import { Pais } from 'app/shared/models/pais';
 
 // Servicios
 import { AuthService } from 'app/core/auth/service/auth.service';

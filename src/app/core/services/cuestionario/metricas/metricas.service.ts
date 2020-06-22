@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Metrica } from '../../../../shared/models/cuestionario';
 import { map } from 'rxjs/operators';
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { Metrica } from 'app/shared/models/metrica';
 
 @Injectable({
   providedIn: 'root'

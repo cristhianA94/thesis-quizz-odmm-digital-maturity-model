@@ -1,12 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import {
-  Categoria,
-  Subcategoria,
-  Capacidad,
-  Metrica,
-  Respuesta,
-} from "app/shared/models/cuestionario";
 import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
 
 import { ActivatedRoute } from "@angular/router";
@@ -15,6 +8,12 @@ import { SubcategoriasService } from "app/core/services/cuestionario/subcategori
 import { takeUntil } from "rxjs/operators";
 import { MetricasService } from "app/core/services/cuestionario/metricas/metricas.service";
 import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
+
+
+import { Categoria } from 'app/shared/models/categoria';
+import { Subcategoria } from 'app/shared/models/subcategoria';
+import { Capacidad } from 'app/shared/models/capacidad';
+import { Metrica, Respuesta } from 'app/shared/models/metrica';
 
 @Component({
   selector: "app-dimension",

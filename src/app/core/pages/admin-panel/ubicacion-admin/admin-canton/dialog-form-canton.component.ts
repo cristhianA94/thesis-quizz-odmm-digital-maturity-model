@@ -1,9 +1,8 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PaisService } from '../../../../services/user/pais/pais.service';
-import { Provincia } from '../../../../../shared/models/ubicacion';
-import { ProvinciaService } from '../../../../services/user/provincia/provincia.service';
+import { Provincia } from 'app/shared/models/provincia';
+import { ProvinciaService } from 'app/core/services/user/provincia/provincia.service';
 
 @Component({
   selector: 'app-dialog-form-provincia',

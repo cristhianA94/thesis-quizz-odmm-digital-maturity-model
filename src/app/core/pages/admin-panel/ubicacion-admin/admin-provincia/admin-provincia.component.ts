@@ -7,9 +7,9 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFormProvinciaComponent } from './dialog-form-provincia.component';
 
-import { ProvinciaService } from '../../../../services/user/provincia/provincia.service';
-import { Provincia } from 'app/shared/models/ubicacion';
 import { PaisService } from 'app/core/services/user/pais/pais.service';
+import { Provincia } from 'app/shared/models/provincia';
+import { ProvinciaService } from 'app/core/services/user/provincia/provincia.service';
 
 @Component({
   selector: 'app-admin-provincia',

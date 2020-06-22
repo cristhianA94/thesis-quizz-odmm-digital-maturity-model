@@ -1,4 +1,4 @@
-export interface Sector_Industrial {
+export interface Pais {
     id?: string
     nombre: string;
 }

@@ -7,8 +7,8 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFormPaisComponent } from './dialog-form-pais.component';
 
-import { Pais } from 'app/shared/models/ubicacion';
 import { PaisService } from 'app/core/services/user/pais/pais.service';
+import { Pais } from 'app/shared/models/pais';
 
 @Component({
   selector: 'app-admin-pais',

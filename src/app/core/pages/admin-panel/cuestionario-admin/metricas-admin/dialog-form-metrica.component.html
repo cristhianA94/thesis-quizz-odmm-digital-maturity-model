@@ -1,120 +1,81 @@
 <h1 mat-dialog-title>
-  <strong>{{ action }}</strong>
+    <strong>{{ action }}</strong>
 </h1>
 <div mat-dialog-content>
-  <form [formGroup]="dataForm">
-    <div *ngIf="action != 'Borrar'; else elseTemplate">
-      <!-- Load data services -->
-      <mat-form-field appearance="outline">
-        <mat-label>Seleccione una capacidad </mat-label>
-        <mat-select formControlName="idCapacidad">
-          <mat-option
-            *ngFor="let capacidad of capacidades"
-            [value]="capacidad.id"
-          >
-            {{ capacidad.nombre }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <!-- Fields common -->
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          formControlName="nombre"
-          placeholder="Nombre de métrica"
-          matInput
-          required
-        />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Pregunta</mat-label>
-        <input
-          formControlName="pregunta"
-          placeholder="Pregunta planteada"
-          matInput
-          required
-        />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Peso pregunta</mat-label>
-        <input
-          matInput
-          formControlName="pesoPregunta"
-          type="number"
-          placeholder="Peso pregunta"
-          required
-        />
-      </mat-form-field>
-
-      <!-- Respuestas -->
-      <div formArrayName="respuestas">
-        <h3>Respuestas</h3>
-        <button mat-raised-button (click)="addRespuesta()">
-          Agregar Respuesta
-        </button>
-
-        <div *ngFor="let respuesta of respuestas.controls; let i = index">
-          <!-- The repeated respuesta template -->
-          <div
-            [formGroupName]="i"
-            fxLayout="column"
-            fxLayoutAlign="space-around start"
-          >
-            <div fxLayout="row" fxLayout.lt-sm="column" >
-              <mat-form-field appearance="outline" fxFlex="45">
-                <mat-label>Opción {{ i + 1 }}</mat-label>
-                <input
-                  formControlName="opcion"
-                  placeholder="Opción de respuesta para la métrica"
-                  matInput
-                  required
-                />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" fxFlex="45">
-                <mat-label>Peso</mat-label>
-                <mat-select formControlName="pesoRespuesta">
-                  <mat-option *ngFor="let peso of pesos" [value]="peso">{{
-                    peso
-                  }}</mat-option>
+    <form [formGroup]="dataForm">
+        <div *ngIf="action != 'Borrar'; else elseTemplate">
+            <!-- Load data services -->
+            <mat-form-field appearance="outline">
+                <mat-label>Seleccione una capacidad </mat-label>
+                <mat-select formControlName="idCapacidad">
+                    <mat-option *ngFor="let capacidad of capacidades" [value]="capacidad.id">
+                        {{ capacidad.nombre }}
+                    </mat-option>
                 </mat-select>
-              </mat-form-field>
+            </mat-form-field>
+            <!-- Fields common -->
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input formControlName="nombre" placeholder="Nombre de métrica" matInput required />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Pregunta</mat-label>
+                <input formControlName="pregunta" placeholder="Pregunta planteada" matInput required />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Peso pregunta</mat-label>
+                <input matInput formControlName="pesoPregunta" type="number" placeholder="Peso pregunta" required />
+            </mat-form-field>
+
+            <!-- Respuestas -->
+            <div formArrayName="respuestas">
+                <h3>Respuestas</h3>
+                <button mat-raised-button (click)="addRespuesta()">
+                    Agregar Respuesta
+                </button>
+
+                <div *ngFor="let respuesta of respuestas.controls; let i = index">
+                    <!-- The repeated respuesta template -->
+                    <div [formGroupName]="i" fxLayout="column" fxLayoutAlign="space-around start">
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+                            <mat-form-field appearance="outline" fxFlex="45">
+                                <mat-label>Opción {{ i + 1 }}</mat-label>
+                                <input formControlName="opcion" placeholder="Opción de respuesta para la métrica" matInput required />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" fxFlex="45">
+                                <mat-label>Peso</mat-label>
+                                <mat-select formControlName="pesoRespuesta">
+                                    <mat-option *ngFor="let peso of pesos" [value]="peso">{{ peso }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <div fxFlex="85">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Recomendación</mat-label>
+                                    <textarea matInput formControlName="recomendacion" placeholder="Observación" required></textarea>
+                                </mat-form-field>
+                            </div>
+                            <button mat-mini-fab (click)="borrarRespuesta(i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div fxLayout="row" fxLayoutAlign="center center">
-              <div fxFlex="85">
-                <mat-form-field appearance="outline">
-                  <mat-label>Observación</mat-label>
-                  <textarea
-                    matInput
-                    formControlName="observacion"
-                    placeholder="Observación"
-                    required
-                  ></textarea>
-                </mat-form-field>
-              </div>
-              <button mat-mini-fab (click)="borrarRespuesta(i)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </form>
-  <ng-template #elseTemplate>
-    <p>¿Está seguro de borrar</p>
-    <b>{{ local_data.nombre }}</b
-    >?
-    <hr />
-  </ng-template>
+    </form>
+    <ng-template #elseTemplate>
+        <p>¿Está seguro de borrar</p>
+        <b>{{ local_data.nombre }}</b>?
+        <hr />
+    </ng-template>
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
-  <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button
-    mat-raised-button
-    [disabled]="dataForm.invalid"
-    (click)="dialogRef.close(dataForm.value)"
-  >
-    {{ action }}
-  </button>
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="dialogRef.close(dataForm.value)">
+        {{ action }}
+    </button>
 </div>

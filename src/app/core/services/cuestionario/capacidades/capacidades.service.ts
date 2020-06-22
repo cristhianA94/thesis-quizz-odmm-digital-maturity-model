@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Capacidad } from '../../../../shared/models/cuestionario';
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Capacidad } from 'app/shared/models/capacidad';
 
 @Injectable({
   providedIn: 'root'

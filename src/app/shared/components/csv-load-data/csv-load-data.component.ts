@@ -4,12 +4,12 @@ import { NgxCsvParser, NgxCSVParserError } from "ngx-csv-parser";
 import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
 import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
 import { MetricasService } from "app/core/services/cuestionario/metricas/metricas.service";
-import {
-  Subcategoria,
-  Capacidad,
-  Metrica,
-  Respuesta,
-} from "app/shared/models/cuestionario";
+
+
+import { Subcategoria } from 'app/shared/models/subcategoria';
+import { Capacidad } from 'app/shared/models/capacidad';
+import { Metrica, Respuesta } from 'app/shared/models/metrica';
+
 
 @Component({
   selector: "app-csv-load-data",
@@ -34,14 +34,17 @@ export class CsvLoadDataComponent implements OnInit {
     private subcategoriasServices: SubcategoriasService,
     private capacidadesServices: CapacidadesService,
     private metricasServices: MetricasService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  respuestas: Respuesta[] = [];
 
   // Sus aplicaciones introducen el cambio de escucha para el archivo CSV
   fileChangeListener($event: any): void {
     // Seleccione los archivos del evento...
     const files = $event.srcElement.files;
+
 
     if (files) {
       this.fileSelected = true;
@@ -79,9 +82,35 @@ export class CsvLoadDataComponent implements OnInit {
         });
         break;
       case "Metricas":
-        this.csvRecords.forEach((element) => {
-          this.metricasServices.createMetricaDB(element as Metrica);
+        //console.log(this.csvRecords);
+        let peso = 0;
+
+        // CsvRecords trae un array de objetos del csv
+        this.csvRecords.forEach((element: any, i: number) => {
+
+          let respuestas: Respuesta[] = [];
+
+          let respuesta: Respuesta = {
+            opcion: element.opcion1,
+            peso: peso,
+            recomendacion: element.opcion2
+          };
+          respuestas.push(respuesta);
+
+          let metrica: Metrica = {
+            nombre: element.nombre,
+            pregunta: element.pregunta,
+            peso: element.peso,
+            respuestas: respuestas,
+            idCapacidad: element.idCapacidad
+          }
+
+
+          console.log(metrica);
+          //this.metricasServices.createMetricaDB(element as Metrica);
         });
+
+
         break;
       default:
         break;

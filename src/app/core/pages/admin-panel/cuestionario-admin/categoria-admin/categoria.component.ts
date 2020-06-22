@@ -5,8 +5,8 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 
 import { DialogFormCategoriaComponent } from './dialog-form-categoria.component';
-import { Categoria } from '../../../../../shared/models/cuestionario';
-import { CategoriasService } from '../../../../services/cuestionario/categorias/categorias.service';
+import { Categoria } from 'app/shared/models/categoria';
+import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
 
 @Component({
   selector: 'app-categoria',

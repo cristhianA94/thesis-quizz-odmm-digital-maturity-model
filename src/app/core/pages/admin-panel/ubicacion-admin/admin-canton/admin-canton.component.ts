@@ -6,9 +6,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 
 import { DialogFormCantonComponent } from './dialog-form-canton.component';
-import { Canton } from '../../../../../shared/models/ubicacion';
-import { CantonService } from '../../../../services/user/canton/canton.service';
 import { ProvinciaService } from 'app/core/services/user/provincia/provincia.service';
+import { Canton } from 'app/shared/models/canton';
+import { CantonService } from 'app/core/services/user/canton/canton.service';
 
 @Component({
   selector: 'app-admin-canton',

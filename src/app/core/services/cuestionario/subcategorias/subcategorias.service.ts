@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Subcategoria } from "../../../../shared/models/cuestionario";
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
@@ -8,6 +7,7 @@ import {
 } from "@angular/fire/firestore";
 import { Observable, BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
+import { Subcategoria } from 'app/shared/models/subcategoria';
 
 @Injectable({
   providedIn: "root",

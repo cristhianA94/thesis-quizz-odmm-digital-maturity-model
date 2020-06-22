@@ -3,7 +3,7 @@ import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Canton } from 'app/shared/models/ubicacion';
+import { Canton } from 'app/shared/models/canton';
 
 @Injectable({
   providedIn: 'root'

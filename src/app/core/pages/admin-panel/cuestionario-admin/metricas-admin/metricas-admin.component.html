@@ -1,163 +1,112 @@
 <div class="row">
-  <div class="card">
-    <div class="card-header card-header-success">
-      <h3 class="card-title"><strong>Administrar Métricas</strong></h3>
-      <p class="card-category">
-        Permite agregar, actualizar o eliminar una métrica de una capacidad del
-        cuestionario
-      </p>
-    </div>
-    <br />
-    <mat-divider></mat-divider>
+    <div class="card">
+        <div class="card-header card-header-success">
+            <h3 class="card-title"><strong>Administrar Métricas</strong></h3>
+            <p class="card-category">
+                Permite agregar, actualizar o eliminar una métrica de una capacidad del cuestionario
+            </p>
+        </div>
+        <br />
+        <mat-divider></mat-divider>
 
-    <!-- CSV -->
-    <app-csv-load-data tipo="Metricas"></app-csv-load-data>
+        <!-- CSV -->
+        <app-csv-load-data tipo="Metricas"></app-csv-load-data>
 
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-icon card-header-success">
-              <div class="card-icon">
-                <i class="material-icons">category</i>
-              </div>
-              <h3 class="card-title"><strong>Métricas</strong></h3>
-              <div class="text-right mr-2">
-                <button
-                  mat-raised-button
-                  (click)="openDialog('Agregar', {})"
-                  color="primary"
-                  aria-label="Agrega una provincia"
-                >
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-icon card-header-success">
+                            <div class="card-icon">
+                                <i class="material-icons">category</i>
+                            </div>
+                            <h3 class="card-title"><strong>Métricas</strong></h3>
+                            <div class="text-right mr-2">
+                                <button mat-raised-button (click)="openDialog('Agregar', {})" color="primary" aria-label="Agrega una provincia">
                   <mat-icon>add</mat-icon> Agregar
                 </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <mat-accordion class="headers-align" multi>
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <i class="material-icons mr-2">visibility</i> Ver Métricas
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      Desplegar/Contraer
-                      <mat-icon>category</mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <mat-accordion class="headers-align" multi>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <i class="material-icons mr-2">visibility</i> Ver Métricas
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            Desplegar/Contraer
+                                            <mat-icon>category</mat-icon>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
 
-                  <!-- Tabla -->
-                  <mat-form-field>
-                    <mat-label>Filtrar</mat-label>
-                    <input
-                      matInput
-                      (keyup)="buscarMetrica($event)"
-                      placeholder="..."
-                    />
-                  </mat-form-field>
+                                    <!-- Tabla -->
+                                    <mat-form-field>
+                                        <mat-label>Filtrar</mat-label>
+                                        <input matInput (keyup)="buscarMetrica($event)" placeholder="..." />
+                                    </mat-form-field>
 
-                  <table
-                    mat-table
-                    [dataSource]="dataSource"
-                    matSort
-                    class="mat-elevation-z8"
-                  >
-                    <!-- Namee Column -->
-                    <ng-container matColumnDef="Nombre">
-                      <th mat-header-cell *matHeaderCellDef>Nombre</th>
-                      <td
-                        mat-cell
-                        *matCellDef="let element"
-                        style="width: 135px;"
-                      >
-                        {{ element.nombre }}
-                      </td>
-                    </ng-container>
+                                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                                        <!-- Namee Column -->
+                                        <ng-container matColumnDef="Nombre">
+                                            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                                            <td mat-cell *matCellDef="let element" style="width: 135px;">
+                                                {{ element.nombre }}
+                                            </td>
+                                        </ng-container>
 
-                    <!-- Descripción Column -->
-                    <ng-container matColumnDef="Pregunta">
-                      <th mat-header-cell *matHeaderCellDef>Pregunta</th>
-                      <td
-                        mat-cell
-                        *matCellDef="let element"
-                        style="width: auto;"
-                      >
-                        {{ element.pregunta }}
-                      </td>
-                    </ng-container>
+                                        <!-- Descripción Column -->
+                                        <ng-container matColumnDef="Pregunta">
+                                            <th mat-header-cell *matHeaderCellDef>Pregunta</th>
+                                            <td mat-cell *matCellDef="let element" style="width: auto;">
+                                                {{ element.pregunta }}
+                                            </td>
+                                        </ng-container>
 
-                    <!-- Peso Column -->
-                    <ng-container matColumnDef="Peso">
-                      <th mat-header-cell *matHeaderCellDef>Peso</th>
-                      <td
-                        mat-cell
-                        *matCellDef="let element"
-                        style="width: 70px;"
-                      >
-                        {{ element.pesoPregunta }}
-                      </td>
-                    </ng-container>
+                                        <!-- Peso Column -->
+                                        <ng-container matColumnDef="Peso">
+                                            <th mat-header-cell *matHeaderCellDef>Peso</th>
+                                            <td mat-cell *matCellDef="let element" style="width: 70px;">
+                                                {{ element.pesoPregunta }}
+                                            </td>
+                                        </ng-container>
 
-                    <!-- Capacidades Column -->
-                    <ng-container matColumnDef="Capacidad">
-                      <th mat-header-cell *matHeaderCellDef>Capacidad</th>
-                      <td
-                        mat-cell
-                        *matCellDef="let element"
-                        style="width: 120px;"
-                      >
-                        {{ (element.idCapacidad | doc | async)?.nombre }} - {{ (element.idCapacidad | doc | async)?.peso }}
-                      </td>
-                    </ng-container>
+                                        <!-- Capacidades Column -->
+                                        <ng-container matColumnDef="Capacidad">
+                                            <th mat-header-cell *matHeaderCellDef>Capacidad</th>
+                                            <td mat-cell *matCellDef="let element" style="width: 120px;">
+                                                {{ (element.idCapacidad | doc | async)?.nombre }} - {{ (element.idCapacidad | doc | async)?.peso }}
+                                            </td>
+                                        </ng-container>
 
-                    <!-- Actions -->
-                    <ng-container matColumnDef=" ">
-                      <th mat-header-cell *matHeaderCellDef></th>
-                      <td
-                        mat-cell
-                        *matCellDef="let element"
-                        style="width: 130px;"
-                      >
-                        <div class="button-container">
-                          <button
-                            (click)="openDialog('Actualizar', element)"
-                            mat-mini-fab
-                            color="accent"
-                            aria-label="Edit"
-                          >
+                                        <!-- Actions -->
+                                        <ng-container matColumnDef=" ">
+                                            <th mat-header-cell *matHeaderCellDef></th>
+                                            <td mat-cell *matCellDef="let element" style="width: 130px;">
+                                                <div class="button-container">
+                                                    <button (click)="openDialog('Actualizar', element)" mat-mini-fab color="accent" aria-label="Edit">
                             <mat-icon>edit</mat-icon>
                           </button>
-                          <button
-                            (click)="borarMetrica(element.id)"
-                            mat-mini-fab
-                            color="warn"
-                            aria-label="Delete"
-                          >
+                                                    <button (click)="borarMetrica(element.id)" mat-mini-fab color="warn" aria-label="Delete">
                             <mat-icon>delete</mat-icon>
                           </button>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                    </table>
+                                    <mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 25, 30]" showFirstLastButtons>
+                                    </mat-paginator>
+
+                                    <!-- End Table -->
+                                </mat-expansion-panel>
+                            </mat-accordion>
                         </div>
-                      </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr
-                      mat-row
-                      *matRowDef="let row; columns: displayedColumns"
-                    ></tr>
-                  </table>
-                  <mat-paginator
-                    [pageSizeOptions]="[5, 10, 15, 20, 25, 30]"
-                    showFirstLastButtons
-                  >
-                  </mat-paginator>
-
-                  <!-- End Table -->
-                </mat-expansion-panel>
-              </mat-accordion>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

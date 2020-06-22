@@ -17,7 +17,6 @@ import { SubcategoriaComponent } from "./subcategoria-admin/subcategoria.compone
 import { CapacidadesAdminComponent } from "./capacidades-admin/capacidades-admin.component";
 import { MetricasAdminComponent } from "./metricas-admin/metricas-admin.component";
 import { DialogFormMetricaComponent } from "./metricas-admin/dialog-form-metrica.component";
-import { RecomendacionesAdminComponent } from "./recomendaciones-admin/recomendaciones-admin.component";
 import { CuestionarioAdminComponent } from "./cuestionario-admin.component";
 
 // Components reutilizables
@@ -44,8 +43,6 @@ import { SharedModule } from 'app/shared.module';
     DialogFormLoadDataComponent,
     MetricasAdminComponent,
     DialogFormMetricaComponent,
-
-    RecomendacionesAdminComponent,
   ],
   providers: [
     CategoriasService,

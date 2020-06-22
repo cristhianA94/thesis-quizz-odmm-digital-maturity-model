@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Subcategoria } from '../../../../../shared/models/cuestionario';
 import { MatAccordion } from "@angular/material/expansion";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatDialog } from "@angular/material/dialog";
 
-import { CategoriasService } from "../../../../services/cuestionario/categorias/categorias.service";
-import { SubcategoriasService } from "../../../../services/cuestionario/subcategorias/subcategorias.service";
-import { DialogFormLoadDataComponent } from "../dialog-form/dialog-form-loadData.component";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogFormLoadDataComponent } from '../dialog-form/dialog-form-loadData.component';
+
+import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
+import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
+import { Subcategoria } from 'app/shared/models/subcategoria';
+
 
 
 @Component({

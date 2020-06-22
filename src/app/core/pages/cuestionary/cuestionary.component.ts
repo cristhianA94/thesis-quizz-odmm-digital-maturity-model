@@ -4,7 +4,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CategoriasService } from '../../services/cuestionario/categorias/categorias.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { Categoria } from 'app/shared/models/cuestionario';
+import { Categoria } from 'app/shared/models/categoria';
 
 @Component({
   selector: 'app-cuestionary',
