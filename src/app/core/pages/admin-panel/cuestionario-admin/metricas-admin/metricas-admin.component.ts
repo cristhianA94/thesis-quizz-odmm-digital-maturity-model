@@ -57,7 +57,7 @@ export class MetricasAdminComponent implements OnInit {
 
   onRowClicked(row: any) {
     //this.metrica = row;
-    console.log("Row clicked: ", row);
+    //console.log("Row clicked: ", row);
   }
 
   openDialog(action: string, obj: any) {

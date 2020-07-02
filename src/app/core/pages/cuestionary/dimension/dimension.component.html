@@ -1,82 +1,110 @@
 <div class="main-content">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="row">
-          <div class="card text-center">
-            <div class="card-header card-header-primary">
-              <h2 class="card-title">
-                <strong>{{ categoria.nombre | uppercase }}</strong>
-              </h2>
-            </div>
-            <div class="card-body">
-              {{ categoria.descripcion }}
-            </div>
-          </div>
-        </div>
-        <hr />
-        <!-- Subcategoria 1 -->
-        
-        <div class="row" *ngFor="let subcategoria of subcategorias">
-          <div class="card">
-            <div class="card-header card-header-icon card-header-rose">
-              <div class="card-icon">
-                <i class="material-icons"></i>
-              </div>
-              <h3 class="card-title">
-                Subcategoria: {{ subcategoria.nombre }}
-              </h3>
-            </div>
-            <div class="card-body">
-              {{ subcategoria.descripcion }}
-            </div>
-            <hr />
+    <div class="container-fluid">
 
-            <!-- Capacidades -->
-            <!-- <div class="row">
+        <div class="row">
+            <div class="col-md-12">
+                <app-loader *ngIf="!load"></app-loader>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="load">
+            <div class="col-md-12">
+
+                <!-- Categoria -->
+                <div class="row">
+                    <div class="card text-center">
+                        <div class="card-header card-header-info">
+                            <h2 class="card-title">
+                                <strong>{{ categoria.nombre | uppercase }}</strong>
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <h4> {{ categoria.descripcion }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <!-- Subcategorias -->
+                <div class="row" *ngFor="let subcategoria of subcategorias, let iSubs = index">
+                    <div class="card">
+                        <div class="card-header card-header-icon card-header-success">
+                            <div class="card-icon">
+                                <i class="material-icons"></i>
+                            </div>
+                            <h3 class="card-title">
+                                Subcategoria: {{ subcategoria.nombre }}
+                            </h3>
+                        </div>
+                        <div class="card-body text-center">
+                            <h4>
+                                <strong>{{ subcategoria.descripcion }}</strong>
+                            </h4>
+                        </div>
+
+                        <!-- Capacidades -->
+                        <div *ngFor="let capacidad of subcategorias[iSubs].capacidades, let iCap = index">
                             <div class="col-md-11 mx-auto">
-                                <h4>Capacidad: <small>{{ capacidades[0].nombre }}</small> </h4>
-                                <p>{{ capacidades[0].descripcion }} </p>
+                                <div class="card border-info">
+                                    <div class="card-header">
+                                        <h4>Capacidad: {{ capacidad.nombre }}</h4>
+                                    </div>
+                                    <div class="card-body text-info">
+                                        <h5 class="card-text"> <strong> {{ capacidad.descripcion }}</strong></h5>
+                                    </div>
+                                </div>
+
+                                <!-- Métrica -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3> Métrica [{{ capacidad.metrica["nombre"] }}] <br> Pregunta: {{ capacidad.metrica["pregunta"] }}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-md-10 mx-auto">
+                                            <label id="example-radio-group-label"> <small>Elija la opción más asequible
+                                                    a su
+                                                    empresa</small></label>
+                                            <!-- Respuestas -->
+                                            <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChange($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
+                                                <mat-radio-button class="radio-button" [value]="respuesta">
+                                                    {{respuesta.opcion }}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <hr> -->
-          </div>
+                        <hr />
+                    </div>
+                    <button mat-raised-button id="btn{{iSubs}}" type="button" [disabled]="buttons[iSubs]" (click)="guardarRespuestas(iSubs)" class="btn btn-block btn-success pull-right">Guardar
+                        cambios</button>
+                </div>
+                <!-- End Subcategorias -->
+            </div>
+            <!-- End Subcategorias -->
         </div>
 
-        <hr />
+        <hr>
 
-        <div class="row">
-          <div class="col-md-10 mx-auto">
-            <!-- Respuestas -->
-            <!-- <form [formGroup]="dimension2Form">
-                            <h4>{{ metricas[0].nombre}}</h4>
-                            <h3> <strong> {{ metricas[0].pregunta }} </strong></h3>
-                            <label id="example-radio-group-label"> <small>Elija la opción más asequible a su
-                                    empresa</small>
-                            </label>
-                            <mat-radio-group aria-labelledby="opciones de las métricas" class="radio-group">
-                                <mat-radio-button class="radio-button" *ngFor="let respuesta of respuestas[0]" [value]="respuesta">
-                                    {{respuesta.opcion }}
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </form> -->
-          </div>
+        <div class="row" *ngIf="load">
+            <div class="col-md-6">
+                <div class="text-left">
+                    <button (click)="regresarSinGuardar()" mat-raised-button class="mr-2">
+                        <mat-icon>keyboard_arrow_left</mat-icon>Regresar sin guardar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <button mat-raised-button type="button" class="btn btn-success pull-right">Guardar cambios</button>
+                    <button (click)="guardarCategoria()" mat-raised-button class="mr-2">
+                                <mat-icon>save</mat-icon>Guardar categoría
+                            </button>
+                </div>
+            </div>
         </div>
-
-        <div class="text-right">
-          <button
-            class="mr-3"
-            mat-fab
-            color="primary"
-            aria-label="categoría anterior"
-          >
-            <mat-icon>arrow_back_ios</mat-icon>
-          </button>
-          <button mat-fab color="primary" aria-label="categoría posterior">
-            <mat-icon>arrow_forward_ios</mat-icon>
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
+
+
 </div>

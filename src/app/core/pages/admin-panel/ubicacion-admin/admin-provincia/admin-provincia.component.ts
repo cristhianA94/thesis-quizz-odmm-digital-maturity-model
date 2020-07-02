@@ -18,7 +18,6 @@ import { ProvinciaService } from 'app/core/services/user/provincia/provincia.ser
 })
 export class AdminProvinciaComponent implements OnInit {
 
-
   @ViewChild(MatAccordion) paisesItems: MatAccordion;
 
   provincias: Provincia[] = [];
@@ -31,7 +30,7 @@ export class AdminProvinciaComponent implements OnInit {
   //@ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
   constructor(
     public paisService: PaisService,
     public provinciaService: ProvinciaService,
@@ -41,20 +40,9 @@ export class AdminProvinciaComponent implements OnInit {
   ngOnInit(): void {
     this.provinciaService.getProvinciasDB().subscribe(provincias => {
       this.provincias = provincias;
-      /* Table */
       // Agrega los datos a la tabla
       this.dataSource.data = this.provincias;
-      //this.paisService.getPaisDB(this.provincias[].id)
     })
-
-    /* 
-    this.provincias.forEach(element => {
-      console.log(element);
-      this.paisService.getPaisDB(element.idPais).subscribe( pais=>{
-        console.log(pais);
-      }) 
-    }); */
-
   }
 
   // Table

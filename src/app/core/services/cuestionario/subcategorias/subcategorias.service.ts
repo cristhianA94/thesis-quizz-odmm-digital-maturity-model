@@ -18,6 +18,7 @@ export class SubcategoriasService {
   subcategoriaDoc: AngularFirestoreDocument<Subcategoria>;
   onSubcategoriaChanged: BehaviorSubject<any>;
   subcategoria: Subcategoria;
+
   constructor(private afs: AngularFirestore) {
     this.onSubcategoriaChanged = new BehaviorSubject([]);
   }
@@ -36,45 +37,10 @@ export class SubcategoriasService {
   }
 
   getSubcategorias_CategoriaDB(idCategoria: string): Promise<Subcategoria[]> {
-    const categoriaRef = this.afs.collection("categorias").doc(idCategoria).ref;
-
-    // this.afs
-    //   .collection("subcategorias", (ref) => {
-    //     return ref.where("idCategoria", "==", categoriaRef);
-    //   })
-    //   .snapshotChanges()
-    //   .pipe(
-    //     map((changes) => {
-    //       return changes.map((a) => {
-    //         const data = a.payload.doc.data() as Subcategoria;
-    //         const id = a.payload.doc.id;
-    //         //get the related document
-    //         return this.afs
-    //           .collection("capacidades", (ref) => {
-    //             return ref.where(
-    //               "idSubcategoria",
-    //               "==",
-    //               this.afs.doc(`subcategorias/${id}`)
-    //             );
-    //           })
-    //           .snapshotChanges()
-    //           .pipe(
-    //             map((actions) => {
-    //               console.log(actions);
-    //               return { capacidades: actions, ...data };
-    //             })
-    //           )
-    //           .subscribe((signup) => {
-    //             console.log(signup);
-    //           });
-    //       });
-    //     })
-    //   );
 
     return new Promise((resolve, reject) => {
       // Crea la referencia de la categoria a la que pertenecen las subcategorias
-      const categoriaRef = this.afs.collection("categorias").doc(idCategoria)
-        .ref;
+      const categoriaRef = this.afs.collection("categorias").doc(idCategoria).ref;
 
       this.afs
         .collection("subcategorias", (ref) => {
@@ -105,17 +71,9 @@ export class SubcategoriasService {
   }
 
   createSubcategoriaDB(subcategoria: Subcategoria) {
-    subcategoria = {
-      nombre: subcategoria.nombre,
-      descripcion: subcategoria.descripcion,
-      peso: subcategoria.peso,
-      // Asigna el objeto relacionado
-      idCategoria: this.afs
-        .collection("categorias")
-        .doc(subcategoria.idCategoria).ref,
-    };
-    //this.subcategoriaDoc.set(subcategoria, { merge: true })
+    subcategoria.idCategoria = this.afs.collection("categorias").doc(subcategoria.idCategoria).ref;
     this.subcategoriaCollection = this.afs.collection("subcategorias");
+    //this.subcategoriaDoc.set(subcategoria, { merge: true })
     this.subcategoriaCollection.add(subcategoria);
   }
 

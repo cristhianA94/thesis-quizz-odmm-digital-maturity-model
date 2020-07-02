@@ -70,44 +70,76 @@ export class CsvLoadDataComponent implements OnInit {
   cargarData() {
     switch (this.tipo) {
       case "Subcategoria":
-        this.csvRecords.forEach((element) => {
-          this.subcategoriasServices.createSubcategoriaDB(
-            element as Subcategoria
-          );
+        this.csvRecords.forEach((element: Subcategoria) => {
+          element.peso = Number(element.peso)
+          this.subcategoriasServices.createSubcategoriaDB(element);
         });
         break;
       case "Capacidades":
-        this.csvRecords.forEach((element) => {
-          this.capacidadesServices.createCapacidadDB(element as Capacidad);
+        this.csvRecords.forEach((element: Capacidad) => {
+          element.peso = Number(element.peso)
+          this.capacidadesServices.createCapacidadDB(element);
         });
         break;
       case "Metricas":
         //console.log(this.csvRecords);
-        let peso = 0;
 
         // CsvRecords trae un array de objetos del csv
-        this.csvRecords.forEach((element: any, i: number) => {
+        this.csvRecords.forEach((element: any) => {
 
           let respuestas: Respuesta[] = [];
 
-          let respuesta: Respuesta = {
+          let respuesta1: Respuesta = {
             opcion: element.opcion1,
-            peso: peso,
+            pesoRespuesta: 0,
             recomendacion: element.opcion2
           };
-          respuestas.push(respuesta);
+          respuestas.push(respuesta1);
+
+          let respuesta2: Respuesta = {
+            opcion: element.opcion2,
+            pesoRespuesta: 2,
+            recomendacion: element.opcion3
+          };
+          respuestas.push(respuesta2);
+
+          let respuesta3: Respuesta = {
+            opcion: element.opcion3,
+            pesoRespuesta: 4,
+            recomendacion: element.opcion4
+          };
+          respuestas.push(respuesta3);
+
+          let respuesta4: Respuesta = {
+            opcion: element.opcion4,
+            pesoRespuesta: 6,
+            recomendacion: element.opcion5
+          };
+          respuestas.push(respuesta4);
+
+          let respuesta5: Respuesta = {
+            opcion: element.opcion5,
+            pesoRespuesta: 8,
+            recomendacion: element.opcion6
+          };
+          respuestas.push(respuesta5);
+
+          let respuesta6: Respuesta = {
+            opcion: element.opcion6,
+            pesoRespuesta: 10,
+            recomendacion: '¡Felicidades, estás manejando esta métrica adecuada y eficientemente, sigue así!'
+          };
+          respuestas.push(respuesta6);
 
           let metrica: Metrica = {
             nombre: element.nombre,
             pregunta: element.pregunta,
-            peso: element.peso,
+            pesoPregunta: element.peso,
             respuestas: respuestas,
             idCapacidad: element.idCapacidad
           }
 
-
-          console.log(metrica);
-          //this.metricasServices.createMetricaDB(element as Metrica);
+          this.metricasServices.createMetricaDB(metrica);
         });
 
 

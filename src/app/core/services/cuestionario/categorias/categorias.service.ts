@@ -17,29 +17,22 @@ export class CategoriasService implements Resolve<any> {
   categoria: Categoria;
   categoriaCollection: AngularFirestoreCollection<Categoria>;
   categoriaDoc: AngularFirestoreDocument<Categoria>;
+
   categoryUid: string;
   onCategoriaChanged: BehaviorSubject<any>;
 
   constructor(
     private afs: AngularFirestore,
-    private subcategoriasService: SubcategoriasService
   ) {
     this.onCategoriaChanged = new BehaviorSubject({});
   }
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
     this.categoryUid = route.params.id;
+
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getCategoriaDB(this.categoryUid),
-        this.subcategoriasService.getSubcategorias_CategoriaDB(
-          this.categoryUid
-        ),
       ])
-        .then(([categorias, subcategorias]) => {
-          subcategorias.forEach((subcategoria) => {
-            console.log(subcategoria.id);
-          });
-        })
         .then(() => {
           resolve();
         }, reject);
@@ -64,10 +57,10 @@ export class CategoriasService implements Resolve<any> {
   // Obtiene una categoria en especifico
   getCategoriaDB(id: string): Promise<Categoria> {
     return new Promise((resolve, reject) => {
-      const expoDoc = this.afs.doc<Categoria>(`categorias/${id}`);
-      expoDoc.valueChanges().subscribe((response: any) => {
+
+      const categoriaDoc = this.afs.doc<Categoria>(`categorias/${id}`);
+      categoriaDoc.valueChanges().subscribe((response: any) => {
         this.categoria = response;
-        console.log(response);
         this.onCategoriaChanged.next(this.categoria);
         resolve(response);
       }, reject);

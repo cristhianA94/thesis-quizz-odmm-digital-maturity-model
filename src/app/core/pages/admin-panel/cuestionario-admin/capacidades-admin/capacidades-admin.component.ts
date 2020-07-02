@@ -37,30 +37,9 @@ export class CapacidadesAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.capacidadesService.getCapacidadesDB()
-      .subscribe((capacidades) => {
-        
-        // Recorre cada capacidad
-        capacidades.forEach((capacidad) => {
-          // Obtiene la coleccion asociada
-          capacidad.idSubcategoria.get().then((subcategoria) => {
-
-            const capacidadObj: Capacidad = {
-              id: capacidad.id,
-              nombre: capacidad.nombre,
-              descripcion: capacidad.descripcion,
-              peso: capacidad.peso,
-              idSubcategoria: subcategoria.data(),
-            };
-
-            this.capacidades.push(capacidadObj);
-            this.dataSource.data = this.capacidades;
-
-          });
-        })
-
-      });
-
+    this.capacidadesService.getCapacidadesDB().subscribe((capacidades) => {
+      this.dataSource.data = capacidades;
+    });
   }
 
   // Table

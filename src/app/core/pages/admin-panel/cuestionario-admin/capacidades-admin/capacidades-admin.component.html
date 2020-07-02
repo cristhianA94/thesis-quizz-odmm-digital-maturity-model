@@ -3,7 +3,8 @@
     <div class="card">
         <div class="card-header card-header-info">
             <h3 class="card-title"> <strong>Administrar Capacidades</strong></h3>
-            <p class="card-category">Permite agregar, actualizar o eliminar una capacidad de una subcategoría del cuestionario</p>
+            <p class="card-category">Permite agregar, actualizar o eliminar una capacidad de una subcategoría del cuestionario
+            </p>
         </div>
         <br>
         <mat-divider></mat-divider>
@@ -79,7 +80,7 @@
                                         <ng-container matColumnDef="Subcategoría">
                                             <th mat-header-cell *matHeaderCellDef> Subcategoría </th>
                                             <td mat-cell *matCellDef="let element" style="width: 120px;">
-                                                {{element.idSubcategoria.nombre }} </td>
+                                                {{ (element.idSubcategoria | doc | async)?.nombre }} </td>
                                         </ng-container>
 
 

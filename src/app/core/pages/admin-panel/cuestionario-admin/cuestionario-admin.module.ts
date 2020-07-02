@@ -2,7 +2,10 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+
+import { ComponentsModule } from 'app/shared/components.module';
 import { MaterialModule } from "../../material.module";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 // Services
 import { SubcategoriasService } from "../../../services/cuestionario/subcategorias/subcategorias.service";
@@ -21,8 +24,6 @@ import { CuestionarioAdminComponent } from "./cuestionario-admin.component";
 
 // Components reutilizables
 import { DialogFormLoadDataComponent } from "./dialog-form/dialog-form-loadData.component";
-import { ComponentsModule } from "../../../../shared/components.module";
-import { SharedModule } from 'app/shared.module';
 
 @NgModule({
   imports: [
@@ -31,8 +32,8 @@ import { SharedModule } from 'app/shared.module';
     ReactiveFormsModule,
     MaterialModule,
     RouterModule,
-    SharedModule,
     ComponentsModule,
+    FlexLayoutModule
   ],
   declarations: [
     CuestionarioAdminComponent,

@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
+import { MatRadioChange, MatRadioButton } from '@angular/material/radio';
 
-import { ActivatedRoute } from "@angular/router";
-import { Observable, Subject } from "rxjs";
-import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
-import { takeUntil } from "rxjs/operators";
-import { MetricasService } from "app/core/services/cuestionario/metricas/metricas.service";
-import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
+import { Subject } from "rxjs";
+import { takeUntil, min } from "rxjs/operators";
 
-
+// Models
 import { Categoria } from 'app/shared/models/categoria';
 import { Subcategoria } from 'app/shared/models/subcategoria';
 import { Capacidad } from 'app/shared/models/capacidad';
 import { Metrica, Respuesta } from 'app/shared/models/metrica';
+import { Cuestionario } from 'app/shared/models/cuestionario';
+
+import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
+import { RespuestasUsuario } from '../../../../shared/models/cuestionario';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-dimension",
@@ -33,102 +33,143 @@ import { Metrica, Respuesta } from 'app/shared/models/metrica';
   ],
 })
 export class DimensionComponent implements OnInit, OnDestroy {
-  idCategoria: string;
-  dimension2Form: FormGroup;
-  categoria: Categoria;
-  subcategorias: Subcategoria[] = [];
-  capacidades: Capacidad[] = [];
-  metricas: Metrica[] = [];
-  respuestas: Respuesta[] = [];
+
   private _unsubscribeAll: Subject<any>;
+  idUser: string;
+  // For disabled buttons
+  buttons = Array(3);
+  load: boolean = false;
+
+  puntuajes: any[] = [];
+
+  cuestionario: Cuestionario;
+  categoria: Categoria;
+
+  subcategoria: Subcategoria;
+  subcategorias: Subcategoria[] = [];
+  subcategoriasEvaluadas: Subcategoria[] = [];
+
+  capacidades: Capacidad[] = [];
+  capacidad: Capacidad = null;
+
+  metricas: Metrica[] = [];
+
+  respuestas: Respuesta[] = [];
+  respuestasUsuario: RespuestasUsuario[] = [];
+  respuestaUsuario: RespuestasUsuario;
 
   constructor(
-    private categoriasServices: CategoriasService,
-    private subcategoriasServices: SubcategoriasService,
-    private metricasServices: MetricasService,
-    private capacidadesServices: CapacidadesService,
-    private fb: FormBuilder,
-    private actRoute: ActivatedRoute
+    private cuestionarioService: CuestionarioService,
+    private router: Router
   ) {
     this._unsubscribeAll = new Subject();
   }
 
   ngOnInit(): void {
-    //this.dimension2Form = this.buildForm();
-    this.categoriasServices.onCategoriaChanged
+    this.idUser = localStorage.getItem("uidUser");
+    this.cuestionarioService.onCuestionarioChanged
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((categoria) => {
-        console.log(categoria);
-        this.categoria = categoria;
+      .subscribe((cuestionario) => {
+        this.categoria = cuestionario;
+        this.subcategorias = this.categoria.subcategorias;
+        //this.cuestionario = cuestionario;
+
       });
-    this.subcategoriasServices.onSubcategoriaChanged
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((subcategorias) => {
-        console.log(subcategorias);
-        this.subcategorias = subcategorias;
-      });
+    this.load = true;
+
   }
 
-  cargarCapacidades(subs: any) {
-    //console.log("llege", subs);
+  // Detecta las opciones elegida por cada subcategoria
+  onChange(mrChange: MatRadioChange, i: number, subcategoria: Subcategoria) {
+    let mrButton: MatRadioButton = mrChange.source;
+    // Guarda cada opcion de respuesta de cada metrica
+    this.respuestas[i] = mrChange.value;
+    // Guarda la subcategoria donde se encuentra el usuario contestando
+    this.subcategoriasEvaluadas.push(subcategoria);
+  }
 
-    // Recorre cada subcategoria
-    this.subcategorias.forEach((subcategoria) => {
-      //console.log(subcategoria);
-      /* this.capacidadesServices.getCapacidades_SubcategoriaDB(subcategoria.id).subscribe(capacidades => {
-        this.capacidades = capacidades;
-        //console.log("CAPACIDADES", this.capacidades);
-      }) */
+  // Calcular la puntuacion de las metricas, capacidades, subcategoria y categoria.
+  calcularPesos(subcategoria: Subcategoria) {
+    //console.log(this.subcategoria.capacidades);
+
+    // Arrays para almacenar los puntuajes
+    let puntuajeMetricas: number[] = [];
+    let puntuajeCapacidades: number[] = [];
+
+    // Recorre cada capacidad para hacer el cálculo de cada métrica y capaciadad
+    subcategoria.capacidades.forEach((capacidad, i) => {
+      // Cálculo pesos metricas
+      puntuajeMetricas.push(Number((capacidad.metrica.pesoPregunta * this.respuestas[i].pesoRespuesta).toFixed(2)));
+      // Cálculo pesos capacidades
+      puntuajeCapacidades.push(Number((capacidad.peso * puntuajeMetricas[i]).toFixed(4)));
     });
+
+    // Cálculo peso subcategoria
+    let puntuajeSubcategoria = puntuajeCapacidades.reduce((oldSum, sumaTotal) => (oldSum + sumaTotal));
+    puntuajeSubcategoria *= subcategoria.peso;
+
+    // Objeto para guardar la informacion de los puntuajes obtenidos de la subcategoria
+    let obtPuntuajes = {
+      subcategoria: this.subcategoria.nombre,
+      puntuacionSubcategoria: puntuajeSubcategoria,
+      puntuacionCapacidades: puntuajeCapacidades,
+      puntuacionMetricas: puntuajeMetricas
+    }
+
+    // Agrega la subcategoria a un arreglo de puntuajes
+    this.puntuajes.push(obtPuntuajes);
   }
 
-  cargarCapacidades2(subcategorias: Subcategoria[]) {
-    /* Carga subcategoria 1: Vigilancia de la marca*/
-    //console.log(subcategorias);
 
-    // Capacidades
-    this.capacidadesServices
-      .getCapacidades_SubcategoriaDB(subcategorias[2].id)
-      .subscribe((capacidades) => {
-        console.log(capacidades);
-        this.capacidades = capacidades;
-      });
+  guardarRespuestas(idSub?: any) {
 
-    /* this.subcategorias.forEach(subcateg => {
-      // Capacidades
-      this.capacidadesServices.getCapacidades_SubcategoriaDB(subcateg.id).subscribe(capacidades => {
-        this.capacidades = capacidades;
-        //console.log("CAPACIDADES",this.capacidades);
+    // ** Validacion de otras subcategorias
+    // Filtra la subcategoria contestada
+    var arrTem: any = [...new Set(this.subcategoriasEvaluadas)];
+    this.subcategoria = arrTem[0];
 
-        this.capacidades.forEach(capac => {
-          // Metricas
-          this.metricasServices.getMetricas_CapacidadesDB(capac.id).subscribe(metricas => {
-            this.metricas = metricas;
-            //console.log("metricas", this.metricas);
+    // Manda la subcategoria contestada por el usuario para sacar los cálculos
+    this.calcularPesos(this.subcategoria);
 
-            this.metricas.forEach(metric => {
+    // Limpia arreglo temporal de subcategoria
+    this.subcategoriasEvaluadas = [];
 
-              this.respuestasServices.getRespuestas_MetricasDB(metric.id).subscribe(respuestas => {
-                this.respuestas = respuestas;
-                //console.log("respuestas", this.respuestas);
-                this.loadData = true;
-              })
+    console.log(this.puntuajes);
 
-            })
-          })
-
-        })
-
-      })
-
-    }) */
+    // Deshabilita boton de esa subcategoria
+    this.buttons[idSub] = true;
   }
 
-  buildForm(): FormGroup {
-    return this.fb.group({
-      opcion: ["", Validators.required],
-    });
+
+  guardarCategoria() {
+
+/* Guardar service */
+
+
+
+    this.respuestaUsuario = {
+      intento: 1,
+      puntuacionCategoria: 0.25,
+      metricas: [
+        {
+          pregunta: "pregunta ejemplo ",
+          respuesta: this.respuestas[0], //Respuesta{}
+        },
+        {
+          pregunta: "pregunta2 ejemplo ",
+          respuesta: this.respuestas[1], //Respuesta{}
+        },
+      ]
+    }
+    this.cuestionario = { idUser: this.idUser };
+    //this.cuestionarioService.createCuestionarioDB(this.cuestionario, this.respuestaUsuario);
   }
+
+  regresarSinGuardar() {
+    this.puntuajes = [];
+    this.router.navigate(["/cuestionario"]);
+  }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();

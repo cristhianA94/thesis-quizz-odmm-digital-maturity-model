@@ -26,17 +26,19 @@ export class AuthService {
     private usuarioService: UsuarioService,
     private empresaService: EmpresaService,
     public ngZone: NgZone // NgZone service to remove outside scope warning
-  ) { }
+  ) {
+  }
 
-  // Permite guardar en el storage los datos del user
+  // Permite guardar en el storage el id y token del user
   guardarStorage(id: string) {
     localStorage.setItem('uidUser', id);
+    this.getToken();
   }
 
   // Autentication Google
   async loginGoogleUser() {
     const credential = await this.afs.auth.signInWithPopup(new auth.GoogleAuthProvider());
-    this.guardarStorage(credential.user.uid)
+    this.guardarStorage(credential.user.uid);
     this.usuarioService.createUserSocial(credential.user);
   }
 
@@ -134,10 +136,19 @@ export class AuthService {
       // Elimina los datos del usuario en el local storage
       localStorage.removeItem("uidUser");
       localStorage.removeItem("usuario");
+      localStorage.removeItem("token");
       this.alertaService.mensajeExito('Adiós', 'Hasta pronto.');
       this.router.navigate(['/login']);
     })
 
+  }
+
+  async getToken() {
+    await this.afs.auth.currentUser.getIdToken(true).then((token) => {
+      localStorage.setItem('token', token);
+    }).catch(function (error) {
+      console.log("User no authenticated: ", error);
+    });;
   }
 
 }

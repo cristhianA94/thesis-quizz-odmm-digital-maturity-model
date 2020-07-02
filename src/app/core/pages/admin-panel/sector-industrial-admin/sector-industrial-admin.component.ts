@@ -60,7 +60,7 @@ export class SectorIndustrialAdminComponent implements OnInit {
 
   onRowClicked(row: any) {
     this.sectorI = row;
-    console.log('Row clicked: ', this.sectorI);
+    //console.log('Row clicked: ', this.sectorI);
   }
 
   openDialog(action: string, obj: any) {

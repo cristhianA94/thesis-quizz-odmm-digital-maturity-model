@@ -1,23 +1,16 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { CuestionaryComponent } from "./cuestionary.component";
-import { DimensionComponent } from "./dimension/dimension.component";
 import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
+import { DimensionComponent } from './dimension/dimension.component';
+import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
 
 export const cuestionaryRoutes: Routes = [
-  /* {
-        path: '',
-        component: CuestionaryComponent,
-        children: [
-            { path: 'dimension/:id', component: Dimension1Component },
-            
-        ]
-    }, */
   {
     path: "dimension/:id",
     component: DimensionComponent,
     resolve: {
-      data: CategoriasService,
+      categoria: CategoriasService,
+      data: CuestionarioService
     },
   },
 ];
@@ -28,4 +21,4 @@ export const cuestionaryRoutes: Routes = [
   providers: [CategoriasService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class CuestionaryRoutingModule {}
+export class CuestionaryRoutingModule { }

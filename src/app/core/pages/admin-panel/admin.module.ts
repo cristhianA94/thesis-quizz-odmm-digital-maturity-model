@@ -32,7 +32,6 @@ import { CuestionarioAdminModule } from './cuestionario-admin/cuestionario-admin
 
 // CSV
 import { NgxCsvParserModule } from 'ngx-csv-parser';
-import { SharedModule } from 'app/shared.module';
 
 
 
@@ -48,7 +47,6 @@ import { SharedModule } from 'app/shared.module';
     CuestionarioAdminModule,
     // CSV
     NgxCsvParserModule,
-    SharedModule
   ],
   declarations: [
     AdminPanelComponent,

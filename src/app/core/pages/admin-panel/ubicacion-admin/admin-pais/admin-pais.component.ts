@@ -64,7 +64,7 @@ export class AdminPaisComponent implements OnInit {
 
   onRowClicked(row: any) {
     this.pais = row;
-    console.log('Row clicked: ', this.pais);
+    //console.log('Row clicked: ', this.pais);
   }
 
   openDialog(action: string, obj: any) {

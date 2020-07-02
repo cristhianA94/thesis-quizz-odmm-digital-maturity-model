@@ -58,7 +58,7 @@ export class DialogFormMetricaComponent {
     return this.dataForm.get("respuestas") as FormArray;
   }
 
-  borrarRespuesta(i) {
+  borrarRespuesta(i:number) {
     this.respuestas.removeAt(i);
   }
 
@@ -80,10 +80,7 @@ export class DialogFormMetricaComponent {
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
       pesoPregunta: [this.local_data.peso, Validators.required],
-      respuestas: this.fb.array(
-        []
-        // ,[Validators.required, Validators.maxLength(6)]
-      ),
+      respuestas: this.fb.array([]),
     });
   }
 }

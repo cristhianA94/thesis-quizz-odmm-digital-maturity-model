@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 // Services
 import { CategoriasService } from '../../services/cuestionario/categorias/categorias.service';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Categoria } from 'app/shared/models/categoria';
 
 @Component({
@@ -21,18 +21,14 @@ export class CuestionaryComponent implements OnInit {
   select: boolean = false;
 
   constructor(
-    private actRouter: ActivatedRoute,
     private router: Router,
     private categoriasServices: CategoriasService,
   ) {
     //console.log(this.router.data);
-
   }
 
   ngOnInit(): void {
-
     this.cargarCategorias();
-
   }
 
   cargarCategorias() {

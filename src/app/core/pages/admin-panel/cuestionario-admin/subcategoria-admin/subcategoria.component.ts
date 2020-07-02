@@ -49,28 +49,9 @@ export class SubcategoriaComponent implements OnInit {
   }
 
   cargarData() {
-    this.subcategoriasService
-      .getSubcategoriasDB()
-      .subscribe((subcategorias) => {
-        // Recorre cada subcategoria
-        subcategorias.forEach((subcategoria) => {
-          subcategoria.idCategoria.get().then((categoria) => {
-
-            const subCategoriaObj: Subcategoria = {
-              id: subcategoria.id,
-              nombre: subcategoria.nombre,
-              descripcion: subcategoria.descripcion,
-              peso: subcategoria.peso,
-              idCategoria: categoria.data(),
-            };
-
-            this.subcategorias.push(subCategoriaObj);
-            this.dataSource.data = this.subcategorias;
-
-          });
-        })
-
-      });
+    this.subcategoriasService.getSubcategoriasDB().subscribe((subcategorias) => {
+      this.dataSource.data = subcategorias;
+    });
   }
 
   // Table

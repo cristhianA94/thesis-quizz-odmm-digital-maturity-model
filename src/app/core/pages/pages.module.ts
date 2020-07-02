@@ -33,6 +33,7 @@ import { PaisService } from '../services/user/pais/pais.service';
 import { ProvinciaService } from '../services/user/provincia/provincia.service';
 import { SectorIndustrialService } from '../services/user/sectorIndustrial/sector-industrial.service';
 import { SubcategoriasService } from '../services/cuestionario/subcategorias/subcategorias.service';
+import { CuestionarioService } from '../services/cuestionario/cuestionario.service';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { SubcategoriasService } from '../services/cuestionario/subcategorias/sub
     PaisService,
     ProvinciaService,
     CantonService,
-    SubcategoriasService
+    SubcategoriasService,
+    CuestionarioService
   ]
 })
 

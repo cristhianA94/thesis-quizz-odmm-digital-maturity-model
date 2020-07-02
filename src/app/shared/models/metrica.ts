@@ -1,14 +1,14 @@
 export interface Respuesta {
     opcion: string;
-    peso: number;
-    recomendacion: number;
+    pesoRespuesta: number;
+    recomendacion: string;
 }
 
 export interface Metrica {
     id?: string;
     nombre: string;
     pregunta: string;
-    peso: number;
-    respuestas: Respuesta[];
+    pesoPregunta: number;
     idCapacidad: any;
+    respuestas: Respuesta[];
 }
