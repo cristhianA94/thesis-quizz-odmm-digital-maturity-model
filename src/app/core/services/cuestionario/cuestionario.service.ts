@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 
 import { Cuestionario } from 'app/shared/models/cuestionario';
 import { RespuestasUsuario } from '../../../shared/models/cuestionario';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -92,9 +93,30 @@ export class CuestionarioService implements Resolve<any>{
   */
 
   createCuestionarioDB(cuestionario: Cuestionario, respuestaUser:RespuestasUsuario) {
+    // TODO crear doc unico
     this.cuestionarioCollection = this.afs.collection('cuestionarios');
     this.cuestionarioCollection.add(cuestionario).then((docCuestionario) => {
-      this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser)
+      this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
+      let timerInterval
+        Swal.fire({
+          title: '¡Categoria registrada!',
+          icon: 'success',
+          timer: 1000,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              Swal.getContent()
+            }, 1000)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+          }
+        })
     });
   }
 

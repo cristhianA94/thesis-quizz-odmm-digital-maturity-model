@@ -38,6 +38,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   idUser: string;
   // For disabled buttons
   buttons = Array(3);
+  btnSave: boolean = true;
   load: boolean = false;
 
   puntuajes: any[] = [];
@@ -56,7 +57,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   respuestas: Respuesta[] = [];
   respuestasUsuario: RespuestasUsuario[] = [];
-  respuestaUsuario: RespuestasUsuario;
+  respuestaUsuario: RespuestasUsuario = { intento: 1, metricas: [], puntuacionCategoria: 0 };
 
   constructor(
     private cuestionarioService: CuestionarioService,
@@ -80,7 +81,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   }
 
   // Detecta las opciones elegida por cada subcategoria
-  onChange(mrChange: MatRadioChange, i: number, subcategoria: Subcategoria) {
+  onChangeOptionValues(mrChange: MatRadioChange, i: number, subcategoria: Subcategoria) {
     let mrButton: MatRadioButton = mrChange.source;
     // Guarda cada opcion de respuesta de cada metrica
     this.respuestas[i] = mrChange.value;
@@ -88,40 +89,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.subcategoriasEvaluadas.push(subcategoria);
   }
 
-  // Calcular la puntuacion de las metricas, capacidades, subcategoria y categoria.
-  calcularPesos(subcategoria: Subcategoria) {
-    //console.log(this.subcategoria.capacidades);
-
-    // Arrays para almacenar los puntuajes
-    let puntuajeMetricas: number[] = [];
-    let puntuajeCapacidades: number[] = [];
-
-    // Recorre cada capacidad para hacer el cálculo de cada métrica y capaciadad
-    subcategoria.capacidades.forEach((capacidad, i) => {
-      // Cálculo pesos metricas
-      puntuajeMetricas.push(Number((capacidad.metrica.pesoPregunta * this.respuestas[i].pesoRespuesta).toFixed(2)));
-      // Cálculo pesos capacidades
-      puntuajeCapacidades.push(Number((capacidad.peso * puntuajeMetricas[i]).toFixed(4)));
-    });
-
-    // Cálculo peso subcategoria
-    let puntuajeSubcategoria = puntuajeCapacidades.reduce((oldSum, sumaTotal) => (oldSum + sumaTotal));
-    puntuajeSubcategoria *= subcategoria.peso;
-
-    // Objeto para guardar la informacion de los puntuajes obtenidos de la subcategoria
-    let obtPuntuajes = {
-      subcategoria: this.subcategoria.nombre,
-      puntuacionSubcategoria: puntuajeSubcategoria,
-      puntuacionCapacidades: puntuajeCapacidades,
-      puntuacionMetricas: puntuajeMetricas
-    }
-
-    // Agrega la subcategoria a un arreglo de puntuajes
-    this.puntuajes.push(obtPuntuajes);
-  }
-
-
-  guardarRespuestas(idSub?: any) {
+  guardarRespuestas(iSub?: any) {
 
     // ** Validacion de otras subcategorias
     // Filtra la subcategoria contestada
@@ -135,34 +103,96 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.subcategoriasEvaluadas = [];
 
     console.log(this.puntuajes);
-
+    
+    // Habilita el boton de guardar categoria cuando haya contestado a cada subcategoria
+    if (this.puntuajes.length === 3) {
+      this.btnSave = false;
+    }
     // Deshabilita boton de esa subcategoria
-    this.buttons[idSub] = true;
+    this.buttons[iSub] = true;
   }
 
 
+  // Calcular la puntuacion de las metricas, capacidades, subcategoria.
+  calcularPesos(subcategoria: Subcategoria) {
+    //console.log(this.subcategoria.capacidades);
+
+    // Arrays para almacenar los puntuajes
+    let puntuajeMetricas: number[] = [];
+    let puntuajeCapacidades: number[] = [];
+    let objMetrica: any = {};
+
+    // Recorre cada capacidad para hacer el cálculo de cada métrica y capacidad
+    subcategoria.capacidades.forEach((capacidad, i) => {
+      objMetrica = {
+        pregunta: capacidad.metrica.pregunta,
+        respuesta: {
+          opcion: this.respuestas[i].opcion,
+          recomendacion: this.respuestas[i].recomendacion
+        }
+      }
+      // Agrega las metricas a un arreglo
+      this.respuestaUsuario.metricas.push(objMetrica);
+      delete this.respuestaUsuario.id;
+      delete this.respuestaUsuario.intento;
+      delete this.respuestaUsuario.puntuacionCategoria;
+      // Cálculo pesos metricas
+      puntuajeMetricas.push(Number((capacidad.metrica.pesoPregunta * this.respuestas[i].pesoRespuesta).toFixed(2)));
+      // Cálculo pesos capacidades
+      puntuajeCapacidades.push(Number((capacidad.peso * puntuajeMetricas[i]).toFixed(4)));
+    });
+
+    // Cálculo peso subcategoria
+    let puntuajeSubcategoria = puntuajeCapacidades.reduce((oldSum, sumaTotal) => (oldSum + sumaTotal));
+    puntuajeSubcategoria *= subcategoria.peso;
+
+    // Agrega las metricas contestadas por el usuario con su opcion
+    this.respuestasUsuario.push(this.respuestaUsuario);
+    // Filtra la subcategoria contestada
+    var respuestasFiltred: any = [...new Set(this.respuestasUsuario)];
+
+    // Objeto para guardar la informacion de los puntuajes obtenidos de la subcategoria
+    let obtPuntuajes = {
+      subcategoria: this.subcategoria.nombre,
+      puntuacionSubcategoria: puntuajeSubcategoria,
+      puntuacionCapacidades: puntuajeCapacidades,
+      puntuacionMetricas: puntuajeMetricas,
+      metricas: respuestasFiltred[0]
+    }
+
+    // Agrega la subcategoria a un arreglo de puntuajes
+    this.puntuajes.push(obtPuntuajes);
+  }
+
   guardarCategoria() {
 
-/* Guardar service */
+    let puntuajeCategoria: number = 0;
 
+    // Calcula peso categoria
+    this.puntuajes.forEach((puntuaje) => {
+      puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
+    });
+    puntuajeCategoria *= this.categoria.peso;
+    // Agrega al objeto puntuajes la puntuacion de la categoria
+    this.puntuajes.push(puntuajeCategoria);
 
+    /* Guardar categoria DB */
+    this.cuestionario = {
+      idUser: this.idUser,
+      categoria: this.categoria.nombre
+    };
 
+    // TODO Falta logica de intentos
     this.respuestaUsuario = {
       intento: 1,
-      puntuacionCategoria: 0.25,
-      metricas: [
-        {
-          pregunta: "pregunta ejemplo ",
-          respuesta: this.respuestas[0], //Respuesta{}
-        },
-        {
-          pregunta: "pregunta2 ejemplo ",
-          respuesta: this.respuestas[1], //Respuesta{}
-        },
-      ]
+      puntuacionCategoria: puntuajeCategoria,
+      metricas: this.puntuajes[0].metricas.metricas
     }
-    this.cuestionario = { idUser: this.idUser };
-    //this.cuestionarioService.createCuestionarioDB(this.cuestionario, this.respuestaUsuario);
+
+    // Crea el cuestionario en la BD
+    this.cuestionarioService.createCuestionarioDB(this.cuestionario, this.respuestaUsuario);
+    this.puntuajes = [];
+    this.router.navigate(["/cuestionario"]);
   }
 
   regresarSinGuardar() {

@@ -65,7 +65,7 @@
                                                     a su
                                                     empresa</small></label>
                                             <!-- Respuestas -->
-                                            <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChange($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
+                                            <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChangeOptionValues($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
                                                 <mat-radio-button class="radio-button" [value]="respuesta">
                                                     {{respuesta.opcion }}
                                                 </mat-radio-button>
@@ -90,15 +90,14 @@
         <div class="row" *ngIf="load">
             <div class="col-md-6">
                 <div class="text-left">
-                    <button (click)="regresarSinGuardar()" mat-raised-button class="mr-2">
+                    <button (click)="regresarSinGuardar()" mat-raised-button class="btn btn-default ">
                         <mat-icon>keyboard_arrow_left</mat-icon>Regresar sin guardar
                     </button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-right">
-                    <button mat-raised-button type="button" class="btn btn-success pull-right">Guardar cambios</button>
-                    <button (click)="guardarCategoria()" mat-raised-button class="mr-2">
+                    <button [disabled]="btnSave" (click)="guardarCategoria()" mat-raised-button class="btn btn-success">
                                 <mat-icon>save</mat-icon>Guardar categoría
                             </button>
                 </div>

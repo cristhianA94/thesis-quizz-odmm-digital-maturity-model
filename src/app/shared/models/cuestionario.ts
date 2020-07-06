@@ -1,6 +1,7 @@
 export interface Cuestionario {
   id?: string;
-  idUser: string
+  idUser: string,
+  categoria: string
 }
 
 export interface RespuestasUsuario {
