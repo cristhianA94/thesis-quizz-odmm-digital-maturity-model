@@ -32,7 +32,7 @@ export class MetricasAdminComponent implements OnInit {
     public metricasService: MetricasService,
     public capacidadesService: CapacidadesService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.metricasService.getMetricasDB().subscribe((metricas) => {
@@ -66,7 +66,7 @@ export class MetricasAdminComponent implements OnInit {
       width: "450px",
       data: {
         obj,
-        action,
+        action
       },
     });
 
@@ -77,28 +77,23 @@ export class MetricasAdminComponent implements OnInit {
         return;
       }
 
-      this.metrica = result;
       console.log(result);
+      this.metrica = result;
       // Si NO es nuevo se le agrega el id
-      // if (result.id) {
-      //   this.metrica.id = result.id;
-      // }
+      if (result.id) {
+        this.metrica.id = result.id;
+      }
 
       if (action === "Agregar") {
         this.createMetrica(result);
-      } else {
+      } else if (action === "Actualizar") {
+        this.updateMetrica(this.metrica);
+      } else if (action === "Borrar") {
+        this.deleteMetrica(this.metrica);
       }
-      //  else if (action === "Actualizar") {
-      //   this.updateMetrica(this.metrica);
-      // } else if (action === "Borrar") {
-      //   this.deleteMetrica(this.metrica);
-      // }
 
       // this.metricas = [];
     });
-  }
-  borarMetrica(id) {
-    this.metricasService.deleteMetricaDB(id);
   }
 
   createMetrica(obj: Metrica) {

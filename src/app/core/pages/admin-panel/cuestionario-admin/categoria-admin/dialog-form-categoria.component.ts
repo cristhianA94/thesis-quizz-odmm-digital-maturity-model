@@ -36,7 +36,11 @@ export class DialogFormCategoriaComponent {
 
   doAction() {
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
-    this.dialogRef.close({ event: this.action, data: this.dataForm.value, id: this.local_data.id });
+    this.dialogRef.close({
+      event: this.action,
+      data: this.dataForm.value,
+      id: this.local_data.id
+    });
   }
 
   closeDialog() {

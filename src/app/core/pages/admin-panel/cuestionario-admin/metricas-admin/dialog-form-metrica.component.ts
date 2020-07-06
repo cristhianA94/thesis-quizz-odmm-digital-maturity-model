@@ -44,21 +44,11 @@ export class DialogFormMetricaComponent {
     this.dataForm = this.buildForm();
   }
 
-  addRespuesta() {
-    this.respuestas.push(
-      this.fb.group({
-        opcion: [""],
-        pesoRespuesta: [""],
-        recomendacion: [""],
-      })
-    );
-  }
-
   get respuestas() {
     return this.dataForm.get("respuestas") as FormArray;
   }
 
-  borrarRespuesta(i:number) {
+  borrarRespuesta(i: number) {
     this.respuestas.removeAt(i);
   }
 
@@ -67,6 +57,7 @@ export class DialogFormMetricaComponent {
     this.dialogRef.close({
       event: this.action,
       data: this.dataForm.value,
+      id: this.local_data.id
     });
   }
 
@@ -74,12 +65,22 @@ export class DialogFormMetricaComponent {
     this.dialogRef.close({ event: "Cancelar" });
   }
 
+  addRespuesta() {
+    this.respuestas.push(
+      this.fb.group({
+        opcion: ['', Validators.required],
+        pesoRespuesta: ['', Validators.required],
+        recomendacion: ['', Validators.required],
+      })
+    );
+  }
+
   buildForm(): FormGroup {
     return this.fb.group({
-      idCapacidad: [""],
+      idCapacidad: ['', Validators.required],
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
-      pesoPregunta: [this.local_data.peso, Validators.required],
+      pesoPregunta: [this.local_data.pesoPregunta, Validators.required],
       respuestas: this.fb.array([]),
     });
   }

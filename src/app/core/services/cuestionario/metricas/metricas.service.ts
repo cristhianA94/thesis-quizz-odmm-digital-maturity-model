@@ -15,7 +15,7 @@ export class MetricasService {
   metricasCollection: AngularFirestoreCollection<Metrica>;
   metricasDoc: AngularFirestoreDocument<Metrica>;
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(private afs: AngularFirestore) { }
 
   getMetricasDB(): Observable<Metrica[]> {
     this.metricasCollection = this.afs.collection("metricas", (ref) => {
@@ -53,14 +53,10 @@ export class MetricasService {
   }
 
   async createMetricaDB(metrica: Metrica) {
-    // metrica.idCapacidad = this.afs
-    //   .collection("capacidades")
-    //   .doc(metrica.idCapacidad).ref;
-    // this.metricasCollection = this.afs.collection("metricas");
-    // this.metricasCollection.add(metrica);
-    const idCapacidad = metrica.idCapacidad;
-    delete metrica.idCapacidad;
-    return await this.afs.doc(`metricas/${idCapacidad}`).set(metrica);
+    let idCapacidad = metrica.idCapacidad;
+    metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
+    this.metricasDoc = this.afs.doc(`metricas/${idCapacidad}`);
+    return await this.metricasDoc.set(metrica, { merge: true });
   }
 
   updateMetricaDB(metrica: Metrica) {

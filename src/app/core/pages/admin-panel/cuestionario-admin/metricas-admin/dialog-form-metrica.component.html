@@ -74,8 +74,6 @@
     </ng-template>
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
+    <button mat-raised-button (click)="doAction()"> {{ action }} </button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="dialogRef.close(dataForm.value)">
-        {{ action }}
-    </button>
 </div>

@@ -52,8 +52,6 @@ export class DialogFormLoadDataComponent {
       case 'Subcategoria':
         this.categoriasService.getCategoriasDB().subscribe(categorias => {
           this.local_data_load = categorias;
-          //this.selectedValue = this.local_data.idCategoria;
-          
         });
         // Construye el formulario
         this.dataForm = this.buildForm();
@@ -61,34 +59,22 @@ export class DialogFormLoadDataComponent {
       case 'Capacidad':
         this.subcategoriasService.getSubcategoriasDB().subscribe(subcategorias => {
           this.local_data_load = subcategorias;
-          //this.selectedValue = this.local_data.idSubcategoria;
         });
         // Construye el formulario
         this.dataForm = this.buildForm();
         break;
-      case 'Metrica':
-        this.capacidadesService.getCapacidadesDB().subscribe(capacidades => {
-          this.local_data_load = capacidades;
-          //this.selectedValue = this.local_data.idCapacidad;
-        });
-        // Construye el formulario
-        this.dataForm = this.fb.group({
-          idRelacion: [' ', Validators.required],
-          nombre: [this.local_data.nombre, Validators.required],
-          descripcion: [this.local_data.pregunta, Validators.required],
-          peso: [this.local_data.peso, Validators.required],
-        });
-        break;
       default:
         break;
     }
-
   }
-
 
   doAction() {
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
-    this.dialogRef.close({ event: this.action, data: this.dataForm.value, id: this.local_data.id });
+    this.dialogRef.close({
+      event: this.action,
+      data: this.dataForm.value,
+      id: this.local_data.id
+    });
   }
 
   closeDialog() {
