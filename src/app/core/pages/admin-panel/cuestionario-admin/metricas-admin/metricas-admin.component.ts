@@ -77,7 +77,6 @@ export class MetricasAdminComponent implements OnInit {
         return;
       }
 
-      console.log(result);
       this.metrica = result;
       // Si NO es nuevo se le agrega el id
       if (result.id) {
@@ -85,7 +84,7 @@ export class MetricasAdminComponent implements OnInit {
       }
 
       if (action === "Agregar") {
-        this.createMetrica(result);
+        this.createMetrica(this.metrica["data"]);
       } else if (action === "Actualizar") {
         this.updateMetrica(this.metrica);
       } else if (action === "Borrar") {
@@ -97,10 +96,10 @@ export class MetricasAdminComponent implements OnInit {
   }
 
   createMetrica(obj: Metrica) {
-    delete obj.id;
     this.metricasService.createMetricaDB(obj);
   }
 
+  // TODO update pendiente
   updateMetrica(obj: Metrica) {
     this.metricasService.updateMetricaDB(obj);
   }

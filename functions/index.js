@@ -69,100 +69,97 @@ app.get("/", cors(), (req, res) => {
 
     return (
         db
-            // .doc(`categorias/${id}`)
-            .doc(`categorias/5OVQbaauPmEA7Jt7HiSK`)
-            .get()
-            .then((categoriaSnap) => {
-                const categoriaRef = categoriaSnap.ref;
-                // Guarda el objeto Categoria
-                categoria = categoriaSnap.data();
-                return db
-                    .collection("subcategorias")
-                    .where("idCategoria", "==", categoriaRef)
-                    .get();
-            })
-            // Trae las subcategorias pertenecientes a la categoria
-            .then((subcategoriasSnap) => {
-                var subcategorias = [];
-                var capacidades = [];
-                subcategoriasSnap.forEach((subcategoriaDoc) => {
-                    // Objeto de cada subcategoria
-                    const subcategoria = subcategoriaDoc.data();
-                    // Crea un array para agregar las capacidades de esa subcategoria
-                    subcategoria.capacidades = [];
-                    // Borra atributo no usado
-                    delete subcategoria.idCategoria;
-                    subcategoria.id = subcategoriaDoc.id;
-                    // Agrega las subcategorias asociadas
-                    subcategorias.push(subcategoria);
-                    capacidades.push(
-                        db
-                            .collection(`capacidades`)
-                            .where("idSubcategoria", "==", subcategoriaDoc.ref)
-                            .get()
-                    );
-                });
-                // Agrega el array de  subcategorias de esa categoria
-                categoria.subcategorias = subcategorias;
-                return Promise.all(capacidades);
-            })
-            // Obtiene las capacidades de cada subcategoria
-            .then((capacidadesSnap) => {
-                var metricas = [];
-                // Capacidades de cada subcategoria
-                capacidadesSnap.forEach((capacidades) => {
-                    capacidades.forEach((capacidad) => {
-                        // Guarda el id de cada capacidad
-                        const capacidadUid = capacidad.id;
-                        // Objeto de cada capacidad
-                        const capacidadObj = capacidad.data();
+        .doc(`categorias/${id}`)
+        //.doc(`categorias/5OVQbaauPmEA7Jt7HiSK`)
+        .get()
+        .then((categoriaSnap) => {
+            const categoriaRef = categoriaSnap.ref;
+            // Guarda el objeto Categoria
+            categoria = categoriaSnap.data();
+            return db
+                .collection("subcategorias")
+                .where("idCategoria", "==", categoriaRef)
+                .get();
+        })
+        // Trae las subcategorias pertenecientes a la categoria
+        .then((subcategoriasSnap) => {
+            var subcategorias = [];
+            var capacidades = [];
+            // Recorre cada subcategoria
+            subcategoriasSnap.forEach((subcategoriaDoc) => {
+                // Objeto de cada subcategoria
+                const subcategoria = subcategoriaDoc.data();
+                // Crea un array para agregar las capacidades de esa subcategoria
+                subcategoria.capacidades = [];
+                // Borra atributo no usado
+                delete subcategoria.idCategoria;
+                subcategoria.id = subcategoriaDoc.id;
+                // Agrega las subcategorias asociadas
+                subcategorias.push(subcategoria);
+                capacidades.push(
+                    db
+                    .collection(`capacidades`)
+                    .where("idSubcategoria", "==", subcategoriaDoc.ref)
+                    .get()
+                );
+            });
+            // Agrega el array de  subcategorias de esa categoria
+            categoria.subcategorias = subcategorias;
+            return Promise.all(capacidades);
+        })
+        // Obtiene las capacidades de cada subcategoria
+        .then((capacidadesSnap) => {
+            var metricas = [];
+            // Capacidades de cada subcategoria
+            capacidadesSnap.forEach((capacidades) => {
+                capacidades.forEach((capacidad) => {
+                    // Guarda el id de cada capacidad
+                    const capacidadUid = capacidad.id;
+                    // Objeto de cada capacidad
+                    const capacidadObj = capacidad.data();
 
-                        capacidadObj.index = 0;
-                        // Agrega el id al obj
-                        capacidadObj.id = capacidadUid;
-                        const idSubcategoria = capacidadObj.idSubcategoria.id;
-                        var elementPos = categoria.subcategorias
-                            .map((x) => {
-                                return x.id;
-                            })
-                            .indexOf(idSubcategoria);
-                        capacidadObj.metricas = [];
-                        // Borra atributo innecesario ya
-                        delete capacidadObj.idSubcategoria;
-                        // Agrega las capacidades a la subcategoria perteneciente
-                        categoria.subcategorias[elementPos].capacidades.push(capacidadObj);
-                        metricas.push(capacidadUid);
-                    });
+                    // Agrega el id al obj
+                    capacidadObj.id = capacidadUid;
+                    const idSubcategoria = capacidadObj.idSubcategoria.id;
+                    var elementPos = categoria.subcategorias
+                        .map((x) => {
+                            return x.id;
+                        })
+                        .indexOf(idSubcategoria);
+                    capacidadObj.metricas = [];
+                    // Borra atributo innecesario ya
+                    delete capacidadObj.idSubcategoria;
+                    // Agrega las capacidades a la subcategoria perteneciente
+                    categoria.subcategorias[elementPos].capacidades.push(capacidadObj);
+                    metricas.push(capacidadUid);
                 });
-                metricas = metricas.filter(onlyUnique);
-                const promesas = [];
-                metricas.forEach(metrica => {
-                    promesas.push(db
-                        .doc(`metricas/${metrica}`)
-                        .get())
+            });
+            metricas = metricas.filter(onlyUnique);
+            const promesas = [];
+            metricas.forEach((metrica) => {
+                promesas.push(db.doc(`metricas/${metrica}`).get());
+            });
+            return Promise.all(promesas);
+        })
+        .then((metricasSnap) => {
+            const metricasArr = [];
+            metricasSnap.forEach((metrica) => {
+                if (metrica.exists) {
+                    const metricaUid = metrica.id;
+                    const metricaObj = metrica.data();
+                    metricaObj.id = metricaUid;
+                    delete metricaObj.idCapacidad;
+                    metricasArr.push(metricaObj);
+                }
+            });
+            categoria.subcategorias.forEach((subcategoria) => {
+                subcategoria.capacidades.forEach((capacidad) => {
+                    const metrica = metricasArr.find((x) => x.id === capacidad.id);
+                    capacidad.metricas.push(metrica);
                 });
-                return Promise.all(promesas);
-            })
-            .then((metricasSnap) => {
-                const metricasArr = [];
-                metricasSnap.forEach((metrica) => {
-                    if (metrica.exists) {
-                        const metricaUid = metrica.id;
-                        const metricaObj = metrica.data();
-                        metricaObj.id = metricaUid;
-                        delete metricaObj.idCapacidad;
-                        metricasArr.push(metricaObj);
-                    }
-                });
-                categoria.subcategorias.forEach(subcategoria => {
-                    subcategoria.capacidades.forEach(capacidad => {
-                        const metrica = metricasArr.find(x => x.id === capacidad.id);
-                        capacidad.metricas.push(metrica);
-                    });
-
-                });
-                return res.send(categoria);
-            })
+            });
+            return res.send(categoria);
+        })
     );
 });
 

@@ -134,7 +134,7 @@ export class CsvLoadDataComponent implements OnInit {
           let metrica: Metrica = {
             nombre: element.nombre,
             pregunta: element.pregunta,
-            pesoPregunta: element.peso,
+            pesoPregunta: Number(element.peso),
             respuestas: respuestas,
             idCapacidad: element.idCapacidad
           }

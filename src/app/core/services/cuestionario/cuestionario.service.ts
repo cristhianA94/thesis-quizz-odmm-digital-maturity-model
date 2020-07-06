@@ -5,8 +5,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Cuestionario } from 'app/shared/models/cuestionario';
-import { RespuestasUsuario } from '../../../shared/models/cuestionario';
+import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -14,12 +13,14 @@ import Swal from 'sweetalert2';
 })
 export class CuestionarioService implements Resolve<any>{
 
-  cuestionarioCollection: AngularFirestoreCollection<Cuestionario>;
-  cuestionarioDoc: AngularFirestoreDocument<Cuestionario>;
-  cuestionario: Cuestionario;
-  onCuestionarioChanged: BehaviorSubject<any>;
+  // URL dev and production
   URL_LOCAL: string = "http://localhost:5001/fir-auth-web-75274/us-central1";
   URL_API: string = "https://us-central1-fir-auth-web-75274.cloudfunctions.net";
+  cuestionarioCollection: AngularFirestoreCollection<Cuestionario>;
+  cuestionarioDoc: AngularFirestoreDocument<Cuestionario>;
+
+  cuestionario: Cuestionario;
+  onCuestionarioChanged: BehaviorSubject<any>;
 
   constructor(
     private http: HttpClient,
@@ -48,11 +49,12 @@ export class CuestionarioService implements Resolve<any>{
     var header = { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
 
     return new Promise((resolve, reject) => {
+      // REST del API
       let url = this.URL_LOCAL + "/cuestionario?id=" + id;
 
       this.http.get(url, header).subscribe((response: any) => {
-        this.cuestionario = response.categoria;
-
+        console.log("res", response);
+        this.cuestionario = response;
         this.onCuestionarioChanged.next(this.cuestionario);
         resolve(response);
       }, reject)

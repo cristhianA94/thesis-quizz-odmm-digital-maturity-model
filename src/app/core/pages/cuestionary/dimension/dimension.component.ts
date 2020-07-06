@@ -72,6 +72,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((cuestionario) => {
         this.categoria = cuestionario;
+        console.log("TS=> ",this.categoria);
+        
         this.subcategorias = this.categoria.subcategorias;
         //this.cuestionario = cuestionario;
 
