@@ -1,47 +1,49 @@
-import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { Metrica } from 'app/shared/models/metrica';
+import { Injectable } from "@angular/core";
+import { map } from "rxjs/operators";
+import {
+  AngularFirestoreCollection,
+  AngularFirestoreDocument,
+  AngularFirestore,
+} from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+import { Metrica } from "app/shared/models/metrica";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class MetricasService {
-
   metricasCollection: AngularFirestoreCollection<Metrica>;
   metricasDoc: AngularFirestoreDocument<Metrica>;
 
-  constructor(
-    private afs: AngularFirestore,
-  ) {
-  }
+  constructor(private afs: AngularFirestore) {}
 
   getMetricasDB(): Observable<Metrica[]> {
-    this.metricasCollection = this.afs.collection("metricas", ref => {
-      return ref.orderBy('nombre')
+    this.metricasCollection = this.afs.collection("metricas", (ref) => {
+      return ref.orderBy("nombre");
     });
     return this.metricasCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(a => {
+      map((actions) =>
+        actions.map((a) => {
           const data = a.payload.doc.data() as Metrica;
           const id = a.payload.doc.id;
           return { id, ...data };
-        }))
+        })
+      )
     );
   }
 
   getMetricas_CapacidadesDB(idCapacidad: string): Observable<Metrica[]> {
-    this.metricasCollection = this.afs.collection("metricas", ref => {
-      return ref.orderBy('nombre').where('idCapacidad', '==', idCapacidad)
+    this.metricasCollection = this.afs.collection("metricas", (ref) => {
+      return ref.orderBy("nombre").where("idCapacidad", "==", idCapacidad);
     });
     return this.metricasCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(a => {
+      map((actions) =>
+        actions.map((a) => {
           const data = a.payload.doc.data() as Metrica;
           const id = a.payload.doc.id;
           return { id, ...data };
-        }))
+        })
+      )
     );
   }
 
@@ -50,10 +52,15 @@ export class MetricasService {
     return this.metricasDoc.valueChanges();
   }
 
-  createMetricaDB(metrica: Metrica) {
-    metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
-    this.metricasCollection = this.afs.collection('metricas');
-    this.metricasCollection.add(metrica);
+  async createMetricaDB(metrica: Metrica) {
+    // metrica.idCapacidad = this.afs
+    //   .collection("capacidades")
+    //   .doc(metrica.idCapacidad).ref;
+    // this.metricasCollection = this.afs.collection("metricas");
+    // this.metricasCollection.add(metrica);
+    const idCapacidad = metrica.idCapacidad;
+    delete metrica.idCapacidad;
+    return await this.afs.doc(`metricas/${idCapacidad}`).set(metrica);
   }
 
   updateMetricaDB(metrica: Metrica) {
