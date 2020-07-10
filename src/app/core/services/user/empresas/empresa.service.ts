@@ -31,7 +31,7 @@ export class EmpresaService implements Resolve<any>{
     private usuarioService: UsuarioService,
   ) {
     this.idUser = usuarioService.idUser;
-    this.onEmpresaChanged = new BehaviorSubject(Empresa);
+    this.onEmpresaChanged = new BehaviorSubject({});
   }
 
   resolve(): Observable<any> | Promise<any> | any {

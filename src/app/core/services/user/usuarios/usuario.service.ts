@@ -33,7 +33,7 @@ export class UsuarioService implements Resolve<any> {
     private alertaService: AlertsService,
   ) {
     this.idUser = localStorage.getItem("uidUser");
-    this.onUsuarioChanged = new BehaviorSubject(Usuario);
+    this.onUsuarioChanged = new BehaviorSubject({});
   }
 
 

@@ -50,10 +50,9 @@ export class CuestionarioService implements Resolve<any>{
 
     return new Promise((resolve, reject) => {
       // REST del API
-      let url = this.URL_LOCAL + "/cuestionario?id=" + id;
+      let url = this.URL_API + "/cuestionario?id=" + id;
 
       this.http.get(url, header).subscribe((response: any) => {
-        console.log("res", response);
         this.cuestionario = response;
         this.onCuestionarioChanged.next(this.cuestionario);
         resolve(response);
@@ -77,9 +76,21 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
-  getCuestionarioUserLogedDB(id: string): Observable<Cuestionario> {
-    this.cuestionarioDoc = this.afs.doc(`cuestionarios/${id}`);
-    return this.cuestionarioDoc.valueChanges();
+  getCuestionarioUserLogedDB(): Observable<Cuestionario[]> {
+    let idUser = localStorage.getItem("uidUser");
+
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref.orderBy("categoria").where("idUser", "==", idUser);
+    });
+    return this.cuestionarioCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as Cuestionario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      )
+    );
   }
 
   /* 
@@ -94,12 +105,51 @@ export class CuestionarioService implements Resolve<any>{
       })
   */
 
-  createCuestionarioDB(cuestionario: Cuestionario, respuestaUser:RespuestasUsuario) {
-    // TODO crear doc unico
-    this.cuestionarioCollection = this.afs.collection('cuestionarios');
-    this.cuestionarioCollection.add(cuestionario).then((docCuestionario) => {
-      this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
-      let timerInterval
+  // TODO Si existe cuestionario con idUser guardar con .set, sino con add.
+  createCuestionarioDB(cuestionario: Cuestionario, respuestaUser: any) {
+    let id = this.afs.createId();
+    let idUser = cuestionario.idUser;
+
+    this.getCuestionarioUserLogedDB().subscribe((cuestionarioDB: any) => {
+      console.log(cuestionarioDB);
+
+      cuestionarioDB.forEach(cuestionario => {
+        console.log(cuestionario);
+        if (cuestionario.categoria === cuestionario.categoria) {
+          console.log("Coincide categoria");
+        }
+
+      });
+      if (cuestionarioDB.categoria === cuestionario.categoria) {
+        console.log("Coincide categoria");
+        /* this.cuestionarioDoc.set(cuestionario, { merge: true })
+          .then(() => {
+            this.afs.collection('cuestionarios/' + idUser + '/respuestas').add(respuestaUser);
+          }) */
+      } else {
+        console.log("NO coincide");
+        /* this.cuestionarioCollection = this.afs.collection('cuestionarios');
+        this.cuestionarioCollection.add(cuestionario)
+          .then((docCuestionario) => {
+            this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
+          }); */
+      }
+
+    });
+
+
+    /* this.cuestionarioDoc = this.afs.doc(`cuestionarios/${idUser}`);
+
+    this.cuestionarioDoc.set(cuestionario)
+      .then(() => {
+        this.afs.collection('cuestionarios/' + idUser + '/respuestas').add(respuestaUser);
+      }) */
+  };
+  /*     
+      this.cuestionarioCollection = this.afs.collection('cuestionarios');
+      this.cuestionarioCollection.add(cuestionario).then((docCuestionario) => {
+        this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
+        let timerInterval
         Swal.fire({
           title: '¡Categoria registrada!',
           icon: 'success',
@@ -115,16 +165,17 @@ export class CuestionarioService implements Resolve<any>{
             clearInterval(timerInterval)
           }
         }).then((result) => {
-          /* Read more about handling dismissals below */
+          //Read more about handling dismissals below 
           if (result.dismiss === Swal.DismissReason.timer) {
           }
         })
-    });
-  }
+      });
+    } */
 
   deleteCuestionarioDB(id: string) {
     this.cuestionarioDoc = this.afs.doc(`cuestionarios/${id}`);
     this.cuestionarioDoc.delete();
   }
+
 }
 
