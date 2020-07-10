@@ -18,6 +18,7 @@ import { EmpresaService } from '../../services/user/empresas/empresa.service';
 export class AuthService {
 
   isLogged: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(
     private router: Router,
@@ -39,7 +40,14 @@ export class AuthService {
   async loginGoogleUser() {
     const credential = await this.afs.auth.signInWithPopup(new auth.GoogleAuthProvider());
     this.guardarStorage(credential.user.uid);
-    this.usuarioService.createUserSocial(credential.user);
+    // Comprueba si existe el usuario
+    this.usuarioService.getUser(credential.user.uid);
+    if (!this.usuarioService.usuario) {
+      console.log("no existe usuario");
+      
+      // Si no existe se crea
+      this.usuarioService.createUserSocial(credential.user);
+    }
   }
 
   /*
@@ -137,6 +145,8 @@ export class AuthService {
       localStorage.removeItem("uidUser");
       localStorage.removeItem("usuario");
       localStorage.removeItem("token");
+      this.isLogged = false;
+      this.isAdmin = false;
       this.alertaService.mensajeExito('Adiós', 'Hasta pronto.');
       this.router.navigate(['/login']);
     })
