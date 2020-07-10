@@ -44,14 +44,45 @@
     </div>
 
     <ul class="nav">
-        <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
-            <a class="nav-link" [routerLink]="[menuItem.path]">
-                <i class="material-icons">{{menuItem.icon}}</i>
-                <p>{{menuItem.title}}</p>
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" [routerLink]="['/home']">
+                <i class="material-icons">house</i>
+                <p>Home</p>
             </a>
         </li>
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" [routerLink]="['/acerca-de']">
+                <i class="material-icons">info</i>
+                <p>Acerca De</p>
+            </a>
+        </li>
+        <li routerLinkActive="active" class="nav-item" *ngIf="authService.isLogged">
+            <a class="nav-link" [routerLink]="['/user-profile']">
+                <i class="material-icons">person</i>
+                <p>Perfil Usuario</p>
+            </a>
+        </li>
+        <li routerLinkActive="active" class="nav-item" *ngIf="authService.isLogged">
+            <a class="nav-link" [routerLink]="['/cuestionario']">
+                <i class="material-icons">vertical_split</i>
+                <p>Cuestionario</p>
+            </a>
+        </li>
+        <li routerLinkActive="active" class="nav-item" *ngIf="authService.isLogged">
+            <a class="nav-link" [routerLink]="['/reportes']">
+                <i class="material-icons">assessment</i>
+                <p>Reportes</p>
+            </a>
+        </li>
+        <li routerLinkActive="active" class="nav-item" *ngIf="!authService.isLogged">
+            <a class="nav-link" [routerLink]="['/login']">
+                <i class="material-icons">vpn_key</i>
+                <p>Login</p>
+            </a>
+        </li>
+
         <hr>
-        <li class="nav-item ml-3">
+        <li class="nav-item ml-3" *ngIf="authService.isAdmin">
             <div class="dropdown mx-auto">
                 <button [routerLink]="['/admin-panel']" class="btn dropdown-toggle btn-danger btnAdmin" data-toggle="dropdown" aria-expanded="true">
                     <span class="material-icons">supervisor_account</span>
@@ -59,8 +90,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a [routerLink]="['/admin-panel/ubicacion-panel']">Administrar Ubicaciones</a></li>
-                    <li><a [routerLink]="['/admin-panel/sector-industrial-panel']">Administrar Sector Industrial</a>
-                    </li>
+                    <li><a [routerLink]="['/admin-panel/sector-industrial-panel']">Administrar Sector Industrial</a></li>
                     <li><a [routerLink]="['/admin-panel/cuestionario-panel']">Administrar Cuestionario</a></li>
                 </ul>
             </div>

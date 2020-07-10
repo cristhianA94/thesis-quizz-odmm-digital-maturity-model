@@ -1,4 +1,4 @@
-export class Empresa {
+export interface Empresa {
     id?: string;
     razon_social: string;
     anio_creacion: string;
@@ -9,18 +9,4 @@ export class Empresa {
     idUser?: string;
     idCanton?: string;
     idSectorInd?: string;
-
-    constructor(empresa?) {
-        empresa = empresa || {};
-        this.id = empresa.id || "";
-        this.razon_social = empresa.razon_social || "";
-        this.anio_creacion = empresa.anio_creacion || "";
-        this.area_alcance = empresa.area_alcance || "";
-        this.franquicias = empresa.franquicias || "";
-        this.direccion = empresa.direccion || "";
-        this.tamanio_empresa = empresa.tamanio_empresa || "";
-        this.idUser = empresa.idUser || "";
-        this.idCanton = empresa.idCanton || "";
-        this.idSectorInd = empresa.idSectorInd || "";
-    }
 }

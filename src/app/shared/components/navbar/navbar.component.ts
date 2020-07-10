@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/service/auth.service';
 
@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit {
         this.sidebarVisible = false;
     }
 
+    // Menu responsive
     ngOnInit() {
         this.listTitles = ROUTES.filter(listTitle => listTitle);
         const navbar: HTMLElement = this.element.nativeElement;
@@ -38,6 +39,7 @@ export class NavbarComponent implements OnInit {
                 this.mobile_menu_visible = 0;
             }
         });
+        // Comprueba si el usuario esta logueado
         this.isUserLogged();
     }
 
@@ -116,6 +118,9 @@ export class NavbarComponent implements OnInit {
         }
     };
 
+    // END Menu responsive
+
+    // Obtiene titulo  de la pag actual
     getTitle() {
         var titlee = this.location.prepareExternalUrl(this.location.path());
         if (titlee.charAt(0) === '#') {
@@ -141,7 +146,7 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    /* Metodo para salir de la cuenta */
+    // Metodo para salir de la cuenta
     onLogout() {
         this.authService.logout();
     }
