@@ -57,17 +57,15 @@
                                 <!-- Métrica -->
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3> Métrica [{{ capacidad.metrica["nombre"] }}] <br> Pregunta: {{ capacidad.metrica["pregunta"] }}</h3>
+                                        <h3> Métrica [ {{ capacidad.metrica["nombre"] }}] <br> <strong class="text-success">{{ capacidad.metrica["pregunta"] }}</strong></h3>
                                     </div>
                                     <div class="card-body">
-                                        <div class="col-md-10 mx-auto">
-                                            <label id="example-radio-group-label"> <small>Elija la opción más asequible
-                                                    a su
-                                                    empresa</small></label>
+                                        <div class="col-xs-10">
+                                            <label> <small>Elija la opción más asequible a su empresa</small></label>
                                             <!-- Respuestas -->
                                             <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChangeOptionValues($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
                                                 <mat-radio-button class="radio-button" [value]="respuesta">
-                                                    {{respuesta.opcion }}
+                                                    <span class="wrap-mat-radio-label"> {{respuesta.opcion }}</span>
                                                 </mat-radio-button>
                                             </mat-radio-group>
                                         </div>
@@ -98,12 +96,16 @@
             <div class="col-md-6">
                 <div class="text-right">
                     <button [disabled]="btnSave" (click)="guardarCategoria()" mat-raised-button class="btn btn-success">
-                                <mat-icon>save</mat-icon>Guardar categoría
-                            </button>
+                        <mat-icon>save</mat-icon>Guardar categoría
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
 
+
 </div>
+<button (click)="test()" mat-raised-button class="btn btn-default">
+            <mat-icon>keyboard_arrow_left</mat-icon>Test
+        </button>

@@ -12,6 +12,7 @@ import { AboutComponent } from './about/about.component';
 import { EmpresaService } from '../services/user/empresas/empresa.service';
 import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 import { CategoriasService } from '../services/cuestionario/categorias/categorias.service';
+import { AuthUserGuard } from '../auth/guards/auth-user.guard';
 
 export const PagesRoutes: Routes = [
 
@@ -21,9 +22,8 @@ export const PagesRoutes: Routes = [
     {
         path: 'cuestionario',
         component: CuestionaryComponent,
-        loadChildren: () => import('./cuestionary/cuestionary.module').then(m => m.CuestionaryModule)
-        //resolve: { CategoriasService }
-
+        loadChildren: () => import('./cuestionary/cuestionary.module').then(m => m.CuestionaryModule),
+        canActivate: [AuthUserGuard]
     },
     { path: 'login', component: AuthComponent },
     {
@@ -32,12 +32,14 @@ export const PagesRoutes: Routes = [
         resolve: {
             dataUser: UsuarioService,
             dataEmpresa: EmpresaService
-        }
+        },
+        canActivate: [AuthUserGuard]
     },
     {
         path: 'admin-panel',
         component: AdminPanelComponent,
-        loadChildren: () => import('./admin-panel/admin.module').then(m => m.AdminModule)
+        loadChildren: () => import('./admin-panel/admin.module').then(m => m.AdminModule),
+        canActivate: [AuthUserGuard]
     },
 ];
 

@@ -1,18 +1,17 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from "@angular/core";
 import { MatRadioChange, MatRadioButton } from '@angular/material/radio';
 
 import { Subject } from "rxjs";
-import { takeUntil, min } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 
 // Models
 import { Categoria } from 'app/shared/models/categoria';
 import { Subcategoria } from 'app/shared/models/subcategoria';
 import { Capacidad } from 'app/shared/models/capacidad';
 import { Metrica, Respuesta } from 'app/shared/models/metrica';
-import { Cuestionario } from 'app/shared/models/cuestionario';
+import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
-import { RespuestasUsuario } from '../../../../shared/models/cuestionario';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,15 +21,19 @@ import { Router } from '@angular/router';
     `
       .radio-group {
         display: flex;
-        flex-direction: column;
         margin: 15px 0;
       }
 
       .radio-button {
         margin: 5px;
       }
-    `,
+
+      .wrap-mat-radio-label {
+        white-space: normal;
+      }
+    `
   ],
+  encapsulation: ViewEncapsulation.None
 })
 export class DimensionComponent implements OnInit, OnDestroy {
 
@@ -50,9 +53,6 @@ export class DimensionComponent implements OnInit, OnDestroy {
   subcategorias: Subcategoria[] = [];
   subcategoriasEvaluadas: Subcategoria[] = [];
 
-  capacidades: Capacidad[] = [];
-  capacidad: Capacidad = null;
-
   metricas: Metrica[] = [];
 
   respuestas: Respuesta[] = [];
@@ -68,18 +68,14 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.idUser = localStorage.getItem("uidUser");
+    // REST para obtener cuestionario
     this.cuestionarioService.onCuestionarioChanged
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((cuestionario) => {
         this.categoria = cuestionario;
-        console.log("TS=> ",this.categoria);
-        
         this.subcategorias = this.categoria.subcategorias;
-        //this.cuestionario = cuestionario;
-
       });
     this.load = true;
-
   }
 
   // Detecta las opciones elegida por cada subcategoria
@@ -105,7 +101,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.subcategoriasEvaluadas = [];
 
     console.log(this.puntuajes);
-    
+
     // Habilita el boton de guardar categoria cuando haya contestado a cada subcategoria
     if (this.puntuajes.length === 3) {
       this.btnSave = false;
@@ -174,7 +170,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.puntuajes.forEach((puntuaje) => {
       puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
     });
-    puntuajeCategoria *= this.categoria.peso;
+    //puntuajeCategoria *= this.categoria.peso;
     // Agrega al objeto puntuajes la puntuacion de la categoria
     this.puntuajes.push(puntuajeCategoria);
 
@@ -205,5 +201,21 @@ export class DimensionComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  test(){
+    this.cuestionario = {
+      idUser: this.idUser,
+      categoria: this.categoria.nombre
+    };
+
+    let obj =  {
+      intento: 1,
+      puntuacionCategoria: 5,
+      metricas: 'gola'
+    }
+
+    // Crea el cuestionario en la BD
+    this.cuestionarioService.createCuestionarioDB(this.cuestionario, obj);
   }
 }

@@ -19,6 +19,7 @@ import { AuthComponent } from '../auth/components/login/auth.component';
 import { RegisterComponent } from '../auth/components/login/register/register.component';
 import { LoginComponent } from '../auth/components/login/login/login.component';
 import { CuestionaryComponent } from './cuestionary/cuestionary.component';
+import { ReportesComponent } from './reportes/reportes.component';
 
 // Angular Material
 import { MaterialModule } from './material.module';
@@ -60,6 +61,7 @@ import { CuestionarioService } from '../services/cuestionario/cuestionario.servi
     EmpresaEditComponent,
     UsuarioEditComponent,
     CuestionaryComponent,
+    ReportesComponent,
   ],
   providers: [
     UsuarioService,
