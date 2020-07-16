@@ -16,6 +16,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/acerca-de', title: 'Acerca De', icon: 'info', class: '' },
   { path: '/cuestionario', title: 'Cuestionario', icon: 'vertical_split', class: '' },
   { path: '/user-profile', title: 'Perfil Usuario', icon: 'person', class: '' },
+  { path: '/reportes', title: 'Reportes', icon: 'assessment', class: '' },
   { path: '/login', title: 'Login', icon: 'vpn_key', class: '' },
 ];
 
