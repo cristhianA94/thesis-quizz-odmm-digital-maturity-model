@@ -28,9 +28,9 @@ export class AdminPaisComponent implements OnInit {
   dataSource = new MatTableDataSource<Pais>();
 
   @ViewChild(MatSort) sort: MatSort;
-
   //@ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  
   constructor(
     public paisService: PaisService,
     public dialog: MatDialog
