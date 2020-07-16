@@ -25,16 +25,12 @@ export class AuthUserGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    // Comprueba si el usuario esta logeado
-    this.auth.isAuth().subscribe((authUser) => {
-      if (authUser) {
-        this.auth.isLogged = true;
-      } else {
-        this.auth.isLogged = false;
-      }
-    });
+    // Valida uidUser logueado y token
+    let idUser: string = localStorage.getItem("uidUser");
+    let token: string = localStorage.getItem("token");
 
-    if (this.auth.isLogged) {
+    // Si existe en el storage permite acceso
+    if (idUser && token) {
       return true;
     } else {
       Swal.fire({

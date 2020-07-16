@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'app/core/auth/service/auth.service';
 import { AlertsService } from 'app/core/services/notificaciones/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -64,7 +65,28 @@ export class LoginComponent implements OnInit {
   /* Login Google */
   onLoginGoogle(): void {
     this.authService.loginGoogleUser().then(() => {
-      this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+      let timerInterval
+      Swal.fire({
+        title: '¡Acceso correcto!',
+        text: 'Bienvenido',
+        icon: 'success',
+        timer: 2000,
+        timerProgressBar: true,
+        onBeforeOpen: () => {
+          Swal.showLoading()
+          timerInterval = setInterval(() => {
+            Swal.getContent()
+          }, 1000)
+        },
+        onClose: () => {
+          clearInterval(timerInterval)
+        }
+      }).then((result) => {
+        //Read more about handling dismissals below
+        if (result.dismiss === Swal.DismissReason.timer) {
+        }
+      });
+      //this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
       this.router.navigate(['/home']);
     }).catch(err => this.alertaService.mensajeError('Error', err.message));
   }
@@ -86,12 +108,28 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService.loginCorreo(this.loginForm.value)
       .then(() => {
-        console.log("Loged");
+        let timerInterval
+        Swal.fire({
+          title: '¡Acceso correcto!',
+          text: 'Bienvenido',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              Swal.getContent()
+            }, 1000)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          //Read more about handling dismissals below
+          if (result.dismiss === Swal.DismissReason.timer) {
+          }
+        });
         //this.router.navigate(['/home']);
-        // TODO Cambiar hasta encontrar solucion
-        /* setInterval(() => {
-          window.location.reload();
-        }, 1000) */
       }).catch(err => this.alertaService.mensajeError('Error', err.message));
   }
 

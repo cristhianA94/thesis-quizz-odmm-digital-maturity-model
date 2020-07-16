@@ -10,6 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
 import { EmpresaService } from '../../services/user/empresas/empresa.service';
+import Swal from 'sweetalert2';
 
 
 @Injectable({
@@ -66,6 +67,8 @@ export class AuthService {
         if (userAuth.user.emailVerified == false) {
           this.emailVerification();
           this.alertaService.mensajeError("Error", "Por favor, valide su dirección de correo electrónico. Por favor, compruebe su bandeja de entrada.");
+          this.router.navigate(['/login']);
+          return;
         } else {
           this.ngZone.run(() => {
             //this.isAuth();
@@ -90,6 +93,27 @@ export class AuthService {
         this.usuarioService.createUserDB(userData.user, formulario);
         // Crea la coleccion Empresa despues del registro de Usuario
         this.empresaService.createEmpresaDB(userData.user, formulario);
+        let timerInterval
+        Swal.fire({
+          title: '¡Registro correcto!',
+          text: 'Bienvenido',
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          onBeforeOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              Swal.getContent()
+            }, 1000)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          //Read more about handling dismissals below
+          if (result.dismiss === Swal.DismissReason.timer) {
+          }
+        });
         // Envia correo de verificacion
         this.emailVerification();
       })

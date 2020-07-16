@@ -1,4 +1,4 @@
-<form class="mt-4" [formGroup]="registroForm" (ngSubmit)="registro() " autocomplete="on">
+<form class="mt-4" [formGroup]="registroForm" (ngSubmit)="registrarCuenta() " autocomplete="on">
 
     <div class="card">
         <div class="card-header card-header-icon card-header-info">
@@ -62,7 +62,7 @@
     <mat-form-field appearance="fill" hintLabel="Min. 8 characters" [color]="passwordComponent.color">
         <mat-label>Contraseña</mat-label>
         <mat-pass-toggle-visibility #toggleVisbility matSuffix></mat-pass-toggle-visibility>
-        <input maxlength="15" minlength="8" matInput #password formControlName="clave" type="password" [type]="toggleVisbility.type" placeholder="Password" required>
+        <input maxlength="15" minlength="8" matInput #password formControlName="clave" type="password" [type]="toggleVisbility.type" placeholder="Contraseña" required>
     </mat-form-field>
     <mat-hint *ngIf="password.value != 0" align="end" aria-live="polite">
         {{password.value.length}} / {{passwordComponent.max}}

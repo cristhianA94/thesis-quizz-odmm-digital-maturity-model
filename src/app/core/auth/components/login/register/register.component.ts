@@ -133,7 +133,7 @@ export class RegisterComponent implements OnInit {
   }
 
   /* Registro usuario */
-  registro() {
+  registrarCuenta() {
     this.authService.registerUser(this.registroForm.value);
   }
 
