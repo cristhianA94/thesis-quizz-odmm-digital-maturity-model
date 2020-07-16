@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { UsuarioService } from '../services/user/usuarios/usuario.service';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AuthComponent } from 'app/core/auth/components/login/auth.component';
@@ -13,19 +12,19 @@ import { EmpresaService } from '../services/user/empresas/empresa.service';
 import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 import { CategoriasService } from '../services/cuestionario/categorias/categorias.service';
 import { AuthUserGuard } from '../auth/guards/auth-user.guard';
+import { ReportesComponent } from './reportes/reportes.component';
+import { ReporteComponent } from './reportes/reporte/reporte.component';
 
 export const PagesRoutes: Routes = [
 
     { path: 'home', component: HomeComponent },
     { path: 'acerca-de', component: AboutComponent },
-    { path: 'dashboard', component: DashboardComponent },
     {
         path: 'cuestionario',
         component: CuestionaryComponent,
         loadChildren: () => import('./cuestionary/cuestionary.module').then(m => m.CuestionaryModule),
         canActivate: [AuthUserGuard]
     },
-    { path: 'login', component: AuthComponent },
     {
         path: 'user-profile',
         component: UserProfileComponent,
@@ -34,6 +33,18 @@ export const PagesRoutes: Routes = [
             dataEmpresa: EmpresaService
         },
         canActivate: [AuthUserGuard]
+    },
+    { path: 'login', component: AuthComponent },
+    {
+        path: 'reportes',
+        component: ReportesComponent,
+        canActivate: [AuthUserGuard],
+        children: [
+            {
+                path: 'reporte/:id',
+                component: ReporteComponent
+            },
+        ]
     },
     {
         path: 'admin-panel',

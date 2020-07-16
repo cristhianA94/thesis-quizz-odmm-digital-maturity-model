@@ -38,7 +38,7 @@ export class CuestionaryComponent implements OnInit {
     });
   }
 
-  evaluarCategoria(categoria: Categoria) {
+  realizarEncuesta(categoria: Categoria) {
     this.select = true;
     this.router.navigate(['dimension/', categoria.id]);
   }

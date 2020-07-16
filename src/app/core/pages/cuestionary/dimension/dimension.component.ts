@@ -57,7 +57,9 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   respuestas: Respuesta[] = [];
   respuestasUsuario: RespuestasUsuario[] = [];
-  respuestaUsuario: RespuestasUsuario = { intento: 1, metricas: [], puntuacionCategoria: 0 };
+  //respuestaUsuario: RespuestasUsuario = { intento: 1, metricas: [], puntuacionCategoria: 0 };
+  respuestaUsuario: RespuestasUsuario = { metricas: [] };
+  //respuestaUsuario: RespuestasUsuario;
 
   constructor(
     private cuestionarioService: CuestionarioService,
@@ -89,8 +91,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   guardarRespuestas(iSub?: any) {
 
-    // ** Validacion de otras subcategorias
-    // Filtra la subcategoria contestada
+    // ** Validacion de otras subcategorias **
+    // Elimina la subcategoria duplicada y la asigna
     var arrTem: any = [...new Set(this.subcategoriasEvaluadas)];
     this.subcategoria = arrTem[0];
 
@@ -123,7 +125,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Recorre cada capacidad para hacer el cálculo de cada métrica y capacidad
     subcategoria.capacidades.forEach((capacidad, i) => {
       objMetrica = {
-        pregunta: capacidad.metrica.pregunta,
+        subcacategoria:subcategoria.nombre, // TODO eliminar por si
+        metrica: capacidad.metrica.nombre,
         respuesta: {
           opcion: this.respuestas[i].opcion,
           recomendacion: this.respuestas[i].recomendacion
@@ -135,7 +138,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
       delete this.respuestaUsuario.intento;
       delete this.respuestaUsuario.puntuacionCategoria;
       // Cálculo pesos metricas
-      puntuajeMetricas.push(Number((capacidad.metrica.pesoPregunta * this.respuestas[i].pesoRespuesta).toFixed(2)));
+      puntuajeMetricas.push(Number((capacidad.metrica.pesoPregunta * this.respuestas[i].pesoRespuesta).toFixed(4)));
       // Cálculo pesos capacidades
       puntuajeCapacidades.push(Number((capacidad.peso * puntuajeMetricas[i]).toFixed(4)));
     });
@@ -170,7 +173,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.puntuajes.forEach((puntuaje) => {
       puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
     });
-    //puntuajeCategoria *= this.categoria.peso;
+    // TODO Porcentaje de madurez
+    puntuajeCategoria *= 10;
     // Agrega al objeto puntuajes la puntuacion de la categoria
     this.puntuajes.push(puntuajeCategoria);
 
@@ -180,9 +184,11 @@ export class DimensionComponent implements OnInit, OnDestroy {
       categoria: this.categoria.nombre
     };
 
+    let fecha = new Date().toLocaleString();
     // TODO Falta logica de intentos
     this.respuestaUsuario = {
       intento: 1,
+      fecha: fecha,
       puntuacionCategoria: puntuajeCategoria,
       metricas: this.puntuajes[0].metricas.metricas
     }
@@ -203,14 +209,16 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-  test(){
+  test() {
     this.cuestionario = {
       idUser: this.idUser,
       categoria: this.categoria.nombre
     };
 
-    let obj =  {
+    let fecha = new Date().toLocaleString();
+    let obj = {
       intento: 1,
+      fecha: fecha,
       puntuacionCategoria: 5,
       metricas: 'gola'
     }

@@ -9,7 +9,6 @@ import { ComponentsModule } from 'app/shared/components.module';
 
 // Components
 import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EmpresaEditComponent } from './user-profile/empresa-edit/empresa-edit.component';
 import { UsuarioEditComponent } from './user-profile/usuario-edit/usuario-edit.component';
@@ -24,6 +23,8 @@ import { ReportesComponent } from './reportes/reportes.component';
 // Angular Material
 import { MaterialModule } from './material.module';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+
 
 import { CuestionaryModule } from './cuestionary/cuestionary.module';
 
@@ -35,6 +36,7 @@ import { ProvinciaService } from '../services/user/provincia/provincia.service';
 import { SectorIndustrialService } from '../services/user/sectorIndustrial/sector-industrial.service';
 import { SubcategoriasService } from '../services/cuestionario/subcategorias/subcategorias.service';
 import { CuestionarioService } from '../services/cuestionario/cuestionario.service';
+import { ReporteComponent } from './reportes/reporte/reporte.component';
 
 
 @NgModule({
@@ -47,6 +49,16 @@ import { CuestionarioService } from '../services/cuestionario/cuestionario.servi
     ComponentsModule,
     MaterialModule,
     MatPasswordStrengthModule,
+    // TODO ng-circle-progress
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300,
+    }),
     CuestionaryModule
   ],
   declarations: [
@@ -56,12 +68,12 @@ import { CuestionarioService } from '../services/cuestionario/cuestionario.servi
     AuthComponent,
     LoginComponent,
     RegisterComponent,
-    DashboardComponent,
     UserProfileComponent,
     EmpresaEditComponent,
     UsuarioEditComponent,
     CuestionaryComponent,
     ReportesComponent,
+    ReporteComponent,
   ],
   providers: [
     UsuarioService,
