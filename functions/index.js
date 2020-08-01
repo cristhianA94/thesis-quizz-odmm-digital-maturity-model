@@ -167,4 +167,27 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
+
+// Actualiza los intentoss de cada categoria evaluada
+exports.actualizarIntento = functions.firestore
+    .document("cuestionarios/{cuestionarioId}/respuestas/{respuestaId}")
+    .onCreate((snap, context) => {
+        // context.params.userId
+        const cuestionarioId = context.params.cuestionarioId;
+        let cuestionarioRef = db.collection("cuestionarios").doc(cuestionarioId);
+        return cuestionarioRef
+            .get()
+            .then((doc) => {
+                var cuestionario = doc.data();
+                var intento = cuestionario.intento + 1;
+                return Promise.all([
+                    snap.ref.update({ intento }),
+                    cuestionarioRef.update({ intento }),
+                ]);
+            })
+            .catch((err) => {
+                return err;
+            });
+    });
+
 exports.cuestionario = functions.https.onRequest(app);

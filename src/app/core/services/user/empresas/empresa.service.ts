@@ -117,11 +117,11 @@ export class EmpresaService implements Resolve<any>{
   }
 
   deleteEmpresa(empresa: Empresa) {
-    console.log(empresa);
-    
+
     this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
     this.empresaDoc.delete();
     //this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
   }
+
 
 }

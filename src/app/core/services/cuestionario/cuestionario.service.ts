@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 import Swal from 'sweetalert2';
+import { AlertsService } from '../notificaciones/alerts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,25 @@ export class CuestionarioService implements Resolve<any>{
   // URL dev and production
   URL_LOCAL: string = "http://localhost:5001/fir-auth-web-75274/us-central1";
   URL_API: string = "https://us-central1-fir-auth-web-75274.cloudfunctions.net";
+
   cuestionarioCollection: AngularFirestoreCollection<Cuestionario>;
   cuestionarioDoc: AngularFirestoreDocument<Cuestionario>;
+  cuestionario_respuestasCollection: AngularFirestoreCollection<RespuestasUsuario>;
+  cuestionario_respuestasDoc: AngularFirestoreDocument<RespuestasUsuario>;
 
   cuestionario: Cuestionario;
+  respuestaUsuario: RespuestasUsuario;
   onCuestionarioChanged: BehaviorSubject<any>;
+
+  subscripcion: Subscription;
+
+  duplicated: boolean = false;
 
   constructor(
     private http: HttpClient,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private alertaService: AlertsService,
+    private router: Router
   ) {
     this.onCuestionarioChanged = new BehaviorSubject({});
   }
@@ -61,7 +72,7 @@ export class CuestionarioService implements Resolve<any>{
   }
 
 
-
+  // Obtiene todos los cuestionarios
   getCuestionariosDB(): Observable<Cuestionario[]> {
     this.cuestionarioCollection = this.afs.collection("cuestionario", ref => {
       return ref.orderBy('fecha')
@@ -76,7 +87,9 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
+  // Obtiene los cuestionarios que ha respondido el usuario
   getCuestionarioUserLogedDB(): Observable<Cuestionario[]> {
+
     let idUser = localStorage.getItem("uidUser");
 
     this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
@@ -93,6 +106,29 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
+  // Obtiene las respuestas de una categoria que ha respondido el usuario
+  getCuestionarioRespuestasDB(idCuestionario: string): Observable<RespuestasUsuario[]> {
+
+    this.cuestionario_respuestasCollection = this.afs.collection('cuestionarios/' + idCuestionario + '/respuestas', ref => {
+      return ref.orderBy('fecha', 'desc')
+    });
+    return this.cuestionario_respuestasCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as RespuestasUsuario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      )
+    );
+  }
+
+  // Obtiene los cuestionarios que ha respondido el usuario
+  getCuestionarioRespuestaDB(idRespuestas: string): Observable<RespuestasUsuario> {
+    this.cuestionario_respuestasDoc = this.afs.doc<RespuestasUsuario>(`respuestas/${idRespuestas}`);
+    return this.cuestionario_respuestasDoc.valueChanges();
+  }
+
   /* 
   getBanks({commit},payload){
       const arrayBank =[]
@@ -105,77 +141,96 @@ export class CuestionarioService implements Resolve<any>{
       })
   */
 
-  // TODO Si existe cuestionario con idUser guardar con .set, sino con add.
+  // Guarda el cuestionario de la categoria evaluada
   createCuestionarioDB(cuestionario: Cuestionario, respuestaUser: any) {
-    let id = this.afs.createId();
-    let idUser = cuestionario.idUser;
 
-    this.getCuestionarioUserLogedDB().subscribe((cuestionarioDB: any) => {
-      console.log(cuestionarioDB);
+    cuestionario.intento = 0;
+    // Obtiene los cuestionarios de el usuario logueado
+    this.subscripcion = this.getCuestionarioUserLogedDB().subscribe((cuestionarioDB: any) => { /// ESTE lo buelve a ejecutar
+      //console.log(cuestionarioDB);
 
-      cuestionarioDB.forEach(cuestionario => {
-        console.log(cuestionario);
-        if (cuestionario.categoria === cuestionario.categoria) {
-          console.log("Coincide categoria");
-        }
+      // Filtra el cuestionario de la categoria evaluada
+      let cuestionarioEvaluado: any = cuestionarioDB.filter((cat: Cuestionario) => cat.categoria === cuestionario.categoria);
 
-      });
-      if (cuestionarioDB.categoria === cuestionario.categoria) {
-        console.log("Coincide categoria");
-        /* this.cuestionarioDoc.set(cuestionario, { merge: true })
+      // Control cuando sea una categoria nueva
+      if (typeof cuestionarioEvaluado != "undefined") {
+        let objTemp = { categoria: " " };
+        cuestionarioEvaluado.push(objTemp);
+      }
+
+      // Busca entre los cuestionarios la categoria evaluada actual, para que no se agregue una duplicidad de docs
+      if (cuestionario.categoria == cuestionarioEvaluado[0].categoria) {
+        this.duplicated = true;
+        // Agrega las metricas del nuevo intento de esa categoria.
+        this.afs.collection('cuestionarios/' + cuestionarioEvaluado[0].id + '/respuestas').add(respuestaUser)
           .then(() => {
-            this.afs.collection('cuestionarios/' + idUser + '/respuestas').add(respuestaUser);
-          }) */
-      } else {
-        console.log("NO coincide");
-        /* this.cuestionarioCollection = this.afs.collection('cuestionarios');
+            // Notificacion
+            let timerInterval
+            Swal.fire({
+              title: '¡Categoria nuevamente evaluada!',
+              icon: 'success',
+              timer: 1000,
+              timerProgressBar: true,
+              onBeforeOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {
+                  Swal.getContent()
+                }, 1000)
+              },
+              onClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {
+              //Read more about handling dismissals below
+              if (result.dismiss === Swal.DismissReason.timer) {
+              }
+            });
+            this.router.navigate(["/cuestionario"]);
+          })
+          .catch((err) => this.alertaService.mensajeError("Error", err));
+      }
+
+      // Registra la nueva categoria evaluada
+      if (!this.duplicated) {
+        this.cuestionarioCollection = this.afs.collection('cuestionarios');
         this.cuestionarioCollection.add(cuestionario)
           .then((docCuestionario) => {
             this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
-          }); */
+            // Notificacion
+            let timerInterval
+            Swal.fire({
+              title: '¡Categoria Evaluada!',
+              icon: 'success',
+              timer: 1000,
+              timerProgressBar: true,
+              onBeforeOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {
+                  Swal.getContent()
+                }, 1000)
+              },
+              onClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {
+              //Read more about handling dismissals below
+              if (result.dismiss === Swal.DismissReason.timer) {
+              }
+            });
+            this.router.navigate(["/cuestionario"]);
+          });
       }
+      // Se desuscribe de la consulta para evitar bucle de adds
+      this.subscripcion.unsubscribe();
 
     });
 
-
-    /* this.cuestionarioDoc = this.afs.doc(`cuestionarios/${idUser}`);
-
-    this.cuestionarioDoc.set(cuestionario)
-      .then(() => {
-        this.afs.collection('cuestionarios/' + idUser + '/respuestas').add(respuestaUser);
-      }) */
   };
-  /*     
-      this.cuestionarioCollection = this.afs.collection('cuestionarios');
-      this.cuestionarioCollection.add(cuestionario).then((docCuestionario) => {
-        this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);
-        let timerInterval
-        Swal.fire({
-          title: '¡Categoria registrada!',
-          icon: 'success',
-          timer: 1000,
-          timerProgressBar: true,
-          onBeforeOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-              Swal.getContent()
-            }, 1000)
-          },
-          onClose: () => {
-            clearInterval(timerInterval)
-          }
-        }).then((result) => {
-          //Read more about handling dismissals below 
-          if (result.dismiss === Swal.DismissReason.timer) {
-          }
-        })
-      });
-    } */
+
 
   deleteCuestionarioDB(id: string) {
     this.cuestionarioDoc = this.afs.doc(`cuestionarios/${id}`);
     this.cuestionarioDoc.delete();
   }
-
 }
 

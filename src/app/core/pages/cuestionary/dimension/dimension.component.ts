@@ -7,7 +7,6 @@ import { takeUntil } from "rxjs/operators";
 // Models
 import { Categoria } from 'app/shared/models/categoria';
 import { Subcategoria } from 'app/shared/models/subcategoria';
-import { Capacidad } from 'app/shared/models/capacidad';
 import { Metrica, Respuesta } from 'app/shared/models/metrica';
 import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 
@@ -125,7 +124,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Recorre cada capacidad para hacer el cálculo de cada métrica y capacidad
     subcategoria.capacidades.forEach((capacidad, i) => {
       objMetrica = {
-        subcacategoria:subcategoria.nombre, // TODO eliminar por si
+        subcacategoria: subcategoria.nombre, // TODO eliminar por si
         metrica: capacidad.metrica.nombre,
         respuesta: {
           opcion: this.respuestas[i].opcion,
@@ -174,24 +173,28 @@ export class DimensionComponent implements OnInit, OnDestroy {
       puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
     });
     // TODO Porcentaje de madurez
-    puntuajeCategoria *= 10;
+    Number((puntuajeCategoria *= 10).toFixed(4))
     // Agrega al objeto puntuajes la puntuacion de la categoria
     this.puntuajes.push(puntuajeCategoria);
 
     /* Guardar categoria DB */
     this.cuestionario = {
       idUser: this.idUser,
-      categoria: this.categoria.nombre
+      categoria: this.categoria.nombre,
+      intento: 0
     };
 
+    // Fecha para el registro del cuestionario
     let fecha = new Date().toLocaleString();
     // TODO Falta logica de intentos
     this.respuestaUsuario = {
-      intento: 1,
+      intento: 0,
       fecha: fecha,
       puntuacionCategoria: puntuajeCategoria,
       metricas: this.puntuajes[0].metricas.metricas
     }
+
+    console.log(this.puntuajes);
 
     // Crea el cuestionario en la BD
     this.cuestionarioService.createCuestionarioDB(this.cuestionario, this.respuestaUsuario);
@@ -217,10 +220,30 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
     let fecha = new Date().toLocaleString();
     let obj = {
-      intento: 1,
+      intento: 2,
       fecha: fecha,
-      puntuacionCategoria: 5,
-      metricas: 'gola'
+      puntuacionCategoria: 60,
+      metricas: [
+        {
+          metrica: "Nombre metrica",
+          respuesta:
+          {
+            opcion: "Opcion ejem",
+            recomendacion: "Recomendacion ejem"
+          },
+          subcategoria: "Subcategoria ejem"
+        },
+        {
+          metrica: "Nombre metrica",
+          respuesta:
+          {
+            opcion: "Opcion ejem",
+            recomendacion: "Recomendacion ejem"
+          },
+          subcategoria: "Subcategoria ejem"
+        },
+
+      ]
     }
 
     // Crea el cuestionario en la BD

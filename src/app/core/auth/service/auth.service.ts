@@ -45,7 +45,6 @@ export class AuthService {
     this.usuarioService.getUser(credential.user.uid);
     if (!this.usuarioService.usuario) {
       console.log("no existe usuario");
-      
       // Si no existe se crea
       this.usuarioService.createUserSocial(credential.user);
     }
@@ -63,7 +62,7 @@ export class AuthService {
     await this.afs.auth.signInWithEmailAndPassword(user.correo, user.clave)
       .then((userAuth) => {
 
-        // Verifica si el usuario ya confirmo por email
+        //TODO Verifica si el usuario ya confirmo por email
         if (userAuth.user.emailVerified == false) {
           this.emailVerification();
           this.alertaService.mensajeError("Error", "Por favor, valide su dirección de correo electrónico. Por favor, compruebe su bandeja de entrada.");
@@ -84,15 +83,17 @@ export class AuthService {
   }
 
 
-  registerUser(formulario: any) {
+  async registrarCuenta(formulario: any) {
 
     // Registra al usuario en Authentication
-    this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
+    await this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
       .then(userData => {
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);
         // Crea la coleccion Empresa despues del registro de Usuario
         this.empresaService.createEmpresaDB(userData.user, formulario);
+
+        // Notificacion
         let timerInterval
         Swal.fire({
           title: '¡Registro correcto!',
@@ -113,9 +114,12 @@ export class AuthService {
           //Read more about handling dismissals below
           if (result.dismiss === Swal.DismissReason.timer) {
           }
+
         });
         // Envia correo de verificacion
         this.emailVerification();
+        //this.router.navigate(['/home']);
+        this.guardarStorage(userData.user.uid);
       })
       .catch(error => this.alertaService.mensajeError("Error", error));
   }

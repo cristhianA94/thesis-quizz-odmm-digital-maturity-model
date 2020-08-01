@@ -1,1 +1,142 @@
-<p>reportes works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+
+        <router-outlet></router-outlet>
+
+        <div class="row" *ngIf="!flag && flag2">
+            <div class="col-md-10 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="text-center">
+                            <div class="jumbotron jumbotron-fluid" style="padding: 1rem;">
+                                <div class="container">
+                                    <h5 class="display-4">NIVEL DE MADUREZ DIGITAL</h5>
+                                    <p class="lead">A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho cuestionario para
+                                        la cuantificación del nivel de madurez digital de tu negoci.o</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mb-5">
+                        <div style="display: block">
+                            <canvas baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels" chartType="radar">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="!flag">
+            <div class="col-md-10 mx-auto">
+
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h2 class="card-title text-center text-justify"><strong>REPORTES</strong></h2>
+                    </div>
+
+                    <div class="card-body m-4">
+
+                        <div class="row">
+                            <div class="col-md-12 mx-auto">
+                                <div class="text-center">
+                                    <div class="jumbotron jumbotron-fluid" style="padding: 2rem;">
+                                        <div class="container">
+                                            <h4 class="display-4">¿Qué puedo hacer?</h4>
+                                            <p class="lead">Aquí podrás consultar los resultados de cada categoría que hayas evaluado anteriormente.
+                                                <br> Selecciona la categoría que desees consultar sus resultados y ver el informe generado
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mx-auto">
+                                <div class="text-center">
+                                    <img src="../../../../assets/img/reportes.png" alt="imgagen reportes" width="200px">
+                                    <hr>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Seleccione la categoría</mat-label>
+                                        <mat-select #idCategoria name="Categorias" required>
+                                            <mat-option *ngFor="let cuestionario of cuestionarios" [value]="cuestionario">
+                                                {{ cuestionario.categoria }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <button mat-raised-button type="button" [disabled]="!idCategoria.value" (click)="visualizacionResultados(idCategoria.value)">
+                                        <mat-icon matSuffix>search</mat-icon>Consultar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================================================================================== -->
+
+        <!-- Tabla Respuestas cuestionario de categoria elegida -->
+        <div class="row" *ngIf="!flag && flag2">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-info">
+                        <div class="card-icon">
+                            <i class="material-icons"></i>
+                        </div>
+                        <h3 class="card-title"> <strong>Respuestas de la categoría: {{ cuestionario.categoria }}
+                            </strong>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tabla -->
+                        <mat-form-field>
+                            <mat-label>Filtrar</mat-label>
+                            <input matInput (keyup)="buscarCuestionario($event)" placeholder="...">
+                        </mat-form-field>
+
+
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                            <!-- Fecha Column -->
+                            <ng-container matColumnDef="Fecha">
+                                <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                                <td mat-cell *matCellDef="let element"> {{element.fecha }} </td>
+                            </ng-container>
+                            <!-- Intento Column -->
+                            <ng-container matColumnDef="Intento">
+                                <th mat-header-cell *matHeaderCellDef> Intento </th>
+                                <td mat-cell *matCellDef="let element"> {{element.intento }} </td>
+                            </ng-container>
+
+                            <!-- Actions -->
+                            <ng-container matColumnDef=" ">
+                                <th mat-header-cell *matHeaderCellDef> </th>
+                                <td mat-cell *matCellDef="let element" style="width: 130px;">
+                                    <div class="button-container">
+                                        <button (click)="verReporte(element)" mat-mini-fab color="accent" aria-label="Ver cuestionario">
+                                            <mat-icon>visibility</mat-icon>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)">
+                            </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[2, 4, 6]" showFirstLastButtons>
+                        </mat-paginator>
+
+                        <!-- End Table -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
