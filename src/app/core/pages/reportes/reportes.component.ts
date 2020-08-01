@@ -11,7 +11,7 @@ import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario'
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
-  styles: ['']
+  styleUrls: ['./reportes.component.css']
 })
 export class ReportesComponent implements OnInit {
 

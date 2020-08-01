@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
   }
 
   /* Login Google */
-  onLoginGoogle(): void {
+  loginGoogle(): void {
     this.authService.loginGoogleUser().then(() => {
       let timerInterval
       Swal.fire({
@@ -106,31 +106,7 @@ export class LoginComponent implements OnInit {
 
   /* Login Correo electronico */
   login() {
-    this.authService.loginCorreo(this.loginForm.value)
-      .then(() => {
-        let timerInterval
-        Swal.fire({
-          title: '¡Acceso correcto!',
-          text: 'Bienvenido',
-          icon: 'success',
-          timer: 2000,
-          timerProgressBar: true,
-          onBeforeOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-              Swal.getContent()
-            }, 1000)
-          },
-          onClose: () => {
-            clearInterval(timerInterval)
-          }
-        }).then((result) => {
-          //Read more about handling dismissals below
-          if (result.dismiss === Swal.DismissReason.timer) {
-          }
-        });
-        //this.router.navigate(['/home']);
-      }).catch(err => this.alertaService.mensajeError('Error', err.message));
+    this.authService.loginCorreo(this.loginForm.value);
   }
 
 

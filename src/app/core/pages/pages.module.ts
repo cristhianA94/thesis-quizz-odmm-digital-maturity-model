@@ -24,6 +24,8 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { MaterialModule } from './material.module';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { ChartsModule } from 'ng2-charts';
+
 
 
 import { CuestionaryModule } from './cuestionary/cuestionary.module';
@@ -49,6 +51,8 @@ import { ReporteComponent } from './reportes/reporte/reporte.component';
     ComponentsModule,
     MaterialModule,
     MatPasswordStrengthModule,
+    //Charts
+    ChartsModule,
     // TODO ng-circle-progress
     NgCircleProgressModule.forRoot({
       // set defaults here

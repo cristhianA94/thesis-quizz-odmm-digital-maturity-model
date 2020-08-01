@@ -134,8 +134,9 @@ export class RegisterComponent implements OnInit {
 
   /* Registro usuario */
   registrarCuenta() {
-    this.authService.registerUser(this.registroForm.value);
+    this.authService.registrarCuenta(this.registroForm.value)
   }
+
 
 
 }
