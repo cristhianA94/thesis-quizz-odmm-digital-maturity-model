@@ -123,9 +123,9 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
-  // Obtiene los cuestionarios que ha respondido el usuario
-  getCuestionarioRespuestaDB(idRespuestas: string): Observable<RespuestasUsuario> {
-    this.cuestionario_respuestasDoc = this.afs.doc<RespuestasUsuario>(`respuestas/${idRespuestas}`);
+  // Obtiene las respuestas que ha respondido el usuario correspondientes a una categoria
+  getCuestionarioRespuestaDB(idCuestionario: string, idRespuesta: string,): Observable<RespuestasUsuario> {
+    this.cuestionario_respuestasDoc = this.afs.doc('cuestionarios/' + idCuestionario + '/respuestas/' + idRespuesta);
     return this.cuestionario_respuestasDoc.valueChanges();
   }
 

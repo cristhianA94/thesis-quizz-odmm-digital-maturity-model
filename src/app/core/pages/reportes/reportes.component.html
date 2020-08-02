@@ -3,30 +3,6 @@
 
         <router-outlet></router-outlet>
 
-        <div class="row" *ngIf="!flag && flag2">
-            <div class="col-md-10 mx-auto">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="text-center">
-                            <div class="jumbotron jumbotron-fluid" style="padding: 1rem;">
-                                <div class="container">
-                                    <h5 class="display-4">NIVEL DE MADUREZ DIGITAL</h5>
-                                    <p class="lead">A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho cuestionario para
-                                        la cuantificación del nivel de madurez digital de tu negoci.o</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body mb-5">
-                        <div style="display: block">
-                            <canvas baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels" chartType="radar">
-                            </canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row" *ngIf="!flag">
             <div class="col-md-10 mx-auto">
 
@@ -79,7 +55,6 @@
             </div>
         </div>
 
-        <!-- ==================================================================================================================================== -->
 
         <!-- Tabla Respuestas cuestionario de categoria elegida -->
         <div class="row" *ngIf="!flag && flag2">
