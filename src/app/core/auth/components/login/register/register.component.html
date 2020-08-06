@@ -1,4 +1,4 @@
-<form class="mt-4" [formGroup]="registroForm" (ngSubmit)="registrarCuenta() " autocomplete="on">
+<form class="mt-4" [formGroup]="registroForm" (ngSubmit)="registrarCuenta()" autocomplete="on">
 
     <div class="card">
         <div class="card-header card-header-icon card-header-info">
@@ -12,7 +12,9 @@
         <mat-label>Nombres</mat-label>
         <input matInput formControlName="nombres" type="text" placeholder="Nombres" required autofocus>
         <mat-icon matSuffix>face</mat-icon>
-        <mat-error *ngIf="registroForm.controls['nombres'].hasError('required')">El nombre es requerido
+        <mat-error *ngIf="registroForm.controls['nombres'].hasError('required')">El nombre es requerido.
+        </mat-error>
+        <mat-error *ngIf="registroForm.controls['nombres'].hasError('pattern')">Solo se admiten caracteres.
         </mat-error>
     </mat-form-field>
 
@@ -20,13 +22,19 @@
         <mat-label>Apellidos</mat-label>
         <input matInput formControlName="apellidos" type="text" placeholder="Apellidos">
         <mat-icon matSuffix>face</mat-icon>
+        <mat-error *ngIf="registroForm.controls['apellidos'].hasError('required')">El apellido es requerido.
+        </mat-error>
+        <mat-error *ngIf="registroForm.controls['apellidos'].hasError('pattern')">Solo se admiten caracteres.
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
         <mat-label>Cedula</mat-label>
         <input maxlength="11" matInput formControlName="cedula" type="text" placeholder="C.I." required>
         <mat-icon matSuffix>fingerprint</mat-icon>
-        <mat-error *ngIf="registroForm.controls['nombres'].hasError('required')">El campo es requerido
+        <mat-error *ngIf="registroForm.controls['cedula'].hasError('required')">El campo es requerido
+        </mat-error>
+        <mat-error *ngIf="registroForm.controls['cedula'].hasError('CedulaValida')">Cédula inválida.
         </mat-error>
     </mat-form-field>
 
@@ -34,6 +42,8 @@
         <span matPrefix>+593 &nbsp;</span>
         <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="Teléfono">
         <mat-icon matSuffix>local_phone</mat-icon>
+        <mat-error *ngIf="registroForm.controls['telefono'].hasError('pattern')">Solo se admiten números.
+        </mat-error>
     </mat-form-field>
 
     <mat-label>Sexo</mat-label>
@@ -43,13 +53,12 @@
             {{ genero }}
         </mat-radio-button>
     </mat-radio-group>
-
-
+    <br>
     <mat-form-field appearance="fill">
         <mat-label>Correo</mat-label>
         <input matInput type="email" formControlName="correo" required>
         <mat-icon matSuffix>email</mat-icon>
-        <mat-error *ngFor="let validation of account_validation_messages.correo ">
+        <mat-error *ngFor="let validation of account_validation_messages.correo">
             <mat-error class="error-message" *ngIf="registroForm.get('correo').hasError(validation.type) && (registroForm.get('correo').dirty || registroForm.get('correo').touched)">
                 {{validation.message}}
             </mat-error>
@@ -67,7 +76,7 @@
     <mat-hint *ngIf="password.value != 0" align="end" aria-live="polite">
         {{password.value.length}} / {{passwordComponent.max}}
     </mat-hint>
-    <mat-error *ngFor="let validation of account_validation_messages.clave ">
+    <mat-error *ngFor="let validation of account_validation_messages.clave">
         <mat-error class="error-message" *ngIf="registroForm.get('clave').hasError(validation.type) && (registroForm.get('clave').dirty || registroForm.get('clave').touched)">
             {{validation.message}}
         </mat-error>
@@ -79,7 +88,7 @@
 
     <!--Password info requeriments-->
     <mat-password-strength-info *ngIf="toggleDetalle.checked" [passwordComponent]="passwordComponent" [enableScoreInfo]="true" lowerCaseCriteriaMsg="Contiene al menos un carácter en mínuscula
-            " upperCaseCriteriaMsg="Contiene al menos un carácter en mayúscula" digitsCriteriaMsg="Contiene al menos un carácter numérico " specialCharsCriteriaMsg="Contiene al menos un carácter especial " minCharsCriteriaMsg="Contiene al menos 8 carácteres">
+        " upperCaseCriteriaMsg="Contiene al menos un carácter en mayúscula" digitsCriteriaMsg="Contiene al menos un carácter numérico" specialCharsCriteriaMsg="Contiene al menos un carácter especial" minCharsCriteriaMsg="Contiene al menos 8 carácteres">
     </mat-password-strength-info>
 
     <br>
@@ -103,7 +112,7 @@
     <mat-form-field appearance="fill">
         <mat-label>Sector Industrial</mat-label>
         <mat-select formControlName="idSectorInd" required>
-            <mat-option *ngFor="let sector of sectoresInds" [value]="sector.id ">
+            <mat-option *ngFor="let sector of sectoresInds" [value]="sector.id">
                 {{ sector.nombre }}
             </mat-option>
         </mat-select>
@@ -122,23 +131,24 @@
         </mat-error>
     </mat-form-field>
 
-    <div class="row mx-auto ">
-        <div class="col-md-6 ">
+    <div class="row mx-auto">
+        <div class="col-md-6">
             <mat-form-field appearance="standard">
-                <mat-label>Años de Actividad de la Empresa</mat-label>
+                <mat-label>Años de actividad de la empresa</mat-label>
                 <input matInput formControlName="anio_creacion" type="number">
                 <mat-icon matSuffix>business</mat-icon>
+                <mat-error *ngIf="registroForm.controls['anio_creacion'].hasError('required')">Ingrese el tiempo de funcionamiento de su empresa.
+                </mat-error>
             </mat-form-field>
         </div>
 
-        <div class="col-md-6 ">
+        <div class="col-md-6">
             <mat-form-field appearance="standard">
                 <mat-label>Franquicias</mat-label>
                 <input matInput formControlName="franquicias" type="number">
                 <mat-icon matSuffix>business</mat-icon>
             </mat-form-field>
         </div>
-
     </div>
 
     <mat-form-field appearance="fill">
@@ -187,7 +197,7 @@
     <mat-form-field appearance="fill">
         <mat-label>Dirección de la Empresa</mat-label>
         <textarea matInput type="text" autocomplete="on" formControlName="direccion" required></textarea>
-        <mat-error *ngIf="registroForm.controls['idCanton'].hasError('required')">Elija un cantón</mat-error>
+        <mat-error *ngIf="registroForm.controls['direccion'].hasError('required')">Ingrese una dirección.</mat-error>
     </mat-form-field>
 
 

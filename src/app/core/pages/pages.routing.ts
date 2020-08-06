@@ -39,12 +39,11 @@ export const PagesRoutes: Routes = [
         path: 'reportes',
         component: ReportesComponent,
         canActivate: [AuthUserGuard],
-        children: [
-            {
-                path: 'reporte/:id',
-                component: ReporteComponent
-            },
-        ]
+    },
+    {
+        path: 'reporte/:id',
+        component: ReporteComponent,
+        canActivate: [AuthUserGuard],
     },
     {
         path: 'admin-panel',

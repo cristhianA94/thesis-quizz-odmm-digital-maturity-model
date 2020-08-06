@@ -14,8 +14,7 @@ import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario
 export class ReportesComponent implements OnInit {
 
   // Banderas para DOM
-  flag: boolean = false;
-  flag2: boolean = false;
+  flagTabla: boolean = false;
 
   cuestionarios: Cuestionario[] = [];
   cuestionario: Cuestionario = {};
@@ -61,7 +60,7 @@ export class ReportesComponent implements OnInit {
 
   // Metodos
   visualizacionResultados(cuestionario: Cuestionario) {
-    this.flag2 = true;
+    this.flagTabla = true;
     this.cuestionario = cuestionario;
     this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestasUser) => {
       //this.cuestionarios[index].respuestasUsuario.push(respuestasUser)
@@ -70,10 +69,9 @@ export class ReportesComponent implements OnInit {
   }
 
   verReporte(respuestasUsuario: RespuestasUsuario) {
-    // Guarda el objeto 
+    // Guarda el id del cuestionario
     localStorage.setItem("cuestionario", this.cuestionario.id);
-    this.flag = true;
-    this.router.navigate(['reportes/reporte', respuestasUsuario.id])
+    this.router.navigate(['/reporte', respuestasUsuario.id])
   }
 
 }

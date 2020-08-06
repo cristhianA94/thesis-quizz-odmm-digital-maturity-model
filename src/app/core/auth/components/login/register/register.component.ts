@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 
 // Models
 import { Sector_Industrial } from 'app/shared/models/sector_industrial';
@@ -110,9 +110,9 @@ export class RegisterComponent implements OnInit {
   registerBuildForm() {
     return this.formbuild.group({
       // User
-      nombres: ['', Validators.required],
-      apellidos: [''],
-      cedula: ['', Validators.required],
+      nombres: ['', [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
+      apellidos: ['', [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
+      cedula: ['', [Validators.required, this.validarCedula()]],
       telefono: ['', [Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
       sexo: [''],
       correo: ['', [Validators.required, Validators.email]],
@@ -135,6 +135,48 @@ export class RegisterComponent implements OnInit {
   /* Registro usuario */
   registrarCuenta() {
     this.authService.registrarCuenta(this.registroForm.value)
+  }
+
+  // Algoritmo validador de cedulas de Ecuador
+  validarCedula(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+
+      let validador;
+      let cedulaCorrecta = false;
+      if (control.value.trim().length == 10) {
+        let tercerDigito = parseInt(control.value.trim().substring(2, 3));
+        if (tercerDigito < 6) {
+          // El ultimo digito se lo considera dígito verificador
+          let coefValCedula = [2, 1, 2, 1, 2, 1, 2, 1, 2];
+          let verificador = parseInt(control.value.trim().substring(9, 10));
+          let suma: number = 0;
+          let digito: number = 0;
+          for (let i = 0; i < (control.value.trim().length - 1); i++) {
+            digito = parseInt(control.value.trim().substring(i, i + 1)) * coefValCedula[i];
+            suma += ((parseInt((digito % 10) + '') + (parseInt((digito / 10) + ''))));
+          }
+          suma = Math.round(suma);
+          if ((Math.round(suma % 10) == 0) && (Math.round(suma % 10) == verificador)) {
+            cedulaCorrecta = true;
+          } else if ((10 - (Math.round(suma % 10))) == verificador) {
+            cedulaCorrecta = true;
+          } else {
+            cedulaCorrecta = false;
+          }
+        } else {
+          cedulaCorrecta = false;
+        }
+      } else {
+        cedulaCorrecta = false;
+      }
+      validador = cedulaCorrecta;
+
+      if (!validador) {
+        return { 'CedulaValida': true };
+      } else {
+        return null;
+      }
+    }
   }
 
 
