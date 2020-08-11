@@ -4,18 +4,21 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
-import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 
-import { CapacidadesService } from "app/core/services/cuestionario/capacidades/capacidades.service";
+import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 import { Metrica } from 'app/shared/models/metrica';
 import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
+import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
+import { RespuestasUsuario } from '../../../../../shared/models/cuestionario';
+import { Respuesta } from '../../../../../shared/models/metrica';
+
 
 @Component({
-  selector: "app-metricas-admin",
-  templateUrl: "./metricas-admin.component.html",
-  styleUrls: ["./metricas-admin.component.css"],
+  selector: "app-metricas",
+  templateUrl: "./metricas.component.html",
+  styleUrls: ["./metricas.component.css"],
 })
-export class MetricasAdminComponent implements OnInit {
+export class MetricasComponent implements OnInit {
   @ViewChild(MatAccordion) metricasItems: MatAccordion;
 
   metricas: Metrica[] = [];
@@ -57,13 +60,13 @@ export class MetricasAdminComponent implements OnInit {
 
   onRowClicked(row: any) {
     //this.metrica = row;
-    //console.log("Row clicked: ", row);
+    console.log("Row clicked: ", row);
   }
 
   openDialog(action: string, obj: any) {
     // Agregar la accion al objeto para mostrarla en el dialog
     const dialogRef = this.dialog.open(DialogFormMetricaComponent, {
-      width: "450px",
+      width: "550px",
       data: {
         obj,
         action
@@ -99,9 +102,22 @@ export class MetricasAdminComponent implements OnInit {
     this.metricasService.createMetricaDB(obj);
   }
 
-  // TODO update pendiente
-  updateMetrica(obj: Metrica) {
-    this.metricasService.updateMetricaDB(obj);
+  updateMetrica(obj: any) {
+
+    let respuestas = [];
+    const data: Metrica = obj.data;
+    respuestas = data.respuestas;
+
+    let metricaEdit: Metrica = {
+      id: obj.id,
+      nombre: data.nombre,
+      pregunta: data.pregunta,
+      pesoPregunta: data.pesoPregunta,
+      idCapacidad: data.idCapacidad,
+      respuestas: respuestas
+    };
+
+    this.metricasService.updateMetricaDB(metricaEdit);
   }
 
   deleteMetrica(metrica: any) {

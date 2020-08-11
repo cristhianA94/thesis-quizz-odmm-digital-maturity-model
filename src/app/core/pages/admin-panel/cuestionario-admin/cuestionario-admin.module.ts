@@ -5,25 +5,24 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { ComponentsModule } from 'app/shared/components.module';
 import { MaterialModule } from "../../material.module";
-import { FlexLayoutModule } from "@angular/flex-layout";
 
 // Services
-import { SubcategoriasService } from "../../../services/cuestionario/subcategorias/subcategorias.service";
 import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
-import { CapacidadesService } from "../../../services/cuestionario/capacidades/capacidades.service";
-import { MetricasService } from "../../../services/cuestionario/metricas/metricas.service";
+import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
+import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
+import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
 
 // Components
 import { CategoriaComponent } from "./categoria-admin/categoria.component";
 import { DialogFormCategoriaComponent } from "./categoria-admin/dialog-form-categoria.component";
 import { SubcategoriaComponent } from "./subcategoria-admin/subcategoria.component";
-import { CapacidadesAdminComponent } from "./capacidades-admin/capacidades-admin.component";
-import { MetricasAdminComponent } from "./metricas-admin/metricas-admin.component";
-import { DialogFormMetricaComponent } from "./metricas-admin/dialog-form-metrica.component";
 import { CuestionarioAdminComponent } from "./cuestionario-admin.component";
+import { CapacidadesComponent } from './capacidades-admin/capacidades.component';
+import { MetricasComponent } from './metricas-admin/metricas.component';
 
 // Components reutilizables
 import { DialogFormLoadDataComponent } from "./dialog-form/dialog-form-loadData.component";
+import { DialogFormMetricaComponent } from './metricas-admin/dialog-form-metrica.component';
 
 @NgModule({
   imports: [
@@ -33,17 +32,17 @@ import { DialogFormLoadDataComponent } from "./dialog-form/dialog-form-loadData.
     MaterialModule,
     RouterModule,
     ComponentsModule,
-    FlexLayoutModule
   ],
   declarations: [
     CuestionarioAdminComponent,
     CategoriaComponent,
     DialogFormCategoriaComponent,
     SubcategoriaComponent,
-    CapacidadesAdminComponent,
+    CapacidadesComponent,
     DialogFormLoadDataComponent,
-    MetricasAdminComponent,
-    DialogFormMetricaComponent,
+    MetricasComponent,
+    DialogFormCategoriaComponent,
+    DialogFormMetricaComponent
   ],
   providers: [
     CategoriasService,

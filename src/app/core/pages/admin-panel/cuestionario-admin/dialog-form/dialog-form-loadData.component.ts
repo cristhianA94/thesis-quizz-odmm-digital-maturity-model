@@ -2,9 +2,11 @@ import { Component, Inject, Optional, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { CategoriasService } from '../../../../services/cuestionario/categorias/categorias.service';
-import { SubcategoriasService } from '../../../../services/cuestionario/subcategorias/subcategorias.service';
-import { CapacidadesService } from '../../../../services/cuestionario/capacidades/capacidades.service';
+import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
+import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
+import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
+
+
 
 @Component({
   selector: 'app-dialog-form-loadData',

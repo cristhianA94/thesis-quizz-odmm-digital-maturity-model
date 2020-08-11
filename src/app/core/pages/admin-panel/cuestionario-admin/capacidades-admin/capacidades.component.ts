@@ -5,18 +5,17 @@ import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
 
-
-import { SubcategoriasService } from "app/core/services/cuestionario/subcategorias/subcategorias.service";
-import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
 import { DialogFormLoadDataComponent } from '../dialog-form/dialog-form-loadData.component';
 import { Capacidad } from 'app/shared/models/capacidad';
+import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
+import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
 
 @Component({
-  selector: "app-capacidades-admin",
-  templateUrl: "./capacidades-admin.component.html",
-  styleUrls: ["./capacidades-admin.component.css"],
+  selector: "app-capacidades",
+  templateUrl: "./capacidades.component.html",
+  styleUrls: ["./capacidades.component.css"],
 })
-export class CapacidadesAdminComponent implements OnInit {
+export class CapacidadesComponent implements OnInit {
 
   @ViewChild(MatAccordion) capacidadesItems: MatAccordion;
 

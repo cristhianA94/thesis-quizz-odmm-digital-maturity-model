@@ -42,6 +42,29 @@ export class DialogFormMetricaComponent {
     this.action = data.action;
 
     this.dataForm = this.buildForm();
+    this.patchForm();
+  }
+
+
+  // 
+  patchForm() {
+    // Valida si es un nuevo registro o editar un elemento.
+    if (!this.local_data.respuestas) {
+      this.local_data.respuestas = [];
+    } else {
+      this.dataForm.patchValue({
+        respuestas: this.local_data.respuestas,
+      })
+      this.setData();
+    }
+  }
+
+  // Al editar, se setea las respuestas del usuario en el formulario
+  setData() {
+    let control = <FormArray>this.dataForm.controls.respuestas;
+    this.local_data.respuestas.forEach(x => {
+      control.push(this.fb.group(x));
+    })
   }
 
   get respuestas() {
@@ -53,6 +76,8 @@ export class DialogFormMetricaComponent {
   }
 
   doAction() {
+    //console.log("data dialog", this.local_data);
+
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
     this.dialogRef.close({
       event: this.action,
@@ -77,7 +102,7 @@ export class DialogFormMetricaComponent {
 
   buildForm(): FormGroup {
     return this.fb.group({
-      idCapacidad: ['', Validators.required],
+      idCapacidad: [' ', Validators.required],
       nombre: [this.local_data.nombre, Validators.required],
       pregunta: [this.local_data.pregunta, Validators.required],
       pesoPregunta: [this.local_data.pesoPregunta, Validators.required],

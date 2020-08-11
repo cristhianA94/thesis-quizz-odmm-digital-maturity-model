@@ -1,12 +1,10 @@
-<h1 mat-dialog-title>
-    <strong>{{ action }}</strong>
-</h1>
+<h1 mat-dialog-title><strong>{{ action }}</strong></h1>
 <div mat-dialog-content>
     <form [formGroup]="dataForm">
         <div *ngIf="action != 'Borrar'; else elseTemplate">
             <!-- Load data services -->
             <mat-form-field appearance="outline">
-                <mat-label>Seleccione una capacidad </mat-label>
+                <mat-label>Seleccione una Capacidad </mat-label>
                 <mat-select formControlName="idCapacidad">
                     <mat-option *ngFor="let capacidad of capacidades" [value]="capacidad.id">
                         {{ capacidad.nombre }}
@@ -26,41 +24,47 @@
                 <mat-label>Peso pregunta</mat-label>
                 <input matInput formControlName="pesoPregunta" type="number" placeholder="Peso pregunta" required />
             </mat-form-field>
+            <div class="main-content">
+                <div class="container-fluid">
+                    <!-- Respuestas -->
+                    <div formArrayName="respuestas">
+                        <h4>Respuestas</h4>
+                        <button mat-raised-button (click)="addRespuesta()">
+                            Agregar Respuesta
+                        </button>
+                        <hr>
+                        <div class="row" aling="center">
+                            <div *ngFor="let respuesta of respuestas.controls; let i = index">
+                                <!-- The repeated respuesta template -->
+                                <div [formGroupName]="i" class="text-center">
+                                    <div class="col-md-12">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Opción {{ i + 1 }}</mat-label>
+                                            <input formControlName="opcion" placeholder="Opción de respuesta para la métrica" matInput required />
+                                        </mat-form-field>
 
-            <!-- Respuestas -->
-            <div formArrayName="respuestas">
-                <h3>Respuestas</h3>
-                <button mat-raised-button (click)="addRespuesta()">
-                    Agregar Respuesta
-                </button>
-
-                <div *ngFor="let respuesta of respuestas.controls; let i = index">
-                    <!-- The repeated respuesta template -->
-                    <div [formGroupName]="i" fxLayout="column" fxLayoutAlign="space-around start">
-                        <div fxLayout="row" fxLayout.lt-sm="column">
-                            <mat-form-field appearance="outline" fxFlex="45">
-                                <mat-label>Opción {{ i + 1 }}</mat-label>
-                                <input formControlName="opcion" placeholder="Opción de respuesta para la métrica" matInput required />
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline" fxFlex="45">
-                                <mat-label>Peso</mat-label>
-                                <mat-select formControlName="pesoRespuesta">
-                                    <mat-option *ngFor="let peso of pesos" [value]="peso">{{ peso }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div fxLayout="row" fxLayoutAlign="center center">
-                            <div fxFlex="85">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Recomendación</mat-label>
-                                    <textarea matInput formControlName="recomendacion" placeholder="Observación" required></textarea>
-                                </mat-form-field>
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Peso</mat-label>
+                                            <mat-select formControlName="pesoRespuesta">
+                                                <mat-option *ngFor="let peso of pesos" [value]="peso">{{ peso }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div align="center">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Recomendación</mat-label>
+                                                <textarea matInput formControlName="recomendacion" placeholder="Observación" required></textarea>
+                                            </mat-form-field>
+                                            <button mat-mini-fab (click)="borrarRespuesta(i)">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
                             </div>
-                            <button mat-mini-fab (click)="borrarRespuesta(i)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -73,6 +77,7 @@
         <hr />
     </ng-template>
 </div>
+
 <div mat-dialog-actions class="dialog-actions" align="center">
     <button mat-raised-button (click)="doAction()"> {{ action }} </button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>

@@ -3,23 +3,23 @@
     <form [formGroup]="dataForm">
         <div *ngIf="action != 'Borrar'; else elseTemplate">
             <!-- Load data services -->
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
                 <mat-label>Seleccione un ítem de categoría anterior </mat-label>
-                <mat-select formControlName="idRelacion" [value]>
+                <mat-select formControlName="idRelacion">
                     <mat-option *ngFor="let item of local_data_load" [value]="item.id">
                         {{ item.nombre }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
             <!-- Fields common -->
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <input formControlName="nombre" [placeholder]="tipo" matInput required>
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-label>Descripción</mat-label>
                 <textarea formControlName="descripcion" placeholder="Breve descripción de lo que comprende" matInput></textarea>
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field appearance="outline">
                 <mat-label>Peso</mat-label>
                 <input matInput formControlName="peso" type="number" placeholder="Peso">
             </mat-form-field>
@@ -32,6 +32,6 @@
     </ng-template>
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
+    <button mat-raised-button (click)="doAction()">{{action}}</button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
 </div>

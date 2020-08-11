@@ -71,7 +71,7 @@ export class SubcategoriaComponent implements OnInit {
 
   onRowClicked(row: any) {
     //this.subcategoria = row;
-    console.log("Row clicked: ", row);
+    //console.log("Row clicked: ", row);
   }
 
   openDialog(action: string, obj: any, tipo: string) {
