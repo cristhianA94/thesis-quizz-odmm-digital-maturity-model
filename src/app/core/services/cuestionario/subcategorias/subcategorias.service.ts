@@ -78,6 +78,7 @@ export class SubcategoriasService {
   }
 
   updateSubcategoriaDB(subcategoria: Subcategoria) {
+    subcategoria.idCategoria = this.afs.collection("categorias").doc(subcategoria.idCategoria).ref;
     this.subcategoriaDoc = this.afs.doc(`subcategorias/${subcategoria.id}`);
     delete subcategoria.id;
     this.subcategoriaDoc.update(subcategoria);

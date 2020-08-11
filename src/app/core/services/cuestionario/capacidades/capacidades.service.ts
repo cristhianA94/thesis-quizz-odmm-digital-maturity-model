@@ -43,6 +43,7 @@ export class CapacidadesService {
   }
 
   updateCapacidadDB(capacidad: Capacidad) {
+    capacidad.idSubcategoria = this.afs.collection("subcategorias").doc(capacidad.idSubcategoria).ref;
     this.capacidadesDoc = this.afs.doc(`capacidades/${capacidad.id}`);
     delete capacidad.id;
     this.capacidadesDoc.update(capacidad);

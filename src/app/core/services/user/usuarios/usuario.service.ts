@@ -66,8 +66,7 @@ export class UsuarioService implements Resolve<any> {
           this.usuario = response;
           this.onUsuarioChanged.next(this.usuario);
           resolve(this.usuario);
-        },
-          reject)
+        }, reject)
     })
 
   }

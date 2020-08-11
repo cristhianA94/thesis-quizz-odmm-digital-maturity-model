@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 import { UsuarioService } from '../services/user/usuarios/usuario.service';
 
@@ -15,6 +16,10 @@ import { AuthUserGuard } from '../auth/guards/auth-user.guard';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
 
+// Auth Guard Firebase
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+
+
 export const PagesRoutes: Routes = [
 
     { path: 'home', component: HomeComponent },
@@ -23,7 +28,7 @@ export const PagesRoutes: Routes = [
         path: 'cuestionario',
         component: CuestionaryComponent,
         loadChildren: () => import('./cuestionary/cuestionary.module').then(m => m.CuestionaryModule),
-        canActivate: [AuthUserGuard]
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'user-profile',
@@ -32,24 +37,27 @@ export const PagesRoutes: Routes = [
             dataUser: UsuarioService,
             dataEmpresa: EmpresaService
         },
-        canActivate: [AuthUserGuard]
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
-    { path: 'login', component: AuthComponent },
+    {
+        path: 'login',
+        component: AuthComponent,
+    },
     {
         path: 'reportes',
         component: ReportesComponent,
-        canActivate: [AuthUserGuard],
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin },
     },
     {
         path: 'reporte/:id',
         component: ReporteComponent,
-        canActivate: [AuthUserGuard],
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin },
     },
     {
         path: 'admin-panel',
         component: AdminPanelComponent,
         loadChildren: () => import('./admin-panel/admin.module').then(m => m.AdminModule),
-        canActivate: [AuthUserGuard]
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
 ];
 

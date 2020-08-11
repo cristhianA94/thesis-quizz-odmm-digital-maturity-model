@@ -7,9 +7,6 @@ import { ChartDataSets, RadialChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 // PDF
 import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
-
 
 @Component({
   selector: 'app-reporte',
@@ -93,36 +90,19 @@ export class ReporteComponent implements OnInit {
           this.radarChartData[1].data = arrayDataPnultimoIntento;
         });
       });
-
       this.flag = true;
+
       //console.log(this.radarChartData);
     });
   };
 
-  getBase64Image(img) {
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    var dataURL = canvas.toDataURL("image/jpeg");
-    return dataURL;
-  }
-
   public openPDF(): void {
-    let dataRespuestas = this.respuestasData.nativeElement;
-    let doc = new jsPDF('p', 'pt', 'a4');
-    doc.fromHTML(dataRespuestas.innerHTML, 15, 15);
-    doc.output('dataurlnewwindow');
-  }
-
-  public openTESTPDF(): void {
     let dataRespuestas = this.respuestasData.nativeElement;
 
     let fecha = new Date().toLocaleDateString();
     let doc = new jsPDF();
 
-    /* //            **PORTADA**
+    //            **PORTADA**
     // Linea superior
     doc.setDrawColor(139, 196, 65);
     doc.setLineWidth(1.5);
@@ -182,7 +162,7 @@ export class ReporteComponent implements OnInit {
     doc.setLineWidth(1.5);
     doc.line(10, 285, 200, 285);
     // Crea otra pag
-    doc.addPage(); */
+    doc.addPage();
 
     //          **RESPUESTAS**
     // Linea superior
@@ -190,21 +170,71 @@ export class ReporteComponent implements OnInit {
     doc.setLineWidth(1.5);
     doc.line(10, 13, 200, 13);
 
+    let margins = {
+      top: 15,
+      bottom: 15,
+      left: 15,
+      width: 185
+    };
+
     let handleElement = {
       '#IDquenosemuestra': function (element, renderer) {
         return true;
       }
     };
 
-    /* html2canvas(document.querySelector("#capture")).then(canvas => {
-      document.body.appendChild(canvas)
-    }); */
 
-    doc.fromHTML($('#respuestasData').get(0), 15, 15, {
-      width: 185,
+    doc.fromHTML($('#respuestasData').get(0),
+      margins.left, // x coord
+      margins.top, {
+      // y coord
+      width: margins.width,
+      // max width of content on PDF
       'elementHandlers': handleElement
-    });
+    },
+      () => {
+        // Crea otra pag
+        doc.addPage();
+        //          **GRAFICO**
+        // Linea superior
+        doc.setDrawColor(139, 196, 65);
+        doc.setLineWidth(1.5);
+        doc.line(10, 13, 200, 13);
 
+        let textoGraficos = "A continuación se ofrece un análisis comparativo del nivel de madurez digital de tu negocio respecto a otras empresas, tomando como referencia distintos criterios.\n\nDebes tener en cuenta que sólo aparecerán comparaciones con otras empresas si se tienen los datos suficientes para ello, por lo que pueden aparecer gráficos comparativos sin datos.";
+
+        doc.setFontSize(20);
+        doc.setFontStyle("bold");
+        doc.setTextColor(75, 86, 100);
+        doc.text(15, 30, "3. BENCHMARKING");
+        doc.setTextColor(0, 0, 0);
+        doc.setFontStyle("normal");
+        doc.setFontSize(14);
+        var splitText = doc.splitTextToSize(textoGraficos, 180);
+        doc.setFontSize(14);
+        doc.text(15, 40, splitText);
+
+        doc.setFontSize(16);
+        doc.setFontStyle("bold");
+        doc.setTextColor(75, 86, 100);
+        doc.text(15, 85, "3.1. Nivel de madurez digital por ejes");
+        doc.setFontStyle("normal");
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(15, 95, "Aquí puedes ver el nivel de madurez obtenido por cada dimensión evaluada.\nLos datos a exponer son los valores del último y penúltimo intento.");
+
+        // Grafico radar
+        let canvas: any = document.getElementById("canvas");
+        let canvasImg = canvas.toDataURL("image/png");
+        doc.addImage(canvasImg, 'PNG', 40, 115, 130, 100);
+
+        //          **FIN**
+        doc.output('dataurlnewwindow');
+      },
+      margins
+      );
+      
+      return null;
     /* let handleElement = {
       '#editor': function (element, renderer) {
         return true;
@@ -220,41 +250,7 @@ export class ReporteComponent implements OnInit {
     // Crea otra pag
     //doc.addPage();
 
-    //          **GRAFICO**
-    /*  // Linea superior
-     doc.setDrawColor(139, 196, 65);
-     doc.setLineWidth(1.5);
-     doc.line(10, 13, 200, 13);
- 
-     let textoGraficos = "A continuación se ofrece un análisis comparativo del nivel de madurez digital de tu negocio respecto a otras empresas, tomando como referencia distintos criterios.\n\nDebes tener en cuenta que sólo aparecerán comparaciones con otras empresas si se tienen los datos suficientes para ello, por lo que pueden aparecer gráficos comparativos sin datos.";
- 
-     doc.setFontSize(20);
-     doc.setFontStyle("bold");
-     doc.setTextColor(75, 86, 100);
-     doc.text(15, 30, "3. BENCHMARKING");
-     doc.setTextColor(0, 0, 0);
-     doc.setFontStyle("normal");
-     doc.setFontSize(14);
-     var splitText = doc.splitTextToSize(textoGraficos, 180);
-     doc.setFontSize(14);
-     doc.text(15, 40, splitText);
- 
-     doc.setFontSize(16);
-     doc.setFontStyle("bold");
-     doc.setTextColor(75, 86, 100);
-     doc.text(15, 85, "3.1. Nivel de madurez digital por ejes");
-     doc.setFontStyle("normal");
-     doc.setFontSize(14);
-     doc.setTextColor(0, 0, 0);
-     doc.text(15, 95, "Aquí puedes ver el nivel de madurez obtenido por cada dimensión evaluada.\nLos datos a exponer son los valores del último y penúltimo intento.");
- 
-     // Grafico radar
-     let canvas: any = document.getElementById("canvas");
-     let canvasImg = canvas.toDataURL("image/png");
-     doc.addImage(canvasImg, 'PNG', 40, 115, 130, 100); */
-
-    //          **FIN**
-    doc.output('dataurlnewwindow');
+    //doc.output('dataurlnewwindow');
 
 
   }

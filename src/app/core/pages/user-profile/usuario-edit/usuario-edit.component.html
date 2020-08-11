@@ -1,6 +1,24 @@
 <app-loader *ngIf="!load"></app-loader>
 
 <div class="row" *ngIf="load">
+    <!-- Card Img -->
+    <div class="col-md-4">
+        <div class="card card-profile">
+            <div class="card-avatar">
+                <a href="javascript:void(0)">
+                    <img class="img" [src]="usuario.photoURL" />
+                </a>
+            </div>
+            <div class="card-body">
+
+                <h6 class="card-category text-gray">
+                    <mat-chip color="primary" selected> {{ usuario.rol }} </mat-chip>
+                </h6>
+                <h4 class="card-title"> {{ usuario.nombres }} {{ usuario.apellidos }} </h4>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-8">
 
         <div class="card">
@@ -97,18 +115,4 @@
         </div>
     </div>
 
-    <!-- Card Img -->
-    <div class="col-md-4">
-        <div class="card card-profile">
-            <div class="card-avatar">
-                <a href="javascript:void(0)">
-                    <img class="img" [src]="usuario.photoURL" />
-                </a>
-            </div>
-            <div class="card-body">
-                <h6 class="card-category text-gray"> {{ usuario.rol}} </h6>
-                <h4 class="card-title"> {{ usuario.nombres }} {{ usuario.apellidos }} </h4>
-            </div>
-        </div>
-    </div>
 </div>

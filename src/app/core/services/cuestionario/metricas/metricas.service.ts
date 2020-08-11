@@ -52,15 +52,15 @@ export class MetricasService {
     return this.metricasDoc.valueChanges();
   }
 
-  async createMetricaDB(metrica: Metrica) {
-    let idCapacidad = metrica.idCapacidad;
-
+  createMetricaDB(metrica: Metrica) {
     metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
-    this.metricasDoc = this.afs.doc(`metricas/${idCapacidad}`);
-    await this.metricasDoc.set(metrica, { merge: true });
+    this.metricasCollection = this.afs.collection('metricas');
+    return this.metricasCollection.add(metrica);
   }
 
   updateMetricaDB(metrica: Metrica) {
+    console.log(metrica);
+    metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
     this.metricasDoc = this.afs.doc(`metricas/${metrica.id}`);
     delete metrica.id;
     this.metricasDoc.update(metrica);
