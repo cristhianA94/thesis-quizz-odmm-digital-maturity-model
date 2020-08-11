@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../../../services/user/usuarios/usuario.service';
-import { AuthService } from '../../service/auth.service';
+import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
+import { AuthService } from 'app/core/auth/service/auth.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-verify-email',
@@ -9,23 +11,26 @@ import { AuthService } from '../../service/auth.service';
 })
 export class VerifyEmailComponent implements OnInit {
 
-
-  userLoged: any;
+  usuario: any;
 
   constructor(
-    public usuarioService: UsuarioService,
     public authService: AuthService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
-    this.authService.isAuth().subscribe((user) => {
-      this.userLoged = user;
+    // Comprueba si el usuario esta logueado y el email verificado
+    this.authService.isAuth().subscribe((authUser) => {
+      this.usuario = authUser;
     });
-
   }
 
   reenviarEmail() {
     this.authService.emailVerification();
+  }
+
+  regresarLogin() {
+    this.authService.logout();
   }
 
 }

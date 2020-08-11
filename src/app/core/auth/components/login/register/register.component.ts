@@ -134,7 +134,7 @@ export class RegisterComponent implements OnInit {
 
   /* Registro usuario */
   registrarCuenta() {
-    this.authService.registrarCuenta(this.registroForm.value)
+    this.authService.registrarCuenta(this.registroForm.value);
   }
 
   // Algoritmo validador de cedulas de Ecuador

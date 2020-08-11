@@ -7,34 +7,29 @@
                 <div class="displayTable">
                     <div class="displayTableCell">
 
-                        <div class="authBlock text-center" *ngIf="userLoged">
+                        <div class="authBlock text-center" *ngIf="usuario">
                             <h2><strong>¡Gracias por registrarte!</strong></h2>
 
                             <div class="formGroup">
-                                <p class="text-center">Hemos enviado un mensaje de confirmacion al email
-                                    <strong>{{ userLoged.email }}</strong>.</p>
-                                <p class="text-center">Verifique su correo electrónico (revise en a la sección de "Correo no deseado"), y haga clic en el enlace para verificar su dirección de correo electrónico.</p>
+                                <p class="text-center">Hemos enviado un mensaje de confirmacion al email:</p>
+                                <strong>{{ usuario.email }}</strong>
+                                <p class="text-center mt-3">Verifique su correo electrónico (si no aparece en su bandeja de entrada revise en a la sección de "Correo no deseado"), y haga clic en el enlace para verificar su dirección de correo electrónico.</p>
                             </div>
-
                             <!-- Calling SendVerificationMail() method using authService Api -->
                             <div class="formGroup text-center">
                                 <hr>
-                                <span>¿No le llega aún el email de verificación?</span>
-                                <br>
+                                <span><strong>¿No le llega aún el email de verificación?</strong></span>
                                 <button type="button" mat-raised-button class="btn btn-info mt-3" (click)="reenviarEmail()">
                                     <i class="fas fa-redo-alt"></i>
                                     Reenviar email de verificación
                                 </button>
-
                             </div>
-
                         </div>
 
                         <div class="redirectToLogin">
                             <div class="text-center">
-                                <span>¿Regresar?</span>
-                                <br>
-                                <button [routerLink]="['/login']" mat-raised-button class="btn btn-secondary mt-3">Log
+                                <h3>¿Regresar?</h3>
+                                <button (click)="regresarLogin()" mat-raised-button class="btn btn-secondary mt-3">Log
                                     in</button>
                             </div>
                         </div>

@@ -1,15 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
-/*  Firebase */
-import { AlertsService } from '../../services/notificaciones/alerts.service';
 // For social providers
 import { auth } from 'firebase/app';
 // Auth
 import { AngularFireAuth } from '@angular/fire/auth';
 
+import { EmpresaService } from 'app/core/services/user/empresas/empresa.service';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
-import { EmpresaService } from '../../services/user/empresas/empresa.service';
+import { AlertsService } from 'app/core/services/notificaciones/alerts.service';
 import Swal from 'sweetalert2';
 
 
@@ -44,8 +43,8 @@ export class AuthService {
     // Comprueba si existe el usuario
     this.usuarioService.getUser(credential.user.uid);
     if (!this.usuarioService.usuario) {
-      console.log("no existe usuario");
-      // Si no existe se crea
+      console.log("No existe usuario");
+      // Si no existe se crea en Firestore  
       this.usuarioService.createUserSocial(credential.user);
     }
   }
@@ -59,26 +58,27 @@ export class AuthService {
  */
 
   async loginCorreo(user: any) {
+    //TODO verificar inicio serion despues de verifica email
+    
     await this.afs.auth.signInWithEmailAndPassword(user.correo, user.clave)
       .then((userAuth) => {
 
-        //TODO Verifica si el usuario ya confirmo por email
+        //TODO Verifica si el usuario ya confirmo su email
         if (userAuth.user.emailVerified == false) {
           this.emailVerification();
           this.alertaService.mensajeError("Error", "Por favor, valide su dirección de correo electrónico. Por favor, compruebe su bandeja de entrada.");
-          this.router.navigate(['/login']);
           return;
         } else {
-          this.ngZone.run(() => {
-            //this.isAuth();
-          });
           this.guardarStorage(userAuth.user.uid);
           this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
           this.router.navigate(['/home']);
+          /*  this.ngZone.run(() => {
+             //this.isAuth();
+           }); */
         }
       })
       .catch((err) => {
-        return this.alertaService.mensajeError(err, "Error");
+        return this.alertaService.mensajeError(err, "¡Error con su correo electrónico y/o contraseña!");
       });
   }
 
@@ -90,7 +90,7 @@ export class AuthService {
       .then(userData => {
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);
-        // Crea la coleccion Empresa despues del registro de Usuario
+        // Registra la Empresa en Firestore
         this.empresaService.createEmpresaDB(userData.user, formulario);
 
         // Notificacion
@@ -118,7 +118,6 @@ export class AuthService {
         });
         // Envia correo de verificacion
         this.emailVerification();
-        //this.router.navigate(['/home']);
         this.guardarStorage(userData.user.uid);
       })
       .catch(error => this.alertaService.mensajeError("Error", error));
