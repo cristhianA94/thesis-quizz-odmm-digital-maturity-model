@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 
 import { Usuario } from 'app/shared/models/usuario';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
@@ -55,19 +55,22 @@ export class UsuarioEditComponent implements OnInit {
     this.load = true;
   }
 
+  resetear(){
+    this.usuarioForm = this.userbuildForm();
+  }
 
   /* Validador de formulario */
   userbuildForm() {
 
     return this.fb.group({
-      nombres: [this.usuario.nombres, Validators.required],
-      apellidos: [this.usuario.apellidos, Validators.required],
-      cedula: [this.usuario.cedula],
+      nombres: [this.usuario.nombres, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
+      apellidos: [this.usuario.apellidos, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
+      cedula: [this.usuario.cedula, [Validators.required, this.validarCedula()]],
       telefono: [this.usuario.telefono, [Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
       sexo: [this.usuario.sexo],
       cargo: [this.usuario.cargo],
       correo: [this.usuario.correo, [Validators.required, Validators.email]],
-      clave: ['', Validators.required]
+      clave: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
     });
   }
 
@@ -81,11 +84,54 @@ export class UsuarioEditComponent implements OnInit {
       telefono: this.usuarioForm.value.telefono,
       sexo: this.usuarioForm.value.sexo,
       cargo: this.usuarioForm.value.cargo,
+      clave: this.usuarioForm.value.clave,
       correo: this.usuarioForm.value.correo,
       rol: this.usuario.rol
     }
 
     this.userService.updateUsuario(userEdit)
+  }
+
+  // Algoritmo validador de cedulas de Ecuador
+  validarCedula(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+
+      let validador;
+      let cedulaCorrecta = false;
+      if (control.value.trim().length == 10) {
+        let tercerDigito = parseInt(control.value.trim().substring(2, 3));
+        if (tercerDigito < 6) {
+          // El ultimo digito se lo considera dígito verificador
+          let coefValCedula = [2, 1, 2, 1, 2, 1, 2, 1, 2];
+          let verificador = parseInt(control.value.trim().substring(9, 10));
+          let suma: number = 0;
+          let digito: number = 0;
+          for (let i = 0; i < (control.value.trim().length - 1); i++) {
+            digito = parseInt(control.value.trim().substring(i, i + 1)) * coefValCedula[i];
+            suma += ((parseInt((digito % 10) + '') + (parseInt((digito / 10) + ''))));
+          }
+          suma = Math.round(suma);
+          if ((Math.round(suma % 10) == 0) && (Math.round(suma % 10) == verificador)) {
+            cedulaCorrecta = true;
+          } else if ((10 - (Math.round(suma % 10))) == verificador) {
+            cedulaCorrecta = true;
+          } else {
+            cedulaCorrecta = false;
+          }
+        } else {
+          cedulaCorrecta = false;
+        }
+      } else {
+        cedulaCorrecta = false;
+      }
+      validador = cedulaCorrecta;
+
+      if (!validador) {
+        return { 'CedulaValida': true };
+      } else {
+        return null;
+      }
+    }
   }
 
 }

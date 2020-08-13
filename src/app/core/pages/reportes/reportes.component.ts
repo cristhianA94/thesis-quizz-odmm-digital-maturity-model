@@ -63,7 +63,6 @@ export class ReportesComponent implements OnInit {
     this.flagTabla = true;
     this.cuestionario = cuestionario;
     this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestasUser) => {
-      //this.cuestionarios[index].respuestasUsuario.push(respuestasUser)
       this.dataSource.data = respuestasUser;
     });
   }

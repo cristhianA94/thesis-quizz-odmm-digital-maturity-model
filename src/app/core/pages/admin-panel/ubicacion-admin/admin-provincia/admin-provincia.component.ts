@@ -61,7 +61,7 @@ export class AdminProvinciaComponent implements OnInit {
   }
 
   onRowClicked(row: any) {
-    this.provincia = row;
+    //this.provincia = row;
     //console.log('Row clicked: ', this.provincias);
   }
 

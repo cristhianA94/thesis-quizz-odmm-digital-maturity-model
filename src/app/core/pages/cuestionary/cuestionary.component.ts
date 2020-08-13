@@ -24,7 +24,6 @@ export class CuestionaryComponent implements OnInit {
     private router: Router,
     private categoriasServices: CategoriasService,
   ) {
-    //console.log(this.router.data);
   }
 
   ngOnInit(): void {

@@ -1,93 +1,90 @@
-<div class="row">
+<div class="card">
+    <div class="card-header card-header-info">
+        <h3 class="card-title"> <strong>Administrar Países</strong></h3>
+        <p class="card-category">Permite agregar, actualizar o eliminar un país</p>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
 
-    <div class="card">
-        <div class="card-header card-header-info">
-            <h3 class="card-title"> <strong>Administrar Países</strong></h3>
-            <p class="card-category">Permite agregar, actualizar o eliminar un país</p>
-        </div>
-        <br>
-        <mat-divider></mat-divider>
+    <div class="card-body">
 
-        <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
 
-            <div class="row">
-                <div class="col-md-12">
+                <!-- Pais -->
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-info">
+                        <div class="card-icon">
+                            <i class="material-icons"></i>
+                        </div>
+                        <h3 class="card-title"> <strong>Países</strong></h3>
+                        <div class="text-right mr-2">
 
-                    <!-- Pais -->
-                    <div class="card">
-                        <div class="card-header card-header-icon card-header-info">
-                            <div class="card-icon">
-                                <i class="material-icons"></i>
-                            </div>
-                            <h3 class="card-title"> <strong>Países</strong></h3>
-                            <div class="text-right mr-2">
-
-                                <button mat-raised-button (click)="openDialog('Agregar',{})" aria-label="Agrega un pais">
+                            <button mat-raised-button (click)="openDialog('Agregar',{})" aria-label="Agrega un pais">
                                     <mat-icon>add</mat-icon> Agregar
                                 </button>
-                            </div>
-
                         </div>
-                        <div class="card-body">
 
-                            <mat-accordion class="headers-align" multi>
-                                <mat-expansion-panel>
+                    </div>
+                    <div class="card-body">
 
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            <i class="material-icons mr-2">visibility</i> Ver paises
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            Desplegar/Contraer
-                                            <mat-icon></mat-icon>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
+                        <mat-accordion class="headers-align" multi>
+                            <mat-expansion-panel>
 
-
-                                    <!-- Tabla -->
-                                    <mat-form-field>
-                                        <mat-label>Filtrar</mat-label>
-                                        <input matInput (keyup)="buscarPais($event)" placeholder="...">
-                                    </mat-form-field>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <i class="material-icons mr-2">visibility</i> Ver paises
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        Desplegar/Contraer
+                                        <mat-icon></mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
 
 
-                                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-                                        <!-- Namee Column -->
-                                        <ng-container matColumnDef="Nombre">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.nombre }} </td>
-                                        </ng-container>
+                                <!-- Tabla -->
+                                <mat-form-field>
+                                    <mat-label>Filtrar</mat-label>
+                                    <input matInput (keyup)="buscarPais($event)" placeholder="...">
+                                </mat-form-field>
 
-                                        <!-- Actions -->
-                                        <ng-container matColumnDef=" ">
-                                            <th mat-header-cell *matHeaderCellDef> </th>
-                                            <td mat-cell *matCellDef="let element" style="width: 130px;">
-                                                <div class="button-container">
-                                                    <button (click)="openDialog('Actualizar',element)" mat-mini-fab color="accent" aria-label="Edit">
+
+                                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                                    <!-- Namee Column -->
+                                    <ng-container matColumnDef="Nombre">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.nombre }} </td>
+                                    </ng-container>
+
+                                    <!-- Actions -->
+                                    <ng-container matColumnDef=" ">
+                                        <th mat-header-cell *matHeaderCellDef> </th>
+                                        <td mat-cell *matCellDef="let element" style="width: 130px;">
+                                            <div class="button-container">
+                                                <button (click)="openDialog('Actualizar',element)" mat-mini-fab color="accent" aria-label="Edit">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
-                                                    <button (click)="openDialog('Borrar',element)" mat-mini-fab color="warn" aria-label="Delete">
+                                                <button (click)="openDialog('Borrar',element)" mat-mini-fab color="warn" aria-label="Delete">
                                                         <mat-icon>delete</mat-icon>
                                                     </button>
-                                                </div>
-                                            </td>
-                                        </ng-container>
+                                            </div>
+                                        </td>
+                                    </ng-container>
 
-                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
-                                    </table>
-                                    <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20] " showFirstLastButtons>
-                                    </mat-paginator>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
+                                </table>
+                                <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20] " showFirstLastButtons>
+                                </mat-paginator>
 
-                                    <!-- End Table -->
-                                </mat-expansion-panel>
-                            </mat-accordion>
-                        </div>
+                                <!-- End Table -->
+                            </mat-expansion-panel>
+                        </mat-accordion>
                     </div>
                 </div>
             </div>
-
         </div>
 
     </div>
+
 </div>

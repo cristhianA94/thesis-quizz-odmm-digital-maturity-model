@@ -17,6 +17,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireStorageModule, StorageBucket } from "@angular/fire/storage";
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 
 // Alertas
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
@@ -43,6 +44,7 @@ import { AuthService } from "./core/auth/service/auth.service";
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFireAuthGuardModule, 
     //AngularFirestoreModule.enablePersistence(),
     // Alertas
     SweetAlert2Module.forRoot(),

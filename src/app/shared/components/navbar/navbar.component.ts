@@ -138,7 +138,7 @@ export class NavbarComponent implements OnInit {
     // Comprueba si hay un usuario logueado
     isUserLogged() {
         this.authService.isAuth().subscribe((authUser) => {
-            if (authUser) {
+            if (authUser && authUser.emailVerified) {
                 this.authService.isLogged = true;
             } else {
                 this.authService.isLogged = false;

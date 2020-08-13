@@ -48,7 +48,6 @@
                             "node_modules/arrive/src/arrive.js",
                             "node_modules/moment/moment.js",
                             "node_modules/bootstrap-notify/bootstrap-notify.js",
-                            "node_modules/html2canvas/dist/html2canvas.min.js",
                             "node_modules/jspdf/dist/jspdf.min.js"
                         ]
                     },

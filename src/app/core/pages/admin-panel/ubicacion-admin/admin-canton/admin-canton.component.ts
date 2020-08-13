@@ -64,7 +64,7 @@ export class AdminCantonComponent implements OnInit {
   }
 
   onRowClicked(row: any) {
-    this.canton = row;
+    //this.canton = row;
     //console.log('Row clicked: ', this.cantones);
   }
 

@@ -63,7 +63,7 @@ export class AdminPaisComponent implements OnInit {
   }
 
   onRowClicked(row: any) {
-    this.pais = row;
+    //this.pais = row;
     //console.log('Row clicked: ', this.pais);
   }
 

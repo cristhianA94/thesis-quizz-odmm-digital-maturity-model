@@ -31,6 +31,7 @@ export class UsuarioService implements Resolve<any> {
     private authFire: AngularFireAuth,
     private dbFire: AngularFirestore,
     private alertaService: AlertsService,
+    private router: Router,
   ) {
     this.idUser = localStorage.getItem("uidUser");
     this.onUsuarioChanged = new BehaviorSubject({});
@@ -115,10 +116,9 @@ export class UsuarioService implements Resolve<any> {
   async updateEmail(email: string) {
     try {
       await this.authFire.auth.currentUser.updateEmail(email);
-      return console.log("Email changed");
     }
     catch (error) {
-      return console.log(error);
+      return this.alertaService.mensajeError("Error al cambiar email", error);
     }
   }
 
@@ -126,20 +126,26 @@ export class UsuarioService implements Resolve<any> {
   async updatePassword(pass: string) {
     try {
       await this.authFire.auth.currentUser.updatePassword(pass);
-      return this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente');
+      this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente. Debe volver a loguearse');
     }
     catch (error) {
-      return console.log(error);
+      return this.alertaService.mensajeError("Error al cambiar contraseña", error);
     }
   }
 
   // Actualiza usuario
   updateUsuario(user: Usuario) {
+    this.updateEmail(user.correo);
+    // Si modifica la clave se cambia y se desloguea
+    if (user.clave) {
+      this.updatePassword(user.clave);
+      this.router.navigate(['/login']);
+    }
     this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
     delete user.uid;
+    delete user.clave;
     this.usuarioDoc.update(user);
     this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
-    //this.router.navigate(['/dashboard']);
   }
 
 

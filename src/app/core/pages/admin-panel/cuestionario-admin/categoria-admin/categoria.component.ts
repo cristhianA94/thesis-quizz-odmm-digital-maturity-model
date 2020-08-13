@@ -54,8 +54,8 @@ export class CategoriaComponent implements OnInit {
   }
 
   onRowClicked(row: any) {
-    this.categoria = row;
-    console.log('Row clicked: ', this.categoria);
+    //this.categoria = row;
+    //console.log('Row clicked: ', this.categoria);
   }
 
   openDialog(action: string, obj: any) {

@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 <!-- <button (click)="openDialog('Actualizar', empresa)" mat-raised-button class="btn btn-info btn-block">Seleccionar</button> -->
                                 <button (click)="empresaUpdateForm(empresa, 'Actualizar')" mat-raised-button class="btn btn-info btn-block">Editar empresa</button>
-                                <button (click)="eliminarEmpresa(empresa)" mat-raised-button class="btn btn-danger btn-block">Eliminar</button>
+                                <button *ngIf="!(empresasList.length == 1)" (click)="eliminarEmpresa(empresa)" mat-raised-button class="btn btn-danger btn-block">Eliminar</button>
                             </div>
                         </div>
 

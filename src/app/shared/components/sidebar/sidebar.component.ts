@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'app/core/auth/service/auth.service';
 import { Usuario } from 'app/shared/models/usuario';
-import { Subject } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -34,12 +35,16 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   private _unsubscribeAll: Subject<any>;
+  subscripcion: Subscription;
+
   usuario: Usuario;
-  idUser: string;
+  userAuth: boolean = false;
+  userAdmin: boolean = false;
 
   constructor(
     public authService: AuthService,
     public userService: UsuarioService,
+    public auth: AngularFireAuth
 
   ) {
     this._unsubscribeAll = new Subject();
@@ -49,6 +54,7 @@ export class SidebarComponent implements OnInit {
     // Comprueba si el usuario esta logueado
     this.isUserLogged();
   }
+
   isMobileMenu() {
     if ($(window).width() > 991) {
       return false;
@@ -57,21 +63,24 @@ export class SidebarComponent implements OnInit {
   };
 
   isUserLogged() {
-    this.idUser = localStorage.getItem("uidUser");
+    let idUser = localStorage.getItem("uidUser");
     // Comprueba si el usuario es admin
-    this.userService.getUser(this.idUser);
-    this.userService.onUsuarioChanged.subscribe(usuario => {
-      this.usuario = usuario
-      if (this.usuario.rol === "ADMIN_ROLE") {
-        this.authService.isAdmin = true;
+    this.userService.getUser(idUser);
+    this.subscripcion = this.userService.onUsuarioChanged.subscribe(usuario => {
+      // TODO Admin deslogueo
+      //this.usuario = usuario;
+      if (usuario.rol == "ADMIN_ROLE") {
+        this.userAdmin = true;
+      } else {
+        this.userAdmin = false;
       }
     });
-    // Comprueba si el usuario esta logueado
+    // Comprueba si el usuario esta logueado y el email verificado
     this.authService.isAuth().subscribe((authUser) => {
-      if (authUser) {
-        this.authService.isLogged = true;
+      if (authUser && authUser.emailVerified) {
+        this.userAuth = true;
       } else {
-        this.authService.isLogged = false;
+        this.userAuth = false;
       }
     });
   }
@@ -79,6 +88,8 @@ export class SidebarComponent implements OnInit {
   // Metodo para salir de la cuenta
   onLogout() {
     this.authService.logout();
+    this.subscripcion.unsubscribe();
+    this.userAdmin = false;
   }
 
   ngOnDestroy(): void {

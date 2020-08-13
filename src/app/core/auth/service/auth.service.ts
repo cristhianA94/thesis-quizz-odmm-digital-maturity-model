@@ -44,7 +44,7 @@ export class AuthService {
     this.usuarioService.getUser(credential.user.uid);
     if (!this.usuarioService.usuario) {
       console.log("No existe usuario");
-      // Si no existe se crea en Firestore  
+      // Si no existe se crea en Firestore
       this.usuarioService.createUserSocial(credential.user);
     }
   }
@@ -59,15 +59,13 @@ export class AuthService {
 
   async loginCorreo(user: any) {
     //TODO verificar inicio serion despues de verifica email
-    
     await this.afs.auth.signInWithEmailAndPassword(user.correo, user.clave)
       .then((userAuth) => {
 
-        //TODO Verifica si el usuario ya confirmo su email
+        // Verifica si el usuario ya confirmo su email
         if (userAuth.user.emailVerified == false) {
           this.emailVerification();
           this.alertaService.mensajeError("Error", "Por favor, valide su dirección de correo electrónico. Por favor, compruebe su bandeja de entrada.");
-          return;
         } else {
           this.guardarStorage(userAuth.user.uid);
           this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
@@ -152,11 +150,9 @@ export class AuthService {
   }
 
   // Metodo para mandar un email de verificacion al usuario
-  async emailVerification() {
-    /* let user: any = this.afs.auth.currentUser;
-    user.sendEmailVerification(); */
+  emailVerification() {
     try {
-      await this.afs.auth.currentUser.sendEmailVerification();
+      this.afs.auth.currentUser.sendEmailVerification();
       this.alertaService.mensajeExito("Email enviado", "Revisa tu correo electrónico para verificar tu cuenta. Gracias");
       this.router.navigate(['/verify-email']);
     }
@@ -170,11 +166,10 @@ export class AuthService {
     await this.afs.auth.signOut().then(() => {
       // Elimina los datos del usuario en el local storage
       localStorage.removeItem("uidUser");
-      localStorage.removeItem("usuario");
       localStorage.removeItem("token");
       this.isLogged = false;
       this.isAdmin = false;
-      this.alertaService.mensajeExito('Adiós', 'Hasta pronto.');
+      this.alertaService.mensajeExito('Adiós', '¡Hasta pronto!');
       this.router.navigate(['/login']);
     })
 

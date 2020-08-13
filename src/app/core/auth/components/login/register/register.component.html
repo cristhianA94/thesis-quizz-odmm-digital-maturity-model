@@ -39,8 +39,9 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
+        <mat-label>Teléfono</mat-label>
         <span matPrefix>+593 &nbsp;</span>
-        <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="Teléfono">
+        <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="0987654321">
         <mat-icon matSuffix>local_phone</mat-icon>
         <mat-error *ngIf="registroForm.controls['telefono'].hasError('pattern')">Solo se admiten números.
         </mat-error>

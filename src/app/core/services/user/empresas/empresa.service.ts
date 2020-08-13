@@ -101,6 +101,8 @@ export class EmpresaService implements Resolve<any>{
       idCanton: formulario.idCanton,
       idSectorInd: formulario.idSectorInd
     }
+    console.log(data);
+    
 
     this.empresaCollection = this.afs.collection('empresas');
     this.empresaCollection.add(data)
@@ -120,7 +122,7 @@ export class EmpresaService implements Resolve<any>{
 
     this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
     this.empresaDoc.delete();
-    //this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
+    this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
   }
 
 

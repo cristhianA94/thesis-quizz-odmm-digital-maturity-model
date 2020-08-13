@@ -12,7 +12,6 @@ import { AboutComponent } from './about/about.component';
 import { EmpresaService } from '../services/user/empresas/empresa.service';
 import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 import { CategoriasService } from '../services/cuestionario/categorias/categorias.service';
-import { AuthUserGuard } from '../auth/guards/auth-user.guard';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
 

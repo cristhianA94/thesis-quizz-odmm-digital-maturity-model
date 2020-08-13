@@ -137,10 +137,10 @@ export class EmpresaEditComponent implements OnInit {
     this.empresa = empresa;
 
     this.empresaForm.patchValue({
-      razon_social: [empresa.razon_social],
+      razon_social: empresa.razon_social,
       anio_creacion: [empresa.anio_creacion],
       area_alcance: [empresa.area_alcance],
-      franquicias: [empresa.franquicias],
+      franquicias: empresa.franquicias,
       direccion: [empresa.direccion],
       tamanio_empresa: [empresa.tamanio_empresa],
       idPais: [],
@@ -184,7 +184,6 @@ export class EmpresaEditComponent implements OnInit {
       idSectorInd: this.empresaForm.value.idSectorInd
     }
 
-    console.log("Empresa edit", empresaEdit);
     this.empresaService.updateEmpresa(empresaEdit);
   }
 

@@ -3,7 +3,10 @@ import { Routes, RouterModule } from "@angular/router";
 import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
 import { DimensionComponent } from './dimension/dimension.component';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
-import { AuthUserGuard } from '../../auth/guards/auth-user.guard';
+
+import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
+// Auth Guard Firebase
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 export const cuestionaryRoutes: Routes = [
   {
@@ -13,7 +16,7 @@ export const cuestionaryRoutes: Routes = [
       categoria: CategoriasService,
       data: CuestionarioService
     },
-    canActivate: [AuthUserGuard]
+    canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
   },
 ];
 

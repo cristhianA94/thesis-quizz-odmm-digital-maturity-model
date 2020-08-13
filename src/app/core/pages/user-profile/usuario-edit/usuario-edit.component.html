@@ -37,15 +37,21 @@
                                 <mat-label>Nombres</mat-label>
                                 <input matInput formControlName="nombres" type="text" placeholder="Nombres" required autofocus>
                                 <mat-icon matSuffix>face</mat-icon>
-                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required')">El nombre es requerido
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required') && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">El nombre es requerido.
+                                </mat-error>
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('pattern')  && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">Solo se admiten caracteres.
                                 </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field appearance="fill">
                                 <mat-label>Apellidos</mat-label>
-                                <input matInput formControlName="apellidos" type="text" placeholder="Apellidos ">
+                                <input matInput formControlName="apellidos" type="text" placeholder="Apellidos">
                                 <mat-icon matSuffix>face</mat-icon>
+                                <mat-error *ngIf="usuarioForm.controls['apellidos'].hasError('required')">El apellido es requerido.
+                                </mat-error>
+                                <mat-error *ngIf="usuarioForm.controls['apellidos'].hasError('pattern')">Solo se admiten caracteres.
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
@@ -53,7 +59,9 @@
                                 <mat-label>Cedula</mat-label>
                                 <input maxlength="11" matInput formControlName="cedula" type="text" placeholder="C.I." required>
                                 <mat-icon matSuffix>fingerprint</mat-icon>
-                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required')">El campo es requerido
+                                <mat-error *ngIf="usuarioForm.controls['cedula'].hasError('required')">El campo es requerido
+                                </mat-error>
+                                <mat-error *ngIf="usuarioForm.controls['cedula'].hasError('CedulaValida')">Cédula inválida.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -62,9 +70,12 @@
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field appearance="fill">
+                                <mat-label>Teléfono</mat-label>
                                 <span matPrefix>+593 &nbsp;</span>
-                                <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="Teléfono">
+                                <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="0987654321">
                                 <mat-icon matSuffix>local_phone</mat-icon>
+                                <mat-error *ngIf="usuarioForm.controls['telefono'].hasError('pattern')">Solo se admiten números.
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
@@ -101,15 +112,25 @@
                         </div>
                         <div class="col-md-5">
                             <mat-form-field appearance="outline">
-                                <mat-label>Enter your password</mat-label>
+                                <mat-label>Contraseña</mat-label>
                                 <input maxlength="15" minlength="8" matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
                                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                 </button>
+                                <mat-error *ngFor="let validation of account_validation_messages.clave">
+                                    <mat-error class="error-message" *ngIf="usuarioForm.get('clave').hasError(validation.type) && (usuarioForm.get('clave').dirty || usuarioForm.get('clave').touched)">
+                                        {{validation.message}}
+                                    </mat-error>
+                                    <mat-error *ngIf="usuarioForm.controls['clave'].hasError('minLength(8)')">Mín. 8 caracteres.
+                                    </mat-error>
+                                    <mat-error *ngIf="usuarioForm.controls['clave'].hasError('maxLength')">Max. 15 caracteres.
+                                    </mat-error>
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
                     <button mat-raised-button type="submit" class="btn btn-success pull-right">Guardar cambios</button>
+                    <button (click)="resetear()" mat-raised-button type="button" class="btn btn-danger pull-right ml-2">Resetear cambios</button>
                 </form>
             </div>
         </div>

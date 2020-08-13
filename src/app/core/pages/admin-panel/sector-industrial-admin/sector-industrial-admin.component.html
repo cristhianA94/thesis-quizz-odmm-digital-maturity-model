@@ -1,103 +1,95 @@
-<div class="main-content">
-    <div class="container-fluid">
+<button [routerLink]="['/admin-panel']" mat-raised-button class="mr-2">
+    <mat-icon>keyboard_arrow_left</mat-icon>Regresar
+</button>
+<hr>
 
-        <button [routerLink]="['/admin-panel']" mat-raised-button class="mr-2">
-            <mat-icon>keyboard_arrow_left</mat-icon>Regresar
-        </button>
-        <hr>
+<div class="card">
+    <div class="card-header card-header-success">
+        <h3 class="card-title"> <strong>Administrar Sectores Industriales</strong></h3>
+        <p class="card-category">Permite agregar, actualizar o eliminar un sector Industrial</p>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
+
+    <div class="card-body">
 
         <div class="row">
+            <div class="col-md-12">
 
-            <div class="card">
-                <div class="card-header card-header-success">
-                    <h3 class="card-title"> <strong>Administrar Sectores Industriales</strong></h3>
-                    <p class="card-category">Permite agregar, actualizar o eliminar un sector Industrial</p>
-                </div>
-                <br>
-                <mat-divider></mat-divider>
-
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col-md-12">
-
-                            <!-- Pais -->
-                            <div class="card">
-                                <div class="card-header card-header-icon card-header-success">
-                                    <div class="card-icon">
-                                        <i class="material-icons">business_center</i>
-                                    </div>
-                                    <h3 class="card-title"> <strong>Sectores Industriales</strong></h3>
-                                    <div class="text-right mr-2">
-
-                                        <button mat-raised-button (click)="openDialog('Agregar',{})" aria-label="Agrega un pais">
-                                            <mat-icon>add</mat-icon> Agregar
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div class="card-body">
-
-                                    <mat-accordion class="headers-align" multi>
-                                        <mat-expansion-panel>
-
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-title>
-                                                    <i class="material-icons mr-2">visibility</i> Ver sectores industriales
-                                                </mat-panel-title>
-                                                <mat-panel-description>
-                                                    Desplegar/Contraer
-                                                    <mat-icon>business_center</mat-icon>
-                                                </mat-panel-description>
-                                            </mat-expansion-panel-header>
-
-
-                                            <!-- Tabla -->
-                                            <mat-form-field>
-                                                <mat-label>Filtrar</mat-label>
-                                                <input matInput (keyup)="buscarSectorIndustrial($event)" placeholder="...">
-                                            </mat-form-field>
-
-
-                                            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-                                                <!-- Namee Column -->
-                                                <ng-container matColumnDef="Nombre">
-                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                                                    <td mat-cell *matCellDef="let element"> {{element.nombre }} </td>
-                                                </ng-container>
-
-                                                <!-- Actions -->
-                                                <ng-container matColumnDef=" ">
-                                                    <th mat-header-cell *matHeaderCellDef> </th>
-                                                    <td mat-cell *matCellDef="let element" style="width: 130px;">
-                                                        <div class="button-container">
-                                                            <button (click)="openDialog('Actualizar',element)" mat-mini-fab color="accent" aria-label="Edit">
-                                                                <mat-icon>edit</mat-icon>
-                                                            </button>
-                                                            <button (click)="openDialog('Borrar',element)" mat-mini-fab color="warn" aria-label="Delete">
-                                                                <mat-icon>delete</mat-icon>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </ng-container>
-
-                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
-                                            </table>
-                                            <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20, 25] " showFirstLastButtons>
-                                            </mat-paginator>
-
-                                            <!-- End Table -->
-                                        </mat-expansion-panel>
-                                    </mat-accordion>
-                                </div>
-                            </div>
+                <!-- Pais -->
+                <div class="card">
+                    <div class="card-header card-header-icon card-header-success">
+                        <div class="card-icon">
+                            <i class="material-icons">business_center</i>
                         </div>
+                        <h3 class="card-title"> <strong>Sectores Industriales</strong></h3>
+                        <div class="text-right mr-2">
+
+                            <button mat-raised-button (click)="openDialog('Agregar',{})" aria-label="Agrega un pais">
+                                <mat-icon>add</mat-icon> Agregar
+                            </button>
+                        </div>
+
                     </div>
+                    <div class="card-body">
 
+                        <mat-accordion class="headers-align" multi>
+                            <mat-expansion-panel>
+
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <i class="material-icons mr-2">visibility</i> Ver sectores industriales
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        Desplegar/Contraer
+                                        <mat-icon>business_center</mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+
+
+                                <!-- Tabla -->
+                                <mat-form-field>
+                                    <mat-label>Filtrar</mat-label>
+                                    <input matInput (keyup)="buscarSectorIndustrial($event)" placeholder="...">
+                                </mat-form-field>
+
+
+                                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                                    <!-- Namee Column -->
+                                    <ng-container matColumnDef="Nombre">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.nombre }} </td>
+                                    </ng-container>
+
+                                    <!-- Actions -->
+                                    <ng-container matColumnDef=" ">
+                                        <th mat-header-cell *matHeaderCellDef> </th>
+                                        <td mat-cell *matCellDef="let element" style="width: 130px;">
+                                            <div class="button-container">
+                                                <button (click)="openDialog('Actualizar',element)" mat-mini-fab color="accent" aria-label="Edit">
+                                                    <mat-icon>edit</mat-icon>
+                                                </button>
+                                                <button (click)="openDialog('Borrar',element)" mat-mini-fab color="warn" aria-label="Delete">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)=" onRowClicked(row)"></tr>
+                                </table>
+                                <mat-paginator [pageSizeOptions]=" [5, 10, 15, 20, 25] " showFirstLastButtons>
+                                </mat-paginator>
+
+                                <!-- End Table -->
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
                 </div>
-
             </div>
         </div>
+
     </div>
+
 </div>

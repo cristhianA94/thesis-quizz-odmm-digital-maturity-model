@@ -59,7 +59,7 @@ export class SectorIndustrialAdminComponent implements OnInit {
   }
 
   onRowClicked(row: any) {
-    this.sectorI = row;
+    //this.sectorI = row;
     //console.log('Row clicked: ', this.sectorI);
   }
 

@@ -110,7 +110,7 @@ export class CuestionarioService implements Resolve<any>{
   getCuestionarioRespuestasDB(idCuestionario: string): Observable<RespuestasUsuario[]> {
 
     this.cuestionario_respuestasCollection = this.afs.collection('cuestionarios/' + idCuestionario + '/respuestas', ref => {
-      return ref.orderBy('fecha', 'desc')
+      return ref.orderBy('intento', 'desc')
     });
     return this.cuestionario_respuestasCollection.snapshotChanges().pipe(
       map((actions) =>

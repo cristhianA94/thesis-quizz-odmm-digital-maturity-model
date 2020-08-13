@@ -1,10 +1,14 @@
-<router-outlet></router-outlet>
-
 <div class="main-content">
     <div class="container-fluid">
-        <div class="row">
 
-            <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+        <div class="row" *ngIf="flat">
+            <div class="col-md-12 col-md-12 col-sm-12">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+
+        <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+        <div class="row" *ngIf="!flat">
             <div class="col-md-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header card-header-icon card-header-info">
@@ -18,7 +22,7 @@
                         <h4>
                             Accede al panel de administración (agregar, actualizar, eliminar, buscar) de PAÍSES, PROVINCIAS Y CANTONES.
                         </h4>
-                        <button [routerLink]="['ubicacion-panel']" mat-fab color="primary" aria-label="Gestionar Ubicaciones" class="m-2">
+                        <button (click)="redireccionarUbicaciones()" mat-fab color="primary" aria-label="Gestionar Ubicaciones" class="m-2">
                             <mat-icon>launch</mat-icon>
                         </button>
                     </div>
@@ -26,10 +30,8 @@
             </div>
         </div>
 
-        <hr>
-
-        <div class="row">
-            <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+        <!-- Admin ubicaciones (Paises, Provincias y Cantones -->
+        <div class="row" *ngIf="!flat">
             <div class="col-md-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header card-header-icon card-header-success">
@@ -43,7 +45,7 @@
                         <h4>
                             Accede al panel de administración (agregar, actualizar, eliminar, buscar) de SECTORES INDUSTRIALES.
                         </h4>
-                        <button routerLink="sector-industrial-panel" mat-fab color="primary" aria-label="Gestionar Ubicaciones" class="m-2">
+                        <button (click)="redireccionarSectorInd()" mat-fab color="primary" aria-label="Gestionar Sectores Industriales" class="m-2">
                             <mat-icon>launch</mat-icon>
                         </button>
                     </div>
@@ -51,10 +53,8 @@
             </div>
         </div>
 
-        <hr>
-
-        <div class="row">
-            <!-- Admin cuestionario (Dimensiones, Subdimensiones, Capacidades, Metricas y respuestas -->
+        <!-- Admin cuestionario (Dimensiones, Subdimensiones, Capacidades, Metricas y respuestas -->
+        <div class="row" *ngIf="!flat">
             <div class="col-md-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header card-header-icon card-header-rose">
@@ -68,14 +68,13 @@
                         <h4>
                             Accede al panel de administración (agregar, actualizar, eliminar, buscar) de CATEGORÍAS, SUBCATEGORÍAS, CAPACIDADES, MÉTRICAS, RESPUESTAS Y RECOMENDACIONES .
                         </h4>
-                        <button routerLink="cuestionario-panel" mat-fab color="primary" aria-label="Gestionar Cuestionario" class="m-2">
+                        <button (click)="redireccionarCuestionario()" mat-fab color="primary" aria-label="Gestionar Cuestionario" class="m-2">
                             <mat-icon>launch</mat-icon>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
+
 </div>

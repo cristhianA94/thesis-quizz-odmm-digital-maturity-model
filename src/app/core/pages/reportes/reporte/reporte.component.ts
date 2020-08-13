@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RespuestasUsuario, Cuestionario } from 'app/shared/models/cuestionario';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
@@ -13,10 +13,9 @@ import * as jsPDF from 'jspdf';
   templateUrl: './reporte.component.html',
   styles: [``]
 })
-export class ReporteComponent implements OnInit {
+export class ReporteComponent implements OnInit, OnDestroy {
 
   @ViewChild('respuestasData', { static: false }) respuestasData: ElementRef;
-  @ViewChild('logo') logoImg: ElementRef;
   @ViewChild('canvasPorcentaje') canvasPorcentaje: ElementRef;
   @ViewChild('canvasRadar') canvasRadar: ElementRef;
 
@@ -45,6 +44,10 @@ export class ReporteComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarData();
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem("cuestionario");
   }
 
   // Carga las respuestas del usuario y puntuacion, y carga los puntuajes de las categorias para el grafico radar
@@ -97,8 +100,6 @@ export class ReporteComponent implements OnInit {
   };
 
   public openPDF(): void {
-    let dataRespuestas = this.respuestasData.nativeElement;
-
     let fecha = new Date().toLocaleDateString();
     let doc = new jsPDF();
 
@@ -183,7 +184,6 @@ export class ReporteComponent implements OnInit {
       }
     };
 
-
     doc.fromHTML($('#respuestasData').get(0),
       margins.left, // x coord
       margins.top, {
@@ -235,23 +235,6 @@ export class ReporteComponent implements OnInit {
       );
       
       return null;
-    /* let handleElement = {
-      '#editor': function (element, renderer) {
-        return true;
-      }
-    };
-    doc.fromHTML(dataRespuestas.innerHTML, 15, 15, {
-      'width': 190,
-      'elementHandlers': handleElement
-    }); */
-
-
-    //doc.fromHTML(dataRespuestas.innerHTML, 15, 15,);
-    // Crea otra pag
-    //doc.addPage();
-
-    //doc.output('dataurlnewwindow');
-
 
   }
 
