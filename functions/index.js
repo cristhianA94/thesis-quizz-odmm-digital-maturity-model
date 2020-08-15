@@ -126,7 +126,7 @@ app.get("/", cors(), (req, res) => {
                             return x.id;
                         })
                         .indexOf(idSubcategoria);
-                    capacidadObj.metricas = [];
+                    capacidadObj.metrica = [];
                     // Borra atributo innecesario ya
                     delete capacidadObj.idSubcategoria;
                     // Agrega las capacidades a la subcategoria perteneciente
@@ -155,7 +155,7 @@ app.get("/", cors(), (req, res) => {
             categoria.subcategorias.forEach((subcategoria) => {
                 subcategoria.capacidades.forEach((capacidad) => {
                     const metrica = metricasArr.find((x) => x.id === capacidad.id);
-                    capacidad.metricas.push(metrica);
+                    capacidad.metrica = metrica;
                 });
             });
             return res.send(categoria);

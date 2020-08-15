@@ -234,7 +234,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
       margins
       );
       
-      return null;
+      
 
   }
 

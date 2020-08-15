@@ -88,7 +88,7 @@ export class EmpresaService implements Resolve<any>{
   }
 
   // Registro nueva empresa
-  createEmpresaDB(user: any, formulario: any) {
+  createEmpresaDB(uidUser: string, formulario: any) {
 
     const data: Empresa = {
       razon_social: formulario.razon_social,
@@ -97,18 +97,15 @@ export class EmpresaService implements Resolve<any>{
       franquicias: formulario.franquicias,
       direccion: formulario.direccion,
       tamanio_empresa: formulario.tamanio_empresa,
-      idUser: user.uid,
+      idUser: uidUser,
       idCanton: formulario.idCanton,
       idSectorInd: formulario.idSectorInd
     }
-    console.log(data);
-    
 
     this.empresaCollection = this.afs.collection('empresas');
     this.empresaCollection.add(data)
       .then(() => this.alertaService.mensajeExito('¡Éxito!', 'Empresa registrada correctamente'))
       .catch((error) => this.alertaService.mensajeError('Error', error))
-
   }
 
   updateEmpresa(empresa: Empresa) {

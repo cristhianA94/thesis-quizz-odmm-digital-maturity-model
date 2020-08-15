@@ -2,48 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write: if false;
-    }
-    
-    match /usuario/{userId} {
-      allow read, get, write, update, delete: if isOwner(userId);
-    }
-    
-    match /empresa/{empresaId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /sector_Industrial/{sector_IndustrialId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /pais/{paisId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /provincia/{provinciaId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /canton/{cantonId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /users/{usersId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /rol/{rolId} {
-      allow read, get, write, update, delete: if true;
-    }
-    
-    match /funcionalidad/{funcionalidadId} {
-      allow read, get, write, update, delete: if true;
-    }
-     
-    //Si no inicia sesion no puede escribir o leer el documento
-    function isOwner(userId){
-    	return request.auth.uid == userId;
+      allow read, write;
     }
   }
 }

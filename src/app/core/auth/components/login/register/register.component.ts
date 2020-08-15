@@ -113,7 +113,7 @@ export class RegisterComponent implements OnInit {
       nombres: ['', [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
       apellidos: ['', [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
       cedula: ['', [Validators.required, this.validarCedula()]],
-      telefono: ['', [Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
+      telefono: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
       sexo: [''],
       correo: ['', [Validators.required, Validators.email]],
       clave: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],

@@ -9,7 +9,7 @@
     <div *ngIf="isMobileMenu()">
 
         <ul class="nav navbar-nav nav-mobile-menu">
-            <li class="nav-item" *ngIf="(auth.user && auth.user['emailVerified']) | async">
+            <li class="nav-item" *ngIf="auth.user | async">
                 <div class="dropdown text-center">
                     <button class="btn dropdown-toggle btnAdmin" data-toggle="dropdown" aria-expanded="true">
                         <span class="material-icons mr-2">person_pin</span>Usuario
@@ -45,25 +45,25 @@
                 <p>Acerca De</p>
             </a>
         </li>
-        <li routerLinkActive="active" class="nav-item" *ngIf="userAuth">
+        <li routerLinkActive="active" class="nav-item" *ngIf="auth.user | async">
             <a class="nav-link" [routerLink]="['/user-profile']">
                 <i class="material-icons">person</i>
                 <p>Perfil Usuario</p>
             </a>
         </li>
-        <li routerLinkActive="active" class="nav-item" *ngIf="(auth.user) | async">
+        <li routerLinkActive="active" class="nav-item" *ngIf="auth.user | async">
             <a class="nav-link" [routerLink]="['/cuestionario']">
                 <i class="material-icons">vertical_split</i>
                 <p>Cuestionario</p>
             </a>
         </li>
-        <li routerLinkActive="active" class="nav-item" *ngIf="(auth.user) | async">
+        <li routerLinkActive="active" class="nav-item" *ngIf="auth.user | async">
             <a class="nav-link" [routerLink]="['/reportes']">
                 <i class="material-icons">assessment</i>
                 <p>Reportes</p>
             </a>
         </li>
-        <li routerLinkActive="active" class="nav-item" *ngIf="!((auth.user) | async)">
+        <li routerLinkActive="active" class="nav-item" *ngIf="!(auth.user | async)">
             <a class="nav-link" [routerLink]="['/login']">
                 <i class="material-icons">vpn_key</i>
                 <p>Login</p>
@@ -71,7 +71,7 @@
         </li>
 
         <hr>
-        <li class="nav-item ml-3" *ngIf="userAdmin">
+        <li class="nav-item ml-3" *ngIf="userService.adminUser | async">
             <div class="dropdown mx-auto">
                 <button [routerLink]="['/admin-panel']" class="btn dropdown-toggle btn-danger btnAdmin" data-toggle="dropdown" aria-expanded="true">
                     <span class="material-icons">supervisor_account</span>

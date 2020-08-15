@@ -15,6 +15,7 @@ export class AdminPanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log("gola");
   }
 
   redireccionarUbicaciones() {
@@ -24,12 +25,12 @@ export class AdminPanelComponent implements OnInit {
 
   redireccionarSectorInd() {
     this.flat = true;
-    this.router.navigate(['sector-industrial-panel']);
+    this.router.navigate(['admin-panel/sector-industrial-panel']);
   }
 
   redireccionarCuestionario() {
     this.flat = true;
-    this.router.navigate(['cuestionario-panel']);
+    this.router.navigate(['admin-panel/cuestionario-panel']);
   }
 
 }

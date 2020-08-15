@@ -65,7 +65,7 @@ export class EmpresaEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.idUser = this.empresaService.idUser;
+    this.idUser = localStorage.getItem("uidUser");
 
     this.empresaForm = this.empresabuildForm();
     this.cargarEmpresas();
@@ -111,7 +111,7 @@ export class EmpresaEditComponent implements OnInit {
   empresabuildForm() {
     return this.fb.group({
       razon_social: ['', Validators.required],
-      anio_creacion: [, Validators.required],
+      anio_creacion: ['', Validators.required],
       area_alcance: ['', Validators.required],
       franquicias: [''],
       direccion: ['', Validators.required],
@@ -138,15 +138,15 @@ export class EmpresaEditComponent implements OnInit {
 
     this.empresaForm.patchValue({
       razon_social: empresa.razon_social,
-      anio_creacion: [empresa.anio_creacion],
-      area_alcance: [empresa.area_alcance],
+      anio_creacion: empresa.anio_creacion,
+      area_alcance: empresa.area_alcance,
       franquicias: empresa.franquicias,
-      direccion: [empresa.direccion],
-      tamanio_empresa: [empresa.tamanio_empresa],
+      direccion: empresa.direccion,
+      tamanio_empresa: empresa.tamanio_empresa,
+      idSectorInd: empresa.idSectorInd,
+      idCanton: empresa.idCanton,
       idPais: [],
-      idProvincia: [],
-      idCanton: [],
-      idSectorInd: []
+      idProvincia: []
     });
   }
 
@@ -166,7 +166,7 @@ export class EmpresaEditComponent implements OnInit {
     }
 
     // Manda a registrar una nueva empresa
-    this.empresaService.createEmpresaDB({ uid: this.idUser }, empresa);
+    this.empresaService.createEmpresaDB(this.idUser, empresa);
   }
 
   actualizarEmpresa() {
@@ -179,7 +179,7 @@ export class EmpresaEditComponent implements OnInit {
       franquicias: this.empresaForm.value.franquicias,
       direccion: this.empresaForm.value.direccion,
       tamanio_empresa: this.empresaForm.value.tamanio_empresa,
-      idUser: this.empresaService.idUser,
+      idUser: this.idUser,
       idCanton: this.empresaForm.value.idCanton,
       idSectorInd: this.empresaForm.value.idSectorInd
     }
@@ -208,7 +208,6 @@ export class EmpresaEditComponent implements OnInit {
       reverseButtons: true
     }).then(error => {
       if (error.value) {
-
         // Borra la empresa
         this.empresaService.deleteEmpresa(empresa);
 
@@ -217,7 +216,6 @@ export class EmpresaEditComponent implements OnInit {
           'La empresa a sido eliminada',
           'success'
         )
-
       } else if (
         /* Read more about handling dismissals below */
         error.dismiss === Swal.DismissReason.cancel

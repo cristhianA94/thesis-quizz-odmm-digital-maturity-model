@@ -19,12 +19,15 @@ import Swal from 'sweetalert2';
 export class UsuarioService implements Resolve<any> {
 
 
-  public idUser: string;
   // Firestore
   usuarioCollection: AngularFirestoreCollection<Usuario>;
   usuarioDoc: AngularFirestoreDocument<Usuario>;
+
+  public idUser: string;
   usuario: Usuario;
   onUsuarioChanged: BehaviorSubject<any>;
+  adminCheck: BehaviorSubject<boolean>;
+  adminUser: Observable<boolean>;
 
 
   constructor(
@@ -35,6 +38,8 @@ export class UsuarioService implements Resolve<any> {
   ) {
     this.idUser = localStorage.getItem("uidUser");
     this.onUsuarioChanged = new BehaviorSubject({});
+    this.adminCheck = new BehaviorSubject<boolean>(false);
+    this.adminUser = this.adminCheck.asObservable();
   }
 
 
@@ -51,6 +56,9 @@ export class UsuarioService implements Resolve<any> {
     });
   }
 
+  public get currentUserValue(): boolean {
+    return this.adminCheck.value;
+  }
 
   //Obtiene un usuario
   getUser(uid: string): Promise<any> {
@@ -69,7 +77,21 @@ export class UsuarioService implements Resolve<any> {
           resolve(this.usuario);
         }, reject)
     })
+  }
 
+  // Valida si el usuario es tiene el rol de ADMIN_ROLE o USER_ROLE
+  validateRolUser() {
+    let idUser = localStorage.getItem("uidUser");
+    // Comprueba si el usuario es admin
+    this.getUser(idUser);
+    this.onUsuarioChanged.subscribe(usuario => {
+      if (usuario.rol == "ADMIN_ROLE") {
+        this.adminCheck.next(true);
+      }
+      else{
+        this.adminCheck.next(false);
+      }
+    });
   }
 
 

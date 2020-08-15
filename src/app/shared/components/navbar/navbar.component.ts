@@ -2,7 +2,10 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'app/core/auth/service/auth.service';
+import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
 
 @Component({
     selector: 'app-navbar',
@@ -10,6 +13,8 @@ import { AuthService } from 'app/core/auth/service/auth.service';
     styles: []
 })
 export class NavbarComponent implements OnInit {
+
+    // Menu
     private listTitles: any[];
     location: Location;
     mobile_menu_visible: any = 0;
@@ -21,13 +26,16 @@ export class NavbarComponent implements OnInit {
         private element: ElementRef,
         private router: Router,
         public authService: AuthService,
+        public userService: UsuarioService,
+        public auth: AngularFireAuth
     ) {
         this.location = location;
         this.sidebarVisible = false;
     }
 
-    // Menu responsive
     ngOnInit() {
+        this.userService.validateRolUser();
+        // Menu responsive
         this.listTitles = ROUTES.filter(listTitle => listTitle);
         const navbar: HTMLElement = this.element.nativeElement;
         this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
@@ -39,8 +47,6 @@ export class NavbarComponent implements OnInit {
                 this.mobile_menu_visible = 0;
             }
         });
-        // Comprueba si el usuario esta logueado
-        this.isUserLogged();
     }
 
     sidebarOpen() {
@@ -54,12 +60,14 @@ export class NavbarComponent implements OnInit {
 
         this.sidebarVisible = true;
     };
+
     sidebarClose() {
         const body = document.getElementsByTagName('body')[0];
         this.toggleButton.classList.remove('toggled');
         this.sidebarVisible = false;
         body.classList.remove('nav-open');
     };
+
     sidebarToggle() {
         // const toggleButton = this.toggleButton;
         // const body = document.getElementsByTagName('body')[0];
@@ -117,7 +125,6 @@ export class NavbarComponent implements OnInit {
 
         }
     };
-
     // END Menu responsive
 
     // Obtiene titulo  de la pag actual
@@ -135,19 +142,9 @@ export class NavbarComponent implements OnInit {
         return 'Home';
     }
 
-    // Comprueba si hay un usuario logueado
-    isUserLogged() {
-        this.authService.isAuth().subscribe((authUser) => {
-            if (authUser && authUser.emailVerified) {
-                this.authService.isLogged = true;
-            } else {
-                this.authService.isLogged = false;
-            }
-        });
-    }
-
     // Metodo para salir de la cuenta
     onLogout() {
         this.authService.logout();
+        this.userService.adminCheck.next(false);
     }
 }

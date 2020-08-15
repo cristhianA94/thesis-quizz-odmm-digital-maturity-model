@@ -52,7 +52,8 @@
 
                 <form class="mt-4" [formGroup]="empresaForm" autocomplete="on">
                     <h3>
-                        <mat-icon matSuffix>business</mat-icon> Datos Empresa: {{ empresa.razon_social }}</h3>
+                        <mat-icon matSuffix>business</mat-icon> Datos Empresa: {{ empresa.razon_social }}
+                    </h3>
                     <hr>
                     <div class="row">
                         <div class="col-md-4">
@@ -60,7 +61,8 @@
                                 <mat-label>Razón Social</mat-label>
                                 <input matInput formControlName="razon_social" type="text" placeholder="Nombre de su empresa" required>
                                 <mat-icon matSuffix>business</mat-icon>
-                                <mat-error *ngIf="empresaForm.controls['razon_social'].hasError('required')">Ingrese el nombre de la empresa o razón social</mat-error>
+                                <mat-error *ngIf="empresaForm.controls['razon_social'].hasError('required')">Ingrese el nombre de la empresa o razón social.
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
@@ -68,6 +70,8 @@
                                 <mat-label>Años de Actividad de la Empresa</mat-label>
                                 <input matInput formControlName="anio_creacion" type="number" required>
                                 <mat-icon matSuffix>business</mat-icon>
+                                <mat-error *ngIf="empresaForm.controls['anio_creacion'].hasError('required')">Ingrese el año de creación de su empresa.
+                                </mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
@@ -89,7 +93,7 @@
                                         {{ sector.nombre }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['idSectorInd'].hasError('required')">Elija un sector industrial
+                                <mat-error *ngIf="empresaForm.controls['idSectorInd'].hasError('required')">Elija un sector industrial.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -101,7 +105,7 @@
                                         {{empresa}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['tamanio_empresa'].hasError('required')">Elija el tipo de empresa
+                                <mat-error *ngIf="empresaForm.controls['tamanio_empresa'].hasError('required')">Elija el tipo de empresa.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -113,7 +117,7 @@
                                         {{area}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['area_alcance'].hasError('required')">Elija el tipo de empresa
+                                <mat-error *ngIf="empresaForm.controls['area_alcance'].hasError('required')">Elija el alcance de su empresa.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -127,7 +131,7 @@
                                         {{ pais.nombre }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['idPais'].hasError('required')">Elija un país
+                                <mat-error *ngIf="empresaForm.controls['idPais'].hasError('required')">Elija un país.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -139,7 +143,7 @@
                                         {{ provincia.nombre }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['idProvincia'].hasError('required')">Elija una provincia
+                                <mat-error *ngIf="empresaForm.controls['idProvincia'].hasError('required')">Elija una provincia.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -151,7 +155,7 @@
                                         {{ canton.nombre }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="empresaForm.controls['idCanton'].hasError('required')">Elija un cantón
+                                <mat-error *ngIf="empresaForm.controls['idCanton'].hasError('required')">Elija un cantón.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -161,13 +165,13 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>Dirección de la Empresa</mat-label>
                                 <textarea matInput type="text" autocomplete="on" formControlName="direccion" required></textarea>
-                                <mat-error *ngIf="empresaForm.controls['idCanton'].hasError('required')">Elija un cantón
+                                <mat-error *ngIf="empresaForm.controls['direccion'].hasError('required')">Agrege la dirección de la empresa.
                                 </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
-                    <button *ngIf="newEmpresa" (click)="crearEmpresa()" mat-raised-button type="submit" class="btn btn-success pull-right">Registrar</button>
-                    <button *ngIf="editEmpresa" (click)="actualizarEmpresa()" mat-raised-button type="submit" class="btn btn-info pull-right">Guardar cambios</button>
+                    <button *ngIf="newEmpresa" [disabled]="empresaForm.invalid" (click)="crearEmpresa()" mat-raised-button type="submit" class="btn btn-success pull-right">Registrar</button>
+                    <button *ngIf="editEmpresa" [disabled]="empresaForm.invalid" (click)="actualizarEmpresa()" mat-raised-button type="submit" class="btn btn-info pull-right">Guardar cambios</button>
                     <button (click)="cancelar()" mat-raised-button type="submit" class="btn btn-danger pull-right ml-3">Cancelar</button>
                 </form>
             </div>

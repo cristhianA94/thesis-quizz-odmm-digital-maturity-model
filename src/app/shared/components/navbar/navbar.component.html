@@ -10,26 +10,16 @@
             <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <!-- Buscador  -->
-            <!--     <form class="navbar-form">
-                <div class="input-group no-border">
-                    <input type="text" value="" class="form-control" placeholder="Search...">
-                    <button mat-raised-button type="submit" class="btn btn-white btn-round btn-just-icon">
-                        <i class="material-icons">search</i>
-                        <div class="ripple-container"></div>
-                    </button>
-                </div>
-            </form> -->
 
             <!-- Menu usuario -->
             <ul class="navbar-nav">
-                <li class="nav-item ml-5 mr-3" *ngIf="!authService.isLogged">
+                <li class="nav-item ml-5 mr-3" *ngIf="!auth.user | async">
                     <button class="btn btn-primary btn-round" type="button" [routerLink]="['/login']">
                         <i class="fas fa-sign-in-alt "> </i> Acceder
                     </button>
                 </li>
 
-                <li class="nav-item ml-5 mr-5" *ngIf="authService.isLogged">
+                <li class="nav-item ml-5 mr-5" *ngIf="auth.user | async">
                     <div class="dropdown">
                         <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <i class="material-icons mr-2 mr-2">person_pin</i>Usuario

@@ -211,7 +211,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-
+/* 
   test() {
     this.cuestionario = {
       idUser: this.idUser,
@@ -249,4 +249,5 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Crea el cuestionario en la BD
     this.cuestionarioService.createCuestionarioDB(this.cuestionario, obj);
   }
+   */
 }

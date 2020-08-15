@@ -43,9 +43,12 @@ export class AuthService {
     // Comprueba si existe el usuario
     this.usuarioService.getUser(credential.user.uid);
     if (!this.usuarioService.usuario) {
+      console.log(this.usuarioService.usuario);
       console.log("No existe usuario");
       // Si no existe se crea en Firestore
       this.usuarioService.createUserSocial(credential.user);
+    }else{
+      this.usuarioService.validateRolUser();
     }
   }
 
@@ -58,10 +61,8 @@ export class AuthService {
  */
 
   async loginCorreo(user: any) {
-    //TODO verificar inicio serion despues de verifica email
     await this.afs.auth.signInWithEmailAndPassword(user.correo, user.clave)
       .then((userAuth) => {
-
         // Verifica si el usuario ya confirmo su email
         if (userAuth.user.emailVerified == false) {
           this.emailVerification();
@@ -70,9 +71,7 @@ export class AuthService {
           this.guardarStorage(userAuth.user.uid);
           this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
           this.router.navigate(['/home']);
-          /*  this.ngZone.run(() => {
-             //this.isAuth();
-           }); */
+          this.usuarioService.validateRolUser();
         }
       })
       .catch((err) => {
@@ -89,7 +88,7 @@ export class AuthService {
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);
         // Registra la Empresa en Firestore
-        this.empresaService.createEmpresaDB(userData.user, formulario);
+        this.empresaService.createEmpresaDB(userData.user.uid, formulario);
 
         // Notificacion
         let timerInterval

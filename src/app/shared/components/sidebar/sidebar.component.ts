@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'app/core/auth/service/auth.service';
 import { Usuario } from 'app/shared/models/usuario';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Subject, Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -34,25 +34,14 @@ export const ROUTES: RouteInfo[] = [
   ]
 })
 export class SidebarComponent implements OnInit {
-  private _unsubscribeAll: Subject<any>;
-  subscripcion: Subscription;
-
-  usuario: Usuario;
-  userAuth: boolean = false;
-  userAdmin: boolean = false;
 
   constructor(
     public authService: AuthService,
     public userService: UsuarioService,
     public auth: AngularFireAuth
-
-  ) {
-    this._unsubscribeAll = new Subject();
-  }
+  ) {}
 
   ngOnInit() {
-    // Comprueba si el usuario esta logueado
-    this.isUserLogged();
   }
 
   isMobileMenu() {
@@ -62,38 +51,10 @@ export class SidebarComponent implements OnInit {
     return true;
   };
 
-  isUserLogged() {
-    let idUser = localStorage.getItem("uidUser");
-    // Comprueba si el usuario es admin
-    this.userService.getUser(idUser);
-    this.subscripcion = this.userService.onUsuarioChanged.subscribe(usuario => {
-      // TODO Admin deslogueo
-      //this.usuario = usuario;
-      if (usuario.rol == "ADMIN_ROLE") {
-        this.userAdmin = true;
-      } else {
-        this.userAdmin = false;
-      }
-    });
-    // Comprueba si el usuario esta logueado y el email verificado
-    this.authService.isAuth().subscribe((authUser) => {
-      if (authUser && authUser.emailVerified) {
-        this.userAuth = true;
-      } else {
-        this.userAuth = false;
-      }
-    });
-  }
-
   // Metodo para salir de la cuenta
   onLogout() {
+    this.userService.adminCheck.next(false);
     this.authService.logout();
-    this.subscripcion.unsubscribe();
-    this.userAdmin = false;
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
-  }
 }

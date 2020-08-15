@@ -41,8 +41,10 @@
     <mat-form-field appearance="fill">
         <mat-label>Teléfono</mat-label>
         <span matPrefix>+593 &nbsp;</span>
-        <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="0987654321">
+        <input maxlength="10" type="text" matInput formControlName="telefono" placeholder="0987654321" required>
         <mat-icon matSuffix>local_phone</mat-icon>
+        <mat-error *ngIf="registroForm.controls['telefono'].hasError('required')">Agrege un número de teléfono.
+        </mat-error>
         <mat-error *ngIf="registroForm.controls['telefono'].hasError('pattern')">Solo se admiten números.
         </mat-error>
     </mat-form-field>
@@ -136,7 +138,7 @@
         <div class="col-md-6">
             <mat-form-field appearance="standard">
                 <mat-label>Años de actividad de la empresa</mat-label>
-                <input matInput formControlName="anio_creacion" type="number">
+                <input matInput formControlName="anio_creacion" type="number" required>
                 <mat-icon matSuffix>business</mat-icon>
                 <mat-error *ngIf="registroForm.controls['anio_creacion'].hasError('required')">Ingrese el tiempo de funcionamiento de su empresa.
                 </mat-error>

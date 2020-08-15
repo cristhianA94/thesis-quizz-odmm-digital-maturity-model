@@ -2,6 +2,6 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-   // API KEYS Firebase
+    //API KEYS
   }
 };
