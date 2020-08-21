@@ -18,10 +18,10 @@ import { CantonService } from 'app/core/services/user/canton/canton.service';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: './registro.component.html',
+  styles: []
 })
-export class RegisterComponent implements OnInit {
+export class RegistroComponent implements OnInit {
 
   registroForm: FormGroup;
 

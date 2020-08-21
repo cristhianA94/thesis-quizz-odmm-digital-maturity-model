@@ -43,8 +43,7 @@ export class AuthService {
     // Comprueba si existe el usuario
     this.usuarioService.getUser(credential.user.uid);
     if (!this.usuarioService.usuario) {
-      console.log(this.usuarioService.usuario);
-      console.log("No existe usuario");
+      //console.log("No existe usuario");
       // Si no existe se crea en Firestore
       this.usuarioService.createUserSocial(credential.user);
     }else{
@@ -179,7 +178,7 @@ export class AuthService {
       localStorage.setItem('token', token);
     }).catch(function (error) {
       console.log("User no authenticated: ", error);
-    });;
+    });
   }
 
 }
