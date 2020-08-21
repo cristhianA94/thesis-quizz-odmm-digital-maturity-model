@@ -4,14 +4,23 @@
         <nav class="pull-left">
             <ul>
                 <li>
-                    <a href="#">
-                        About Us
+                    <a [routerLink]="['home']">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['acerca-de']">
+                        Acerca De
                     </a>
                 </li>
             </ul>
         </nav>
         <div class="copyright pull-right">
             &copy; {{test | date: 'yyyy'}}
+            <br>
+            <a target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licencia de Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Autodiagnóstico ODMM PYMES</span> by <span xmlns:cc="http://creativecommons.org/ns#"
+                property="cc:attributionName">Cristhian Andrés Apolo Cevallos</span> is licensed under a <a target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Reconocimiento 4.0 Internacional License</a>.<br
+            />Creado a partir de la obra en <a target="_blank" xmlns:dct="http://purl.org/dc/terms/" href="https://openroadscommunity.com/initiative/open-digital-maturity-model" rel="dct:source">https://openroadscommunity.com/initiative/open-digital-maturity-model</a>.
         </div>
     </div>
 </footer>

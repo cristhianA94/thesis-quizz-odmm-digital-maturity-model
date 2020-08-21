@@ -82,7 +82,6 @@ export class CsvLoadDataComponent implements OnInit {
         });
         break;
       case "Metricas":
-        //console.log(this.csvRecords);
 
         // CsvRecords trae un array de objetos del csv
         this.csvRecords.forEach((element: any) => {
@@ -141,7 +140,6 @@ export class CsvLoadDataComponent implements OnInit {
 
           this.metricasServices.createMetricaDB(metrica);
         });
-
 
         break;
       default:
