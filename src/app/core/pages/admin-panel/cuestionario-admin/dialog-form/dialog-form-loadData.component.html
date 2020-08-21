@@ -5,7 +5,7 @@
             <!-- Load data services -->
             <mat-form-field appearance="outline">
                 <mat-label>Seleccione un ítem de categoría anterior </mat-label>
-                <mat-select formControlName="idRelacion">
+                <mat-select formControlName="idRelacion" required>
                     <mat-option *ngFor="let item of local_data_load" [value]="item.id">
                         {{ item.nombre }}
                     </mat-option>
@@ -15,21 +15,22 @@
             </mat-form-field>
             <!-- Fields common -->
             <mat-form-field appearance="outline">
-                <input formControlName="nombre" [placeholder]="tipo" matInput required>
+                <mat-label>Nombre</mat-label>
+                <input formControlName="nombre" [placeholder]="tipo" required matInput>
                 <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Descripción</mat-label>
-                <textarea formControlName="descripcion" placeholder="Breve descripción de lo que comprende" matInput></textarea>
+                <textarea formControlName="descripcion" placeholder="Breve descripción de lo que comprende" matInput required></textarea>
                 <mat-error *ngIf="dataForm.controls['descripcion'].hasError('required') && dataForm.controls['descripcion'].touched">La descripcion es requerida.
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Peso</mat-label>
-                <input matInput formControlName="peso" type="number" placeholder="Peso">
+                <input matInput formControlName="peso" type="number" placeholder="Peso" required>
                 <mat-error *ngIf="dataForm.controls['peso'].hasError('required') && dataForm.controls['peso'].touched">El peso es requerido.
                 </mat-error>
             </mat-form-field>

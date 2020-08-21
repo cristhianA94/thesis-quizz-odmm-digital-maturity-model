@@ -2,7 +2,7 @@
 <div mat-dialog-content>
     <form [formGroup]="dataForm">
         <mat-form-field appearance="outline" *ngIf="action != 'Borrar'; else elseTemplate">
-            <input formControlName="nombre" placeholder="Nombre sector industrial" matInput [value]="local_data.nombre" required>
+            <input formControlName="nombre" required placeholder="Nombre sector industrial" matInput [value]="local_data.nombre">
             <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
             </mat-error>
             <mat-error *ngIf="dataForm.controls['nombre'].hasError('pattern') && dataForm.controls['nombre'].touched">Solo se admiten caracteres.

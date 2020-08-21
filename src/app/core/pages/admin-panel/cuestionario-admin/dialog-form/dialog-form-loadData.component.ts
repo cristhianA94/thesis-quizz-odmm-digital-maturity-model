@@ -42,7 +42,6 @@ export class DialogFormLoadDataComponent {
   }
 
   cargarData() {
-
     // Agrega el objeto a un objeto local
     this.local_data = this.data.obj;
     // Separa la accion del objeto (Agregar, actualizar o borrar)

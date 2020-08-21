@@ -42,12 +42,12 @@ export class DialogFormMetricaComponent {
     this.action = data.action;
 
     this.dataForm = this.buildForm();
-    this.patchForm();
+    this.loadDataForm();
   }
 
 
-  // 
-  patchForm() {
+  // Carga las respuestas en el dialog
+  loadDataForm() {
     // Valida si es un nuevo registro o editar un elemento.
     if (!this.local_data.respuestas) {
       this.local_data.respuestas = [];
@@ -71,13 +71,12 @@ export class DialogFormMetricaComponent {
     return this.dataForm.get("respuestas") as FormArray;
   }
 
+  // Permite borrar una opcion de resputas
   borrarRespuesta(i: number) {
     this.respuestas.removeAt(i);
   }
 
   doAction() {
-    //console.log("data dialog", this.local_data);
-
     // Manda el tipo de accion que se hizo (Agregar, Actualizar o Borrar) y los datos del formulario y el id
     this.dialogRef.close({
       event: this.action,

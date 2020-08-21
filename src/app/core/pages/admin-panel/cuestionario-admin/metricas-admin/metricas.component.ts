@@ -84,11 +84,11 @@ export class MetricasComponent implements OnInit {
         this.metrica.id = result.id;
       }
 
-      if (action === "Agregar") {
+      if (result.event === "Agregar") {
         this.createMetrica(this.metrica["data"]);
-      } else if (action === "Actualizar") {
+      } else if (result.event === "Actualizar") {
         this.updateMetrica(this.metrica);
-      } else if (action === "Borrar") {
+      } else if (result.event === "Borrar") {
         this.deleteMetrica(this.metrica);
       }
 

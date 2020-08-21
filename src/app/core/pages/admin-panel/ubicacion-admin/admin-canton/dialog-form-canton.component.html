@@ -11,6 +11,7 @@
             <mat-error *ngIf="dataForm.controls['idProvincia'].hasError('required')">Elija la provincia a la que pertenece.
             </mat-error>
         </mat-form-field>
+
         <mat-form-field appearance="outline">
             <input formControlName="nombre" placeholder="Canton" matInput [value]="local_data.nombre" required>
             <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
@@ -19,11 +20,13 @@
             </mat-error>
         </mat-form-field>
     </form>
+
     <ng-template #elseTemplate>
         <p>¿Está seguro de borrar </p>
         <b>{{local_data.nombre}}</b>?
         <hr>
     </ng-template>
+
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
     <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
