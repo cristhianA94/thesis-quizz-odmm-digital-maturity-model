@@ -2,7 +2,7 @@
 
     <div class="card">
         <div class="card-header card-header-rose">
-            <h3 class="card-title"> <strong>Administrar Subcategorías</strong></h3>
+            <h3 class="card-title"> <strong>Gestionar Subcategorías</strong></h3>
             <p class="card-category">Permite agregar, actualizar o eliminar una subcategoría de una categoría del cuestionario
             </p>
         </div>
@@ -82,7 +82,6 @@
                                             <td mat-cell *matCellDef="let element" style="width: 120px;">
                                                 {{ (element.idCategoria | doc | async)?.nombre }} </td>
                                         </ng-container>
-
 
                                         <!-- Actions -->
                                         <ng-container matColumnDef=" ">

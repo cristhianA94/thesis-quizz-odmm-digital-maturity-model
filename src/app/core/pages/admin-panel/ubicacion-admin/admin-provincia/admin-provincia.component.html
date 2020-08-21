@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header card-header-warning">
-        <h3 class="card-title"> <strong>Administrar Provincias</strong></h3>
+        <h3 class="card-title"> <strong>Gestionar Provincias</strong></h3>
         <p class="card-category">Permite agregar, actualizar o eliminar una provincia de un país</p>
     </div>
     <br>
@@ -51,7 +51,7 @@
                                 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                                     <!-- Nombre Column -->
                                     <ng-container matColumnDef="Nombre">
-                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                                        <th mat-header-cell *matHeaderCellDef> Nombre </th>
                                         <td mat-cell *matCellDef="let element"> {{element.nombre }} </td>
                                     </ng-container>
 

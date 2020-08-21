@@ -4,7 +4,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.css'],
+  styles: [
+    `
+    .button-container {
+    display: flex;
+    justify-content: center;
+}
+    `
+  ],
 })
 export class AdminPanelComponent implements OnInit {
 
@@ -15,21 +22,20 @@ export class AdminPanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("gola");
   }
 
   redireccionarUbicaciones() {
-    this.flat = true;
+    //this.flat = true;
     this.router.navigate(['admin-panel/ubicacion-panel']);
   }
 
   redireccionarSectorInd() {
-    this.flat = true;
+    //this.flat = true;
     this.router.navigate(['admin-panel/sector-industrial-panel']);
   }
 
   redireccionarCuestionario() {
-    this.flat = true;
+    //this.flat = true;
     this.router.navigate(['admin-panel/cuestionario-panel']);
   }
 

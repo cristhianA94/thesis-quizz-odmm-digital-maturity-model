@@ -104,7 +104,6 @@ export class AdminCantonComponent implements OnInit {
   }
 
   createCaton(canton: Canton) {
-    console.log("Metodo ", canton);
     this.cantonService.createCantonDB(canton);
   }
 

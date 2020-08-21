@@ -112,7 +112,7 @@ export class SubcategoriaComponent implements OnInit {
 
   createSubcategoria(obj: any) {
 
-    const subCategoriaNew: Subcategoria = {
+    let subCategoriaNew: Subcategoria = {
       nombre: obj.nombre,
       descripcion: obj.descripcion,
       peso: obj.peso,
@@ -122,7 +122,8 @@ export class SubcategoriaComponent implements OnInit {
   }
 
   updateSubcategoria(obj: any) {
-    const subCategoriaEdit: Subcategoria = {
+
+    let subCategoriaEdit: Subcategoria = {
       id: obj.id,
       nombre: obj.nombre,
       descripcion: obj.descripcion,

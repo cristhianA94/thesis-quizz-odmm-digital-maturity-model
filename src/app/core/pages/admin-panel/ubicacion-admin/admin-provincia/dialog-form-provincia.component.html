@@ -1,16 +1,23 @@
 <h1 mat-dialog-title><strong>{{action}}</strong></h1>
 <div mat-dialog-content>
     <form [formGroup]="dataForm" *ngIf="action != 'Borrar'; else elseTemplate">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Seleccione el país</mat-label>
             <mat-select formControlName="idPais" required>
                 <mat-option *ngFor="let pais of paises" [value]="pais.id">
                     {{ pais.nombre }}
                 </mat-option>
             </mat-select>
+            <mat-error *ngIf="dataForm.controls['idPais'].hasError('required')">Elija un país al que pertenece.
+            </mat-error>
         </mat-form-field>
-        <mat-form-field>
+
+        <mat-form-field appearance="outline">
             <input formControlName="nombre" placeholder="Provincia" matInput [value]="local_data.nombre" required>
+            <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
+            </mat-error>
+            <mat-error *ngIf="dataForm.controls['nombre'].hasError('pattern') && dataForm.controls['nombre'].touched">Solo se admiten caracteres.
+            </mat-error>
         </mat-form-field>
     </form>
     <ng-template #elseTemplate>
@@ -21,5 +28,5 @@
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
     <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
-    <button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
 </div>

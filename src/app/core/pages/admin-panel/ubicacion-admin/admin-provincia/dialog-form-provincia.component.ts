@@ -57,8 +57,8 @@ export class DialogFormProvinciaComponent {
 
   buildForm(): FormGroup {
     return this._formBuilder.group({
-      nombre: [this.local_data.nombre, Validators.required],
-      idPais: [null]
+      nombre: [this.local_data.nombre, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
+      idPais: [this.local_data.idPais, Validators.required]
     });
   }
 }

@@ -9,8 +9,6 @@ import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 import { Metrica } from 'app/shared/models/metrica';
 import { MetricasService } from 'app/core/services/cuestionario/metricas/metricas.service';
 import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/capacidades.service';
-import { RespuestasUsuario } from '../../../../../shared/models/cuestionario';
-import { Respuesta } from '../../../../../shared/models/metrica';
 
 
 @Component({
@@ -44,7 +42,7 @@ export class MetricasComponent implements OnInit {
   }
 
   // Table
-  buscarMetrica(event: Event) {
+  buscarPregunta(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 

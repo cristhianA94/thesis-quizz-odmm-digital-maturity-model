@@ -49,7 +49,7 @@ export class DialogFormSectorIndustrialComponent {
 
   buildForm(): FormGroup {
     return this._formBuilder.group({
-      nombre: [this.local_data.nombre, Validators.required],
+      nombre: [this.local_data.nombre, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
     });
   }
 }

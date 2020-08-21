@@ -1,7 +1,7 @@
 <div class="row">
     <div class="card">
         <div class="card-header card-header-success">
-            <h3 class="card-title"><strong>Administrar Métricas</strong></h3>
+            <h3 class="card-title"><strong>Gestionar Preguntas</strong></h3>
             <p class="card-category">
                 Permite agregar, actualizar o eliminar una métrica de una capacidad del cuestionario
             </p>
@@ -20,9 +20,9 @@
                             <div class="card-icon">
                                 <i class="material-icons">category</i>
                             </div>
-                            <h3 class="card-title"><strong>Métricas</strong></h3>
+                            <h3 class="card-title"><strong>Preguntas</strong></h3>
                             <div class="text-right mr-2">
-                                <button mat-raised-button (click)="openDialog('Agregar', {})" aria-label="Agrega una provincia">
+                                <button mat-raised-button (click)="openDialog('Agregar', {})" aria-label="Agrega una pregunta">
                                     <mat-icon>add</mat-icon> Agregar
                                 </button>
                             </div>
@@ -32,7 +32,7 @@
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            <i class="material-icons mr-2">visibility</i> Ver Métricas
+                                            <i class="material-icons mr-2">visibility</i> Ver Preguntas
                                         </mat-panel-title>
                                         <mat-panel-description>
                                             Desplegar/Contraer
@@ -43,7 +43,7 @@
                                     <!-- Tabla -->
                                     <mat-form-field>
                                         <mat-label>Filtrar</mat-label>
-                                        <input matInput (keyup)="buscarMetrica($event)" placeholder="..." />
+                                        <input matInput (keyup)="buscarPregunta($event)" placeholder="..." />
                                     </mat-form-field>
 
                                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
