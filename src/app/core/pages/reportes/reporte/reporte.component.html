@@ -27,14 +27,6 @@
             </div>
         </div>
 
-        <div class="col-md-4 text-right">
-            <button class="btn btn-success btn-block" (click)="openPDF()">Open PDF</button>
-            <button class="btn btn-danger btn-block" (click)="downloadPDF()">Download PDF</button>
-            <button (click)="regresar()" mat-raised-button class="btn btn-default ">
-                <mat-icon>keyboard_arrow_left</mat-icon>Regresar
-            </button>
-        </div>
-
         <div class="row" *ngIf="flag">
             <div class="col-md-12">
 
@@ -108,6 +100,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="col-md-12 text-right">
+            <button class="btn btn-info btn-block" (click)="abrirPDF()">Ver PDF</button>
+            <button class="btn btn-success btn-block" (click)="descargarReporte()">Descargar reporte</button>
+            <button (click)="regresar()" mat-raised-button class="btn-block">
+                <mat-icon>keyboard_arrow_left</mat-icon>Regresar
+            </button>
         </div>
 
     </div>

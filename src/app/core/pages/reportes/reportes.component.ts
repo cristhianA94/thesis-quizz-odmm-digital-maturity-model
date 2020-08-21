@@ -52,13 +52,9 @@ export class ReportesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  onRowClicked(row: any) {
-    //this.cuestionario = row;
-    //console.log('Row clicked: ', this.cuestionario);
-  }
-
-
   // Metodos
+
+  // Permite ver la tabla con las diferentes evaluaciones hechas por el usuario según la categoría
   visualizacionResultados(cuestionario: Cuestionario) {
     this.flagTabla = true;
     this.cuestionario = cuestionario;
@@ -67,6 +63,7 @@ export class ReportesComponent implements OnInit {
     });
   }
 
+  // Permite ver detalladamente el resultado de la evaluación realizada
   verReporte(respuestasUsuario: RespuestasUsuario) {
     // Guarda el id del cuestionario
     localStorage.setItem("cuestionario", this.cuestionario.id);

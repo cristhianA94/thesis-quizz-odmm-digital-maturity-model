@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 // Services
-import { CategoriasService } from '../../services/cuestionario/categorias/categorias.service';
-
-import { Router } from '@angular/router';
+import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
 import { Categoria } from 'app/shared/models/categoria';
 
 @Component({

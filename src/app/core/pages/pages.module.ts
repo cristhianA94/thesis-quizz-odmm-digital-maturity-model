@@ -15,7 +15,7 @@ import { UsuarioEditComponent } from './user-profile/usuario-edit/usuario-edit.c
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { AuthComponent } from '../auth/components/login/auth.component';
-import { RegisterComponent } from '../auth/components/login/register/register.component';
+import { RegistroComponent } from '../auth/components/login/registro/registro.component';
 import { LoginComponent } from '../auth/components/login/login/login.component';
 import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 import { ReportesComponent } from './reportes/reportes.component';
@@ -53,7 +53,6 @@ import { ReporteComponent } from './reportes/reporte/reporte.component';
     MatPasswordStrengthModule,
     //Charts
     ChartsModule,
-    // TODO ng-circle-progress
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,
@@ -71,7 +70,7 @@ import { ReporteComponent } from './reportes/reporte/reporte.component';
     AboutComponent,
     AuthComponent,
     LoginComponent,
-    RegisterComponent,
+    RegistroComponent,
     UserProfileComponent,
     EmpresaEditComponent,
     UsuarioEditComponent,

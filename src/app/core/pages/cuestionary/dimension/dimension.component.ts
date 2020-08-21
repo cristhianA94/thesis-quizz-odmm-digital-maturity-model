@@ -186,7 +186,6 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
     // Fecha para el registro del cuestionario
     let fecha = new Date().toLocaleString();
-    // TODO Falta logica de intentos
     this.respuestaUsuario = {
       intento: 0,
       fecha: fecha,
