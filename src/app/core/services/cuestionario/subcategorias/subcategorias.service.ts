@@ -58,7 +58,6 @@ export class SubcategoriasService {
         )
         .subscribe((response: any) => {
           this.subcategoria = response;
-          console.log(response);
           this.onSubcategoriaChanged.next(this.subcategoria);
           resolve(response);
         }, reject);

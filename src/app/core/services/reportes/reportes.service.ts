@@ -60,7 +60,6 @@ export class ReportesService {
   */
 
   createCuestionarioDB(cuestionario: Cuestionario, respuestaUser: RespuestasUsuario) {
-    // TODO crear doc unico
     this.cuestionarioCollection = this.afs.collection('cuestionarios');
     this.cuestionarioCollection.add(cuestionario).then((docCuestionario) => {
       this.afs.collection('cuestionarios/' + docCuestionario.id + '/respuestas').add(respuestaUser);

@@ -59,7 +59,6 @@ export class MetricasService {
   }
 
   updateMetricaDB(metrica: Metrica) {
-    console.log(metrica);
     metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
     this.metricasDoc = this.afs.doc(`metricas/${metrica.id}`);
     delete metrica.id;
