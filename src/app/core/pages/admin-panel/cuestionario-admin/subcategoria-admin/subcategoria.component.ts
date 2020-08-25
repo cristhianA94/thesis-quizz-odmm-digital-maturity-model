@@ -102,7 +102,7 @@ export class SubcategoriaComponent implements OnInit {
         this.createSubcategoria(this.subcategoria);
       } else if (result.event == "Actualizar") {
         this.updateSubcategoria(this.subcategoria);
-      } else if (result.event == "Borrar") {
+      } else if (result.event == "Eliminar") {
         this.deleteSubcategoria(this.subcategoria);
       }
 

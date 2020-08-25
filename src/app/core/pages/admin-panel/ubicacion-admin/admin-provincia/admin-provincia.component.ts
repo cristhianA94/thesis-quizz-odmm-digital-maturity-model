@@ -89,11 +89,11 @@ export class AdminProvinciaComponent implements OnInit {
         this.provincia.id = result.id;
       }
 
-      if (result.event == 'Agregar') {
+      if (result.event == "Agregar") {
         this.createProvincia(this.provincia);
-      } else if (result.event == 'Actualizar') {
+      } else if (result.event == "Actualizar") {
         this.updateProvincia(this.provincia);
-      } else if (result.event == 'Borrar') {
+      } else if (result.event == "Eliminar") {
         this.deleteProvincia(this.provincia);
       }
 

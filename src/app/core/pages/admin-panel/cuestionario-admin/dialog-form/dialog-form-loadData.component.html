@@ -1,7 +1,7 @@
 <h1 mat-dialog-title><strong>{{action}}</strong></h1>
 <div mat-dialog-content>
     <form [formGroup]="dataForm">
-        <div *ngIf="action != 'Borrar'; else elseTemplate">
+        <div *ngIf="action != 'Eliminar'; else elseTemplate">
             <!-- Load data services -->
             <mat-form-field appearance="outline">
                 <mat-label>Seleccione un ítem de categoría anterior </mat-label>
@@ -37,12 +37,12 @@
         </div>
     </form>
     <ng-template #elseTemplate>
-        <p>¿Está seguro de borrar </p>
+        <p>¿Está seguro de eliminar </p>
         <b>{{local_data.nombre}}</b>?
         <hr>
     </ng-template>
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
 </div>

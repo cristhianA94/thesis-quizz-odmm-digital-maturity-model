@@ -89,7 +89,7 @@ export class CapacidadesComponent implements OnInit {
         this.createCapacidad(this.capacidad);
       } else if (result.event == "Actualizar") {
         this.updateCapacidad(this.capacidad);
-      } else if (result.event == "Borrar") {
+      } else if (result.event == "Eliminar") {
         this.deleteCapacidad(this.capacidad);
       }
 

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title><strong>{{action}}</strong></h1>
 <div mat-dialog-content>
     <form [formGroup]="dataForm">
-        <mat-form-field appearance="outline" *ngIf="action != 'Borrar'; else elseTemplate">
+        <mat-form-field appearance="outline" *ngIf="action != 'Eliminar'; else elseTemplate">
             <input formControlName="nombre" required placeholder="Nombre sector industrial" matInput [value]="local_data.nombre">
             <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
             </mat-error>
@@ -10,12 +10,12 @@
         </mat-form-field>
     </form>
     <ng-template #elseTemplate>
-        <p>¿Está seguro de borrar </p>
+        <p>¿Está seguro de eliminar </p>
         <b>{{local_data.nombre}}</b>?
         <hr>
     </ng-template>
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
 </div>

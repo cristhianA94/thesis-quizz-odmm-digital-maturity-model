@@ -85,11 +85,11 @@ export class SectorIndustrialAdminComponent implements OnInit {
         this.sectorI.id = result.id;
       }
 
-      if (result.event == 'Agregar') {
+      if (result.event == "Agregar") {
         this.createSectorI(this.sectorI);
-      } else if (result.event == 'Actualizar') {
+      } else if (result.event == "Actualizar") {
         this.updateSectorI(this.sectorI);
-      } else if (result.event == 'Borrar') {
+      } else if (result.event == "Eliminar") {
         this.deleteSectorI(this.sectorI);
       }
 

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title><strong>{{action}}</strong></h1>
 <div mat-dialog-content>
-    <form [formGroup]="dataForm" *ngIf="action != 'Borrar'; else elseTemplate">
+    <form [formGroup]="dataForm" *ngIf="action != 'Eliminar'; else elseTemplate">
         <mat-form-field appearance="outline">
             <mat-label>Seleccione la provincia</mat-label>
             <mat-select formControlName="idProvincia" required>
@@ -22,13 +22,13 @@
     </form>
 
     <ng-template #elseTemplate>
-        <p>¿Está seguro de borrar </p>
+        <p>¿Está seguro de eliminar </p>
         <b>{{local_data.nombre}}</b>?
         <hr>
     </ng-template>
 
 </div>
 <div mat-dialog-actions class="dialog-actions" align="center">
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
     <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
+    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
 </div>

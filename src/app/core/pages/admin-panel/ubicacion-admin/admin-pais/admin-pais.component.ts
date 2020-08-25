@@ -89,11 +89,11 @@ export class AdminPaisComponent implements OnInit {
         this.pais.id = result.id;
       }
 
-      if (result.event == 'Agregar') {
+      if (result.event == "Agregar") {
         this.createPais(this.pais);
-      } else if (result.event == 'Actualizar') {
+      } else if (result.event == "Actualizar") {
         this.updatePais(this.pais);
-      } else if (result.event == 'Borrar') {
+      } else if (result.event == "Eliminar") {
         this.deletePais(this.pais);
       }
 

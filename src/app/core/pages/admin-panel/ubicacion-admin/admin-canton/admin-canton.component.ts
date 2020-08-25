@@ -92,11 +92,11 @@ export class AdminCantonComponent implements OnInit {
         this.canton.id = result.id;
       }
 
-      if (result.event == 'Agregar') {
+      if (result.event == "Agregar") {
         this.createCaton(this.canton);
-      } else if (result.event == 'Actualizar') {
+      } else if (result.event == "Actualizar") {
         this.updateCaton(this.canton);
-      } else if (result.event == 'Borrar') {
+      } else if (result.event == "Eliminar") {
         this.deleteCaton(this.canton);
       }
 

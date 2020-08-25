@@ -11,7 +11,7 @@ import { CategoriasService } from 'app/core/services/cuestionario/categorias/cat
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
-  styleUrls: ['./categoria.component.css']
+  styleUrls: ['./categoria.component.css'],
 })
 export class CategoriaComponent implements OnInit {
 
@@ -80,11 +80,11 @@ export class CategoriaComponent implements OnInit {
         this.categoria.id = result.id;
       }
 
-      if (result.event == 'Agregar') {
+      if (result.event == "Agregar") {
         this.createCategoria(this.categoria);
-      } else if (result.event == 'Actualizar') {
+      } else if (result.event == "Actualizar") {
         this.updatePais(this.categoria);
-      } else if (result.event == 'Borrar') {
+      } else if (result.event == "Eliminar") {
         this.deletePais(this.categoria);
       }
 

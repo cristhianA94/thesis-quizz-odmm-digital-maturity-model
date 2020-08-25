@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
+
 
 import { DialogFormMetricaComponent } from "./dialog-form-metrica.component";
 import { Metrica } from 'app/shared/models/metrica';
@@ -15,6 +16,7 @@ import { CapacidadesService } from 'app/core/services/cuestionario/capacidades/c
   selector: "app-metricas",
   templateUrl: "./metricas.component.html",
   styleUrls: ["./metricas.component.css"],
+  encapsulation: ViewEncapsulation.None
 })
 export class MetricasComponent implements OnInit {
   @ViewChild(MatAccordion) metricasItems: MatAccordion;
@@ -84,11 +86,11 @@ export class MetricasComponent implements OnInit {
         this.metrica.id = result.id;
       }
 
-      if (result.event === "Agregar") {
+      if (result.event == "Agregar") {
         this.createMetrica(this.metrica["data"]);
-      } else if (result.event === "Actualizar") {
+      } else if (result.event == "Actualizar") {
         this.updateMetrica(this.metrica);
-      } else if (result.event === "Borrar") {
+      } else if (result.event == "Eliminar") {
         this.deleteMetrica(this.metrica);
       }
 
