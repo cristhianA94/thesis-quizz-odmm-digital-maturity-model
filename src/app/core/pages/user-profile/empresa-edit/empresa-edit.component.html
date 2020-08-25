@@ -170,9 +170,9 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <button *ngIf="newEmpresa" [disabled]="empresaForm.invalid" (click)="crearEmpresa()" mat-raised-button type="submit" class="btn btn-success pull-right">Registrar</button>
-                    <button *ngIf="editEmpresa" [disabled]="empresaForm.invalid" (click)="actualizarEmpresa()" mat-raised-button type="submit" class="btn btn-info pull-right">Guardar cambios</button>
-                    <button (click)="cancelar()" mat-raised-button type="submit" class="btn btn-danger pull-right ml-3">Cancelar</button>
+                    <button (click)="cancelar()" mat-raised-button type="submit" class="btn btn-danger pull-right mr-3">Cancelar</button>
+                    <button *ngIf="newEmpresa" [disabled]="empresaForm.invalid" (click)="crearEmpresa()" mat-raised-button type="submit" class="btn btn-success pull-right"><mat-icon>save</mat-icon> Registrar</button>
+                    <button *ngIf="editEmpresa" [disabled]="empresaForm.invalid" (click)="actualizarEmpresa()" mat-raised-button type="submit" class="btn btn-info pull-right"><mat-icon>save</mat-icon> Guardar cambios</button>
                 </form>
             </div>
         </div>

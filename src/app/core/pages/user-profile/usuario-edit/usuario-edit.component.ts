@@ -74,25 +74,15 @@ export class UsuarioEditComponent implements OnInit {
     });
   }
 
-  actualizarUsuario() {
+  actualizarUsuario(usuario: Usuario) {
 
-    const userEdit: Usuario = {
-      uid: this.usuario.uid,
-      nombres: this.usuarioForm.value.nombres,
-      apellidos: this.usuarioForm.value.apellidos,
-      cedula: this.usuarioForm.value.cedula,
-      telefono: this.usuarioForm.value.telefono,
-      sexo: this.usuarioForm.value.sexo,
-      cargo: this.usuarioForm.value.cargo,
-      clave: this.usuarioForm.value.clave,
-      correo: this.usuarioForm.value.correo,
-      rol: this.usuario.rol
-    }
+    usuario.id = this.usuario.id;
+    usuario.rol = this.usuario.rol;
 
-    this.userService.updateUsuario(userEdit)
+    this.userService.updateUsuario(usuario);
   }
 
-  // Algoritmo validador de cedulas de Ecuador
+  // TODO Algoritmo validador de cedulas de Ecuador
   validarCedula(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
 

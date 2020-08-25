@@ -30,7 +30,7 @@
                 <!-- Usuario -->
                 <h3>Datos Usuario</h3>
 
-                <form class="mt-4" [formGroup]="usuarioForm" (ngSubmit)="actualizarUsuario()" autocomplete="on">
+                <form class="mt-4" [formGroup]="usuarioForm" autocomplete="on">
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field appearance="fill">
@@ -113,7 +113,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-md-5">
-                            <mat-form-field appearance="outline">
+                            <mat-form-field appearance="fill">
                                 <mat-label>Contraseña</mat-label>
                                 <input maxlength="15" minlength="8" matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
                                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -131,8 +131,8 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <button mat-raised-button type="submit" class="btn btn-success pull-right">Guardar cambios</button>
-                    <button (click)="resetear()" mat-raised-button type="button" class="btn btn-danger pull-right ml-2">Resetear cambios</button>
+                    <button (click)="resetear()" mat-raised-button type="button" class="btn btn-danger pull-right mr-3">Restablecer cambios</button>
+                    <button (click)="actualizarUsuario(usuarioForm.value)" mat-raised-button type="button" class="btn btn-success pull-right"> <mat-icon>save</mat-icon> Guardar cambios</button>
                 </form>
             </div>
         </div>
