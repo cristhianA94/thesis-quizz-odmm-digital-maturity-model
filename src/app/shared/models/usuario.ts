@@ -1,6 +1,6 @@
 export interface Usuario {
     //Atributos para redes sociales
-    uid?: string;
+    id?: string;
     correo: string;
     photoURL?: string;
     nombres: string;
