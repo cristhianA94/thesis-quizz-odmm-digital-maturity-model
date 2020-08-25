@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'app/core/auth/service/auth.service';
 import { AlertsService } from 'app/core/services/notificaciones/alerts.service';
 import Swal from 'sweetalert2';

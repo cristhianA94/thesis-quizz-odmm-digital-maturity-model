@@ -1,7 +1,7 @@
 <form class="mt-4" [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="on">
     <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="correo" required placeholder="Email" autofocus>
+        <input matInput type="email" formControlName="correo" required placeholder="Email">
         <mat-error *ngFor="let validation of account_validation_messages.correo ">
             <mat-error class="error-message" *ngIf="loginForm.get('correo').hasError(validation.type) && (loginForm.get('correo').dirty || loginForm.get('correo').touched)">
                 {{validation.message}}

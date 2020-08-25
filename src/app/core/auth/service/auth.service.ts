@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 // For social providers
@@ -26,7 +26,6 @@ export class AuthService {
     private alertaService: AlertsService,
     private usuarioService: UsuarioService,
     private empresaService: EmpresaService,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
   ) {
   }
 
@@ -80,7 +79,6 @@ export class AuthService {
 
 
   async registrarCuenta(formulario: any) {
-
     // Registra al usuario en Authentication
     await this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
       .then(userData => {
@@ -124,18 +122,6 @@ export class AuthService {
     return this.afs.authState;
   }
 
-
-  // Actualizar contraseña usuario
-  async updateSession(user: any) {
-    try {
-      await this.afs.auth.currentUser.reauthenticateWithCredential(user);
-      return console.log("Password changed");
-    }
-    catch (error) {
-      return console.log(error);
-    }
-  }
-
   // Metodo para resetear contraseña de usuario
   async resetPassword(passwordReset: string) {
     try {
@@ -159,14 +145,45 @@ export class AuthService {
     }
   }
 
+    // Actualizar email usuario
+    async updateEmail(email: string) {
+      try {
+        await this.afs.auth.currentUser.updateEmail(email);
+      }
+      catch (error) {
+        return this.alertaService.mensajeError("Error al cambiar email", error);
+      }
+    }
+  
+    // Actualizar contraseña usuario
+    updatePassword(pass: string) {
+      this.afs.auth.currentUser.updatePassword(pass).then(function () {
+        // Update successful.
+        this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente. Debe volver a loguearse');
+      }).catch(function (error) {
+        return this.alertaService.mensajeError("Error al cambiar contraseña", error);
+      });
+    }
+  
+    // Reautentica cuando email o contraseña se cambian
+    async updateSession(user: any) {
+      try {
+        await this.afs.auth.currentUser.reauthenticateWithCredential(user);
+        //this.router.navigate(['/login']);
+        return console.log("Password changed");
+      }
+      catch (error) {
+        return this.alertaService.mensajeError('Error', error);
+      }
+    }
+  
+
   /* Metodo para salir de la cuenta */
   async logout() {
     await this.afs.auth.signOut().then(() => {
       // Elimina los datos del usuario en el local storage
       localStorage.removeItem("uidUser");
       localStorage.removeItem("token");
-      this.isLogged = false;
-      this.isAdmin = false;
       this.alertaService.mensajeExito('Adiós', '¡Hasta pronto!');
       this.router.navigate(['/login']);
     })
