@@ -15,5 +15,7 @@
         "statusBarItem.hoverBackground": "#e83c5a",
         "titleBar.inactiveBackground": "#d8193b99",
         "titleBar.inactiveForeground": "#e7e7e799"
-    }
+    },
+    "javascript.implicitProjectConfig.experimentalDecorators": true
+
 }
