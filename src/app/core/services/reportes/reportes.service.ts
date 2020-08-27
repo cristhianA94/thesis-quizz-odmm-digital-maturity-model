@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestoreCollection, AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 import Swal from 'sweetalert2';
+import { Cuestionario, RespuestasUsuario } from '../../../shared/models/cuestionario';
 
 
 @Injectable({
@@ -22,8 +21,7 @@ export class ReportesService {
 
 
   constructor(
-    private http: HttpClient,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
   ) { }
 
 

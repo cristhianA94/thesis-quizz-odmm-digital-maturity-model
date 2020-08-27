@@ -46,16 +46,20 @@ export class ReporteComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     localStorage.removeItem("cuestionario");
+    localStorage.removeItem("idUserCuestionario");
   }
 
   // Carga las respuestas del usuario y puntuacion, y carga los puntuajes de las categorias para el grafico radar
   cargarData() {
+
+    // TODO cargar data en grafico dependiendo del id
     let idCuestionario = localStorage.getItem("cuestionario");
     let idRespuesta = this.actRouter.snapshot.paramMap.get('id');
     let arrayDataUltimoIntento: number[] = [];
     let arrayDataPnultimoIntento: number[] = [];
-
+    
     // Carga las respuesta del usuario del cuestionario seleccionado
+    // TODO obtener idUserCuestionario del local y hacer consulta dependiendo de ese usuario
     this.cuestionarioService.getCuestionarioRespuestaDB(idCuestionario, idRespuesta).subscribe((res: RespuestasUsuario) => {
       this.respuestasUsuario = res;
       this.flag = true;

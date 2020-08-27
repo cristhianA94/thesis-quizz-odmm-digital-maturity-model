@@ -66,11 +66,11 @@ export class UsuarioEditComponent implements OnInit {
       nombres: [this.usuario.nombres, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
       apellidos: [this.usuario.apellidos, [Validators.required, Validators.pattern("[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,100}")]],
       cedula: [this.usuario.cedula, [Validators.required, this.validarCedula()]],
-      telefono: [this.usuario.telefono, [Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
+      telefono: [this.usuario.telefono, [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(10)]],
       sexo: [this.usuario.sexo],
       cargo: [this.usuario.cargo],
       correo: [this.usuario.correo, [Validators.required, Validators.email]],
-      clave: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
+      clave: ['', [ Validators.minLength(8), Validators.maxLength(15)]],
     });
   }
 

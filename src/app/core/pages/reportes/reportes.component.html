@@ -1,7 +1,83 @@
 <div class="main-content">
     <div class="container-fluid">
 
-        <div class="row">
+        <!-- Reportes Administrador -->
+        <div class="row" *ngIf="userService.adminUser | async">
+            <div class="col-md-10 mx-auto">
+
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h2 class="card-title text-center text-justify"><strong>REPORTES ADMINISTRADOR</strong></h2>
+                    </div>
+
+                    <div class="card-body m-4">
+
+                        <div class="row">
+                            <div class="col-md-12 mx-auto">
+                                <div class="text-center">
+                                    <div class="jumbotron jumbotron-fluid" style="padding: 2rem;">
+                                        <div class="container">
+                                            <h4 class="display-4">¿Qué puedo hacer?</h4>
+                                            <p class="lead">Aquí podrás consultar los cuestionarios contestados de:
+                                                <br> 1. Un usuario específico. <br> 2.Consultar todos los cuestionarios
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <img class="mx-auto" src="../../../../assets/img/reportes.png" alt="imgagen reportes" width="200px">
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-6 mx-auto text-center">
+                                <h3><strong>1</strong></h3>
+
+                                <form class="mt-4" [formGroup]="consultaForm" autocomplete="on">
+                                    <!-- Seleccionar usuario -->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Seleccione al usuario</mat-label>
+                                        <mat-select formControlName="idUsuario" name="Usuarios" required>
+                                            <mat-option *ngFor="let usuario of usuarios" [value]="usuario.id">
+                                                {{ usuario.nombres }} {{ usuario.apellidos }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Seleccione la categoría</mat-label>
+                                        <mat-select #idCategoria formControlName="idCategoria" name="Categorias" required>
+                                            <mat-option *ngFor="let cuestionario of cuestionariosUser" [value]="cuestionario">
+                                                {{ cuestionario.categoria }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <button mat-raised-button type="button" [disabled]="!idCategoria.value" (click)="consultarUsuario()">
+                                                <mat-icon matSuffix>search</mat-icon>Consultar usuario
+                                            </button>
+                                </form>
+                            </div>
+
+                            <div class="col-md-6 mx-auto text-center">
+
+                                <h3><strong>2</strong></h3>
+                                <div class="pt-5">
+                                    <!-- De todos los usuarios -->
+                                    <button mat-raised-button type="button" (click)="consultarReportesUsuarios()">
+                                        <mat-icon matSuffix>search</mat-icon>Consultar todos los cuestionarios
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Reportes Usuario -->
+        <div class="row" *ngIf="!(userService.adminUser | async)">
             <div class="col-md-10 mx-auto">
 
                 <div class="card">

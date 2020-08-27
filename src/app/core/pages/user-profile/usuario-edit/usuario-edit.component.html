@@ -37,9 +37,11 @@
                                 <mat-label>Nombres</mat-label>
                                 <input matInput formControlName="nombres" type="text" placeholder="Nombres" required autofocus>
                                 <mat-icon matSuffix>face</mat-icon>
-                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required') && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">El nombre es requerido.
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('required') && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">
+                                    El nombre es requerido.
                                 </mat-error>
-                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('pattern')  && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">Solo se admiten caracteres.
+                                <mat-error *ngIf="usuarioForm.controls['nombres'].hasError('pattern')  && (usuarioForm.get('nombres').dirty || usuarioForm.get('nombres').touched)">
+                                    Solo se admiten caracteres.
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -112,27 +114,30 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
+
                         <div class="col-md-5">
-                            <mat-form-field appearance="fill">
-                                <mat-label>Contraseña</mat-label>
-                                <input maxlength="15" minlength="8" matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
-                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                                </button>
-                                <mat-error *ngFor="let validation of account_validation_messages.clave">
-                                    <mat-error class="error-message" *ngIf="usuarioForm.get('clave').hasError(validation.type) && (usuarioForm.get('clave').dirty || usuarioForm.get('clave').touched)">
-                                        {{validation.message}}
-                                    </mat-error>
+                            <div cdkScrollable>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Contraseña</mat-label>
+                                    <input matTooltip="Escribir solo si quiere modificarla" matTooltipPosition="above" matTooltipHideDelay="100" maxlength="15" minlength="8" matInput formControlName="clave" [type]="hide ? 'password' : 'text'">
+                                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </button>
+
                                     <mat-error *ngIf="usuarioForm.controls['clave'].hasError('minLength(8)')">Mín. 8 caracteres.
                                     </mat-error>
                                     <mat-error *ngIf="usuarioForm.controls['clave'].hasError('maxLength')">Max. 15 caracteres.
                                     </mat-error>
-                                </mat-error>
-                            </mat-form-field>
+                                </mat-form-field>
+                            </div>
+
                         </div>
                     </div>
+
                     <button (click)="resetear()" mat-raised-button type="button" class="btn btn-danger pull-right mr-3">Restablecer cambios</button>
-                    <button (click)="actualizarUsuario(usuarioForm.value)" mat-raised-button type="button" class="btn btn-success pull-right"> <mat-icon>save</mat-icon> Guardar cambios</button>
+                    <button [disabled]="usuarioForm.invalid" (click)="actualizarUsuario(usuarioForm.value)" mat-raised-button type="button" class="btn btn-success pull-right">
+                        <mat-icon>save</mat-icon> Guardar cambios
+                    </button>
                 </form>
             </div>
         </div>

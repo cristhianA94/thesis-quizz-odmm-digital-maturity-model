@@ -87,11 +87,11 @@
                                         <ng-container matColumnDef=" ">
                                             <th mat-header-cell *matHeaderCellDef> </th>
                                             <td mat-cell *matCellDef="let element" style="width: 130px;">
-                                                <div cdkScrollable class="button-container">
+                                                <div cdkScrollable>
                                                     <button matTooltip="Editar" matTooltipPosition="above" matTooltipHideDelay="100" (click)="openDialog('Actualizar',element, 'Subcategoria')" mat-mini-fab color="accent" aria-label="Editar">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
-                                                    <button matTooltipClass="custom-tooltip" matTooltip="Eliminar" matTooltipPosition="above" matTooltipHideDelay="100" (click)="openDialog('Eliminar',element, 'Subcategoria')" mat-mini-fab color="warn" aria-label="Delete">
+                                                    <button matTooltip="Eliminar" matTooltipPosition="above" matTooltipHideDelay="100" (click)="openDialog('Eliminar',element, 'Subcategoria')" mat-mini-fab color="warn" aria-label="Delete">
                                                         <mat-icon>delete</mat-icon>
                                                     </button>
                                                 </div>

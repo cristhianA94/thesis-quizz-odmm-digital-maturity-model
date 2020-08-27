@@ -74,8 +74,8 @@ export class CuestionarioService implements Resolve<any>{
 
   // Obtiene todos los cuestionarios
   getCuestionariosDB(): Observable<Cuestionario[]> {
-    this.cuestionarioCollection = this.afs.collection("cuestionario", ref => {
-      return ref.orderBy('fecha')
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", ref => {
+      return ref.orderBy('categoria')
     });
     return this.cuestionarioCollection.snapshotChanges().pipe(
       map(actions =>
@@ -94,6 +94,23 @@ export class CuestionarioService implements Resolve<any>{
 
     this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
       return ref.orderBy("categoria").where("idUser", "==", idUser);
+    });
+    return this.cuestionarioCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as Cuestionario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      )
+    );
+  }
+
+  // Obtiene los cuestionarios que ha respondido el usuario
+  getCuestionarioUserDB(idUsuario): Observable<Cuestionario[]> {
+
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref.orderBy("categoria").where("idUser", "==", idUsuario);
     });
     return this.cuestionarioCollection.snapshotChanges().pipe(
       map((actions) =>

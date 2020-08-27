@@ -1,9 +1,13 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
+import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Usuario } from 'app/shared/models/usuario';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -16,6 +20,11 @@ export class ReportesComponent implements OnInit {
   // Banderas para DOM
   flagTabla: boolean = false;
 
+  consultaForm: FormGroup;
+
+  usuarios: Usuario[] = [];
+
+  cuestionariosUser: Cuestionario[] = [];
   cuestionarios: Cuestionario[] = [];
   cuestionario: Cuestionario = {};
   respuestasUsuario: RespuestasUsuario[] = [];
@@ -28,16 +37,39 @@ export class ReportesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private fb: FormBuilder,
     private cuestionarioService: CuestionarioService,
     private router: Router,
+    public userService: UsuarioService,
+    public auth: AngularFireAuth
   ) { }
 
   ngOnInit(): void {
+    this.userService.validateRolUser();
+    this.consultaForm = this.registerBuildForm();
+    this.cargarData();
+  }
+
+  cargarData() {
+    //  **USUARIO
+    // Cargar los cuestionarios del usuario logueado
     this.cuestionarioService.getCuestionarioUserLogedDB().subscribe((cuestionarioUserDB: Cuestionario[]) => {
       this.cuestionarios = cuestionarioUserDB;
     });
-  }
+    //  **ADMINISTRADOR
+    this.userService.getUsersDB().subscribe((users) => {
+      console.log(users);
+      
+      this.usuarios = users;
+    });
 
+    // Consulta los cuestionarios que ha contestado el usuario seleccionado
+    this.consultaForm.get('idUsuario').valueChanges.subscribe(idUsuarioSelect => {
+      this.cuestionarioService.getCuestionarioUserDB(idUsuarioSelect).subscribe((cuestionariosUser) => {
+        this.cuestionariosUser = cuestionariosUser;
+      });
+    })
+  }
   // Table
   buscarCuestionario(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -69,5 +101,35 @@ export class ReportesComponent implements OnInit {
     localStorage.setItem("cuestionario", this.cuestionario.id);
     this.router.navigate(['/reporte', respuestasUsuario.id])
   }
+
+  //                    ** ADMINISTRADOR  **
+
+  /* Validador de formulario */
+  registerBuildForm() {
+    return this.fb.group({
+      idUsuario: ['', Validators.required],
+      idCategoria: ['', Validators.required]
+    });
+  }
+
+  consultarUsuario() {
+    this.flagTabla = true;
+    let idUser = this.consultaForm.get("idUsuario").value;
+    localStorage.setItem("idUserCuestionario", idUser);
+    let categoria = this.consultaForm.get("idCategoria").value;
+    this.cuestionario = categoria;
+
+    this.cuestionarioService.getCuestionarioRespuestasDB(this.cuestionario.id).subscribe((respuestasUser) => {
+      this.dataSource.data = respuestasUser;
+    });
+  }
+
+  consultarReportesUsuarios() {
+    this.cuestionarioService.getCuestionariosDB().subscribe((cuestionarios) => {
+      console.log(cuestionarios);
+
+    });
+  }
+
 
 }

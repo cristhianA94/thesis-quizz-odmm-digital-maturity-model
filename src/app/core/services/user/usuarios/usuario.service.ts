@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Resolve, Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -23,7 +23,7 @@ export class UsuarioService implements Resolve<any> {
   usuarioCollection: AngularFirestoreCollection<Usuario>;
   usuarioDoc: AngularFirestoreDocument<Usuario>;
 
-  public idUser: string;
+  idUser: string;
   usuario: Usuario;
   onUsuarioChanged: BehaviorSubject<any>;
   adminCheck: BehaviorSubject<boolean>;
@@ -56,20 +56,33 @@ export class UsuarioService implements Resolve<any> {
     });
   }
 
+  // Comprueba el estado del usuario admin
   public get currentUserValue(): boolean {
     return this.adminCheck.value;
   }
 
+  getUsersDB(): Observable<Usuario[]> {
+    this.usuarioCollection = this.dbFire.collection("usuarios");
+    return this.usuarioCollection.snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data() as Usuario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+    );
+  }
+
   //Obtiene un usuario
-  getUser(uid: string): Promise<any> {
+  getUser(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.usuarioDoc = this.dbFire.doc<Usuario>(`usuarios/${uid}`);
+      this.usuarioDoc = this.dbFire.doc<Usuario>(`usuarios/${id}`);
       this.usuarioDoc.snapshotChanges()
         .pipe(
           map(res => {
             const data = res.payload.data() as Usuario;
-            const uid = res.payload.id;
-            return { uid, ...data }
+            const id = res.payload.id;
+            return { id, ...data }
           })
         ).subscribe(response => {
           this.usuario = response;
@@ -88,7 +101,7 @@ export class UsuarioService implements Resolve<any> {
       if (usuario.rol == "ADMIN_ROLE") {
         this.adminCheck.next(true);
       }
-      else{
+      else {
         this.adminCheck.next(false);
       }
     });
@@ -97,7 +110,7 @@ export class UsuarioService implements Resolve<any> {
 
   // Registra al usuario con sus datos de red social y el mismo ID de AUTH y lo guarda en firestore/usuario
   createUserSocial(user: any) {
-    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
+    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.id}`);
     const data: Usuario = {
       nombres: user.displayName,
       photoURL: user.photoURL,
@@ -111,7 +124,7 @@ export class UsuarioService implements Resolve<any> {
 
   // Registra un usuario en firestore/usuario
   async createUserDB(user: any, formulario) {
-    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
+    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.id}`);
     const data: Usuario = {
       nombres: formulario.nombres,
       apellidos: formulario.apellidos,
@@ -134,48 +147,58 @@ export class UsuarioService implements Resolve<any> {
     }
   }
 
-  // Actualizar contraseña usuario
+  // Actualizar email usuario
   async updateEmail(email: string) {
     try {
       await this.authFire.auth.currentUser.updateEmail(email);
     }
     catch (error) {
-      return this.alertaService.mensajeError("Error al cambiar email", error);
+      console.log(error);
+      //return this.alertaService.mensajeError("¡Error al actualizar email!", error);
     }
   }
 
   // Actualizar contraseña usuario
-  async updatePassword(pass: string) {
-    try {
-      await this.authFire.auth.currentUser.updatePassword(pass);
+  updatePassword(pass: string) {
+    this.authFire.auth.currentUser.updatePassword(pass).then(function () {
+      // Update successful.
       this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente. Debe volver a loguearse');
-    }
-    catch (error) {
-      return this.alertaService.mensajeError("Error al cambiar contraseña", error);
-    }
+    }).catch(function (error) {
+      return this.alertaService.mensajeError("¡Error al actualizar contraseña!", error);
+    });
   }
 
   // Actualiza usuario
-  updateUsuario(user: Usuario) {
-    this.updateEmail(user.correo);
+  updateUsuario(usuario: Usuario) {
+    // Actualiza el email del AUTH
+    this.updateEmail(usuario.correo);
     // Si modifica la clave se cambia y se desloguea
-    if (user.clave) {
-      this.updatePassword(user.clave);
+    if (usuario.clave) {
+      this.updatePassword(usuario.clave);
+      // Cierra la sesion
+      this.authFire.auth.signOut();
+      localStorage.removeItem("uidUser");
+      localStorage.removeItem("token");
       this.router.navigate(['/login']);
+      this.alertaService.mensajeExito('¡Contraseña cambiada!', 'Por seguridad tienes que volver a loguearte.');
     }
-    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
-    delete user.uid;
-    delete user.clave;
-    this.usuarioDoc.update(user);
-    this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
+    else{
+      this.usuarioDoc = this.dbFire.doc(`usuarios/${usuario.id}`);
+      delete usuario.id;
+      delete usuario.clave;
+      setTimeout(() => {
+        this.usuarioDoc.update(usuario);
+        this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
+      }, 2000)
+    }
   }
 
 
   // Borra usuario
   deleteUsuario(user: Usuario) {
-    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
+    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.id}`);
     this.usuarioDoc.delete();
-    /* admin.auth().deleteUser(uid)
+    /* admin.auth().deleteUser(id)
       .then(function () {
         console.log('Successfully deleted user');
       })
