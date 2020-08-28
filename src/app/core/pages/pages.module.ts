@@ -40,7 +40,6 @@ import { SubcategoriasService } from '../services/cuestionario/subcategorias/sub
 import { CuestionarioService } from '../services/cuestionario/cuestionario.service';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
 import { ReportesService } from '../services/reportes/reportes.service';
-import { AuthService } from '../auth/service/auth.service';
 
 
 @NgModule({
@@ -88,7 +87,7 @@ import { AuthService } from '../auth/service/auth.service';
     ProvinciaService,
     CantonService,
     SubcategoriasService,
-    CuestionarioService, 
+    CuestionarioService,
     ReportesService,
   ]
 })

@@ -26,6 +26,7 @@ export class UsuarioService implements Resolve<any> {
   idUser: string;
   usuario: Usuario;
   onUsuarioChanged: BehaviorSubject<any>;
+  
   adminCheck: BehaviorSubject<boolean>;
   adminUser: Observable<boolean>;
 
@@ -124,8 +125,9 @@ export class UsuarioService implements Resolve<any> {
 
   // Registra un usuario en firestore/usuario
   async createUserDB(user: any, formulario) {
-    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.id}`);
-    const data: Usuario = {
+
+    this.usuarioDoc = this.dbFire.doc(`usuarios/${user.uid}`);
+    let data: Usuario = {
       nombres: formulario.nombres,
       apellidos: formulario.apellidos,
       photoURL: "https://firebasestorage.googleapis.com/v0/b/fir-auth-web-75274.appspot.com/o/user-img-profile-default.jpg?alt=media&token=6c90096b-6275-4497-8630-8ce52b1fbe68",
@@ -136,7 +138,6 @@ export class UsuarioService implements Resolve<any> {
       cargo: formulario.cargo,
       rol: 'USER_ROLE'
     }
-    this.usuario = data;
 
     try {
       await this.usuarioDoc.set(data, { merge: true });

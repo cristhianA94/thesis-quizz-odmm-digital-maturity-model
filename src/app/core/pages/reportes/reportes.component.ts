@@ -58,8 +58,6 @@ export class ReportesComponent implements OnInit {
     });
     //  **ADMINISTRADOR
     this.userService.getUsersDB().subscribe((users) => {
-      console.log(users);
-      
       this.usuarios = users;
     });
 
@@ -126,7 +124,7 @@ export class ReportesComponent implements OnInit {
 
   consultarReportesUsuarios() {
     this.cuestionarioService.getCuestionariosDB().subscribe((cuestionarios) => {
-      console.log(cuestionarios);
+      //console.log(cuestionarios);
 
     });
   }

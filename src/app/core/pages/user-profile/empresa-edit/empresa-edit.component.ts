@@ -136,6 +136,7 @@ export class EmpresaEditComponent implements OnInit {
 
     this.empresa = empresa;
 
+    // Carga los datos de la empresa al formulario
     this.empresaForm.patchValue({
       razon_social: empresa.razon_social,
       anio_creacion: empresa.anio_creacion,
@@ -165,8 +166,9 @@ export class EmpresaEditComponent implements OnInit {
       idSectorInd: this.empresaForm.value.idSectorInd
     }
 
-    // Manda a registrar una nueva empresa
     this.empresaService.createEmpresaDB(this.idUser, empresa);
+    this.newEmpresa = false;
+    this.editEmpresa = false;
   }
 
   actualizarEmpresa() {
@@ -185,6 +187,7 @@ export class EmpresaEditComponent implements OnInit {
     }
 
     this.empresaService.updateEmpresa(empresaEdit);
+    
   }
 
   eliminarEmpresa(empresa: Empresa) {

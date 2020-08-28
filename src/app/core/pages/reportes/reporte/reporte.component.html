@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <div class="row" *ngIf="flag" id="respuestasData">
+        <div class="row" *ngIf="flag" id="respuestasData" #respuestasData>
             <div class="col-md-12">
                 <!-- Respuestas -->
                 <div class="card" *ngFor="let metrica of respuestasUsuario.metricas">

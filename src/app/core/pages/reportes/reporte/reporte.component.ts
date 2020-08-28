@@ -15,7 +15,7 @@ import * as jsPDF from 'jspdf';
 })
 export class ReporteComponent implements OnInit, OnDestroy {
 
-  @ViewChild('respuestasData', { static: false }) respuestasData: ElementRef;
+  @ViewChild('respuestasData') respuestasData: ElementRef;
   @ViewChild('canvasPorcentaje') canvasPorcentaje: ElementRef;
 
   flag: boolean = false;
@@ -57,7 +57,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
     let idRespuesta = this.actRouter.snapshot.paramMap.get('id');
     let arrayDataUltimoIntento: number[] = [];
     let arrayDataPnultimoIntento: number[] = [];
-    
+
     // Carga las respuesta del usuario del cuestionario seleccionado
     // TODO obtener idUserCuestionario del local y hacer consulta dependiendo de ese usuario
     this.cuestionarioService.getCuestionarioRespuestaDB(idCuestionario, idRespuesta).subscribe((res: RespuestasUsuario) => {
@@ -104,6 +104,12 @@ export class ReporteComponent implements OnInit, OnDestroy {
   public abrirPDF(): void {
     let fecha = new Date().toLocaleDateString();
     let doc = new jsPDF();
+    let margins = {
+      top: 15,
+      bottom: 15,
+      left: 15,
+      width: 180
+    };
 
     //            **PORTADA**
     // Linea superior
@@ -173,68 +179,57 @@ export class ReporteComponent implements OnInit, OnDestroy {
     doc.setLineWidth(1.5);
     doc.line(10, 13, 200, 13);
 
-    let margins = {
-      top: 15,
-      bottom: 15,
-      left: 15,
-      width: 180
-    };
 
-    let handleElement = {
-      '#IDquenosemuestra': function (element, renderer) {
-        return true;
-      }
-    };
-
-    doc.fromHTML($('#respuestasData').get(0),
+    doc.fromHTML(this.respuestasData.nativeElement,
       margins.left, // x coord
       margins.top, {
       // y coord
       width: margins.width,
-      // max width of content on PDF
-      'elementHandlers': handleElement
+    }, () => {
+      // Crea otra pag
+      doc.addPage();
+      //          **GRAFICO**
+      // Linea superior
+      doc.setDrawColor(139, 196, 65);
+      doc.setLineWidth(1.5);
+      doc.line(10, 13, 200, 13);
+
+      let textoGraficos = "A continuación se ofrece un análisis comparativo del nivel de madurez digital de tu negocio respecto a otras empresas, tomando como referencia distintos criterios.\n\nDebes tener en cuenta que sólo aparecerán comparaciones con otras empresas si se tienen los datos suficientes para ello, por lo que pueden aparecer gráficos comparativos sin datos.";
+
+      doc.setFontSize(20);
+      doc.setFontStyle("bold");
+      doc.setTextColor(75, 86, 100);
+      doc.text(15, 30, "3. BENCHMARKING");
+      doc.setTextColor(0, 0, 0);
+      doc.setFontStyle("normal");
+      doc.setFontSize(14);
+      var splitText = doc.splitTextToSize(textoGraficos, 180);
+      doc.setFontSize(14);
+      doc.text(15, 40, splitText);
+
+      doc.setFontSize(16);
+      doc.setFontStyle("bold");
+      doc.setTextColor(75, 86, 100);
+      doc.text(15, 85, "3.1. Nivel de madurez digital por ejes");
+      doc.setFontStyle("normal");
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text(15, 95, "Aquí puedes ver el nivel de madurez obtenido por cada dimensión evaluada.\nLos datos a exponer son los valores del último y penúltimo intento.");
+
+      // Grafico radar
+      let canvas: any = document.getElementById("canvas");
+      let canvasImg = canvas.toDataURL("image/png");
+      doc.addImage(canvasImg, 'PNG', 40, 115, 120, 90);
+
+      //          **FIN**
+
+      // TODO REVISAR en despliegue
+      //doc.output('dataurlnewwindow');
+      var blob = doc.output("blob");
+      window.open(URL.createObjectURL(blob));
     },
-      () => {
-        // Crea otra pag
-        doc.addPage();
-        //          **GRAFICO**
-        // Linea superior
-        doc.setDrawColor(139, 196, 65);
-        doc.setLineWidth(1.5);
-        doc.line(10, 13, 200, 13);
-
-        let textoGraficos = "A continuación se ofrece un análisis comparativo del nivel de madurez digital de tu negocio respecto a otras empresas, tomando como referencia distintos criterios.\n\nDebes tener en cuenta que sólo aparecerán comparaciones con otras empresas si se tienen los datos suficientes para ello, por lo que pueden aparecer gráficos comparativos sin datos.";
-
-        doc.setFontSize(20);
-        doc.setFontStyle("bold");
-        doc.setTextColor(75, 86, 100);
-        doc.text(15, 30, "3. BENCHMARKING");
-        doc.setTextColor(0, 0, 0);
-        doc.setFontStyle("normal");
-        doc.setFontSize(14);
-        var splitText = doc.splitTextToSize(textoGraficos, 180);
-        doc.setFontSize(14);
-        doc.text(15, 40, splitText);
-
-        doc.setFontSize(16);
-        doc.setFontStyle("bold");
-        doc.setTextColor(75, 86, 100);
-        doc.text(15, 85, "3.1. Nivel de madurez digital por ejes");
-        doc.setFontStyle("normal");
-        doc.setFontSize(14);
-        doc.setTextColor(0, 0, 0);
-        doc.text(15, 95, "Aquí puedes ver el nivel de madurez obtenido por cada dimensión evaluada.\nLos datos a exponer son los valores del último y penúltimo intento.");
-
-        // Grafico radar
-        let canvas: any = document.getElementById("canvas");
-        let canvasImg = canvas.toDataURL("image/png");
-        doc.addImage(canvasImg, 'PNG', 40, 115, 120, 90);
-
-        //          **FIN**
-        doc.output('dataurlnewwindow');
-      },
       margins
-      );
+    );
   }
 
 
@@ -371,7 +366,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
         docDown.save('Reporte_EncuestaODMM.pdf');
       },
       margins
-      );
+    );
 
   }
 

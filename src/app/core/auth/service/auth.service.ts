@@ -45,7 +45,7 @@ export class AuthService {
       //console.log("No existe usuario");
       // Si no existe se crea en Firestore
       this.usuarioService.createUserSocial(credential.user);
-    }else{
+    } else {
       this.usuarioService.validateRolUser();
     }
   }
@@ -78,10 +78,13 @@ export class AuthService {
   }
 
 
-  async registrarCuenta(formulario: any) {
+  registrarCuenta(formulario: any) {
     // Registra al usuario en Authentication
-    await this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
+    console.log(formulario);
+    
+    this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
       .then(userData => {
+        console.log(userData);
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);
         // Registra la Empresa en Firestore
@@ -145,38 +148,38 @@ export class AuthService {
     }
   }
 
-    // Actualizar email usuario
-    async updateEmail(email: string) {
-      try {
-        await this.afs.auth.currentUser.updateEmail(email);
-      }
-      catch (error) {
-        return this.alertaService.mensajeError("Error al cambiar email", error);
-      }
+  // Actualizar email usuario
+  async updateEmail(email: string) {
+    try {
+      await this.afs.auth.currentUser.updateEmail(email);
     }
-  
-    // Actualizar contraseña usuario
-    updatePassword(pass: string) {
-      this.afs.auth.currentUser.updatePassword(pass).then(function () {
-        // Update successful.
-        this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente. Debe volver a loguearse');
-      }).catch(function (error) {
-        return this.alertaService.mensajeError("Error al cambiar contraseña", error);
-      });
+    catch (error) {
+      return this.alertaService.mensajeError("Error al cambiar email", error);
     }
-  
-    // Reautentica cuando email o contraseña se cambian
-    async updateSession(user: any) {
-      try {
-        await this.afs.auth.currentUser.reauthenticateWithCredential(user);
-        //this.router.navigate(['/login']);
-        return console.log("Password changed");
-      }
-      catch (error) {
-        return this.alertaService.mensajeError('Error', error);
-      }
+  }
+
+  // Actualizar contraseña usuario
+  updatePassword(pass: string) {
+    this.afs.auth.currentUser.updatePassword(pass).then(function () {
+      // Update successful.
+      this.alertaService.mensajeExito('¡Éxito!', 'Contraseña actualizado correctamente. Debe volver a loguearse');
+    }).catch(function (error) {
+      return this.alertaService.mensajeError("Error al cambiar contraseña", error);
+    });
+  }
+
+  // Reautentica cuando email o contraseña se cambian
+  async updateSession(user: any) {
+    try {
+      await this.afs.auth.currentUser.reauthenticateWithCredential(user);
+      //this.router.navigate(['/login']);
+      return console.log("Password changed");
     }
-  
+    catch (error) {
+      return this.alertaService.mensajeError('Error', error);
+    }
+  }
+
 
   /* Metodo para salir de la cuenta */
   async logout() {
@@ -194,7 +197,7 @@ export class AuthService {
     await this.afs.auth.currentUser.getIdToken(true).then((token) => {
       localStorage.setItem('token', token);
     }).catch(function (error) {
-      console.log("User no authenticated: ", error);
+      //console.log("User no authenticated: ", error);
     });
   }
 

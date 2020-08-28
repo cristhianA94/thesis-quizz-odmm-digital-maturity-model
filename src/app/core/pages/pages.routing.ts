@@ -1,6 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 import { UsuarioService } from '../services/user/usuarios/usuario.service';
 
@@ -16,6 +15,7 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
 
 // Auth Guard Firebase
+import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 
