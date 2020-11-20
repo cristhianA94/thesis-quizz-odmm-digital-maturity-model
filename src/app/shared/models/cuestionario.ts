@@ -12,4 +12,5 @@ export interface RespuestasUsuario {
   fecha?: string,
   metricas: any[];
   puntuacionCategoria?: number;
+  peso?: number;
 }

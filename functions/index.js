@@ -91,7 +91,7 @@ app.get("/", cors(), (req, res) => {
                 const subcategoria = subcategoriaDoc.data();
                 // Crea un array para agregar las capacidades de esa subcategoria
                 subcategoria.capacidades = [];
-                // Borra atributo no usado
+                // Borra atributo ref categoria
                 delete subcategoria.idCategoria;
                 subcategoria.id = subcategoriaDoc.id;
                 // Agrega las subcategorias asociadas
@@ -112,6 +112,7 @@ app.get("/", cors(), (req, res) => {
             var metricas = [];
             // Capacidades de cada subcategoria
             capacidadesSnap.forEach((capacidades) => {
+
                 capacidades.forEach((capacidad) => {
                     // Guarda el id de cada capacidad
                     const capacidadUid = capacidad.id;
@@ -121,28 +122,35 @@ app.get("/", cors(), (req, res) => {
                     // Agrega el id al obj
                     capacidadObj.id = capacidadUid;
                     const idSubcategoria = capacidadObj.idSubcategoria.id;
+
                     var elementPos = categoria.subcategorias
                         .map((x) => {
                             return x.id;
                         })
                         .indexOf(idSubcategoria);
                     capacidadObj.metrica = [];
-                    // Borra atributo innecesario ya
+                    // Borra atributo ref innecesario
                     delete capacidadObj.idSubcategoria;
                     // Agrega las capacidades a la subcategoria perteneciente
                     categoria.subcategorias[elementPos].capacidades.push(capacidadObj);
                     metricas.push(capacidadUid);
                 });
+
             });
+            // Elimina duplicado
             metricas = metricas.filter(onlyUnique);
+
             const promesas = [];
             metricas.forEach((metrica) => {
                 promesas.push(db.doc(`metricas/${metrica}`).get());
             });
             return Promise.all(promesas);
         })
+
+        //TODO Aqui llega
         .then((metricasSnap) => {
             const metricasArr = [];
+
             metricasSnap.forEach((metrica) => {
                 if (metrica.exists) {
                     const metricaUid = metrica.id;

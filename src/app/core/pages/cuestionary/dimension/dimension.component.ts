@@ -38,7 +38,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   private _unsubscribeAll: Subject<any>;
   idUser: string;
-  // For disabled buttons
+  // TODO For disabled buttons, editar si hay mas subcategorias
   buttons = Array(3);
   btnSave: boolean = true;
   load: boolean = false;
@@ -56,9 +56,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   respuestas: Respuesta[] = [];
   respuestasUsuario: RespuestasUsuario[] = [];
-  //respuestaUsuario: RespuestasUsuario = { intento: 1, metricas: [], puntuacionCategoria: 0 };
   respuestaUsuario: RespuestasUsuario = { metricas: [] };
-  //respuestaUsuario: RespuestasUsuario;
 
   constructor(
     private cuestionarioService: CuestionarioService,
@@ -101,10 +99,10 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Limpia arreglo temporal de subcategoria
     this.subcategoriasEvaluadas = [];
 
-    console.log(this.puntuajes);
+    //console.log(this.puntuajes);
 
-    // Habilita el boton de guardar categoria cuando haya contestado a cada subcategoria
-    if (this.puntuajes.length === 3) {
+    // TODO Habilita el boton de guardar categoria cuando haya contestado a cada subcategoria; varia segun subcategorias
+    if (this.puntuajes.length == 3) {
       this.btnSave = false;
     }
     // Deshabilita boton de esa subcategoria
@@ -114,7 +112,6 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   // Calcular la puntuacion de las metricas, capacidades, subcategoria.
   calcularPesos(subcategoria: Subcategoria) {
-    //console.log(this.subcategoria.capacidades);
 
     // Arrays para almacenar los puntuajes
     let puntuajeMetricas: number[] = [];
@@ -123,6 +120,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
     // Recorre cada capacidad para hacer el cálculo de cada métrica y capacidad
     subcategoria.capacidades.forEach((capacidad, i) => {
+      // Objeto Respuestas Usuario
       objMetrica = {
         subcacategoria: subcategoria.nombre, // TODO eliminar por si
         metrica: capacidad.metrica.nombre,
@@ -149,6 +147,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Agrega las metricas contestadas por el usuario con su opcion
     this.respuestasUsuario.push(this.respuestaUsuario);
     // Filtra la subcategoria contestada
+    //console.log(this.respuestaUsuario);
+    
     var respuestasFiltred: any = [...new Set(this.respuestasUsuario)];
 
     // Objeto para guardar la informacion de los puntuajes obtenidos de la subcategoria
@@ -173,7 +173,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
       puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
     });
     // TODO Porcentaje de madurez
-    Number((puntuajeCategoria *= 10).toFixed(4))
+    Number((puntuajeCategoria *= 10).toFixed(4));
     // Agrega al objeto puntuajes la puntuacion de la categoria
     this.puntuajes.push(puntuajeCategoria);
 
@@ -190,10 +190,11 @@ export class DimensionComponent implements OnInit, OnDestroy {
       intento: 0,
       fecha: fecha,
       puntuacionCategoria: puntuajeCategoria,
+      peso: this.categoria.peso,
       metricas: this.puntuajes[0].metricas.metricas
     }
 
-    console.log(this.puntuajes);
+    //console.log(this.puntuajes);
 
     // Crea el cuestionario en la BD
     this.cuestionarioService.createCuestionarioDB(this.cuestionario, this.respuestaUsuario);

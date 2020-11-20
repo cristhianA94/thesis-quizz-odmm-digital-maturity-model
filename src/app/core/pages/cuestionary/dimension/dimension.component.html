@@ -22,7 +22,6 @@
                         </div>
                     </div>
                 </div>
-                <hr />
 
                 <!-- Subcategorias -->
                 <div class="row" *ngFor="let subcategoria of subcategorias, let iSubs = index">
@@ -72,7 +71,6 @@
                                 </div>
                             </div>
                         </div>
-                        <hr />
                     </div>
                     <button mat-raised-button id="btn{{iSubs}}" type="button" [disabled]="buttons[iSubs]" (click)="guardarRespuestas(iSubs)" class="btn btn-block btn-success pull-right">Guardar
                         cambios</button>

@@ -39,7 +39,7 @@
                     <div class="card-body mx-auto">
                         <div class="row">
                             <div class="col-md-12">
-                                <img src="../../../../../assets/img/logo2.jpg" alt="ODMM logo" width="275px">
+                                <!-- <img src="../../../../../assets/img/logo2.jpg" alt="ODMM logo" width="275px"> -->
 
                                 <div class="card card-stats">
                                     <div class="card-header card-header-warning card-header-icon">
@@ -47,7 +47,7 @@
                                             <i class="material-icons">pie_chart</i>
                                         </div>
                                         <p class="card-category">Porcentaje de madurez</p>
-                                        <h3 class="card-title">{{respuestasUsuario.puntuacionCategoria}}/100
+                                        <h3 class="card-title">{{respuestasUsuario.puntuacionCategoria | number:'1.0-2'}}/100
                                             <small>%</small>
                                         </h3>
                                     </div>

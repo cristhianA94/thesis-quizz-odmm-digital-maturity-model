@@ -78,13 +78,10 @@ export class AuthService {
   }
 
 
+  // Registra al usuario en Authentication
   registrarCuenta(formulario: any) {
-    // Registra al usuario en Authentication
-    console.log(formulario);
-    
     this.afs.auth.createUserWithEmailAndPassword(formulario.correo, formulario.clave)
       .then(userData => {
-        console.log(userData);
         // Registra al usuario en Firestore
         this.usuarioService.createUserDB(userData.user, formulario);
         // Registra la Empresa en Firestore

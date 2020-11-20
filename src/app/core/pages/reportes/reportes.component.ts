@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { Cuestionario, RespuestasUsuario } from 'app/shared/models/cuestionario';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
@@ -33,8 +32,6 @@ export class ReportesComponent implements OnInit {
   displayedColumns: string[] = ['Fecha', 'Intento', ' '];
 
   dataSource = new MatTableDataSource<RespuestasUsuario>();
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private fb: FormBuilder,
@@ -73,14 +70,8 @@ export class ReportesComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
 
   // Metodos
 

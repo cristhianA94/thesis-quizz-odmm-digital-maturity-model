@@ -43,7 +43,7 @@ import { AuthService } from "./core/auth/service/auth.service";
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    AngularFireStorageModule,
+    //AngularFireStorageModule,
     AngularFireAuthGuardModule, 
     //AngularFirestoreModule.enablePersistence(),
     // Alertas
@@ -63,7 +63,7 @@ import { AuthService } from "./core/auth/service/auth.service";
   providers: [
     AuthService,
     // Storage Firebase
-    { provide: StorageBucket, useValue: "gs://fir-auth-web-75274.appspot.com" },
+    //{ provide: StorageBucket, useValue: "gs://fir-auth-web-75274.appspot.com" },
   ],
   bootstrap: [AppComponent],
 })

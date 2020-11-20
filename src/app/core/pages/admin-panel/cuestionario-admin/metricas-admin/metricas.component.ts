@@ -28,7 +28,6 @@ export class MetricasComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Metrica>();
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -54,7 +53,6 @@ export class MetricasComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 

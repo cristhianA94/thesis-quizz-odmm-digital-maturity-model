@@ -104,7 +104,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-6 mx-auto">
                                 <div class="text-center">
-                                    <img src="../../../../assets/img/reportes.png" alt="imgagen reportes" width="200px">
+                                    <img src="../../../../assets/img/reportes.png" alt="imagen reportes" width="200px">
                                     <hr>
                                     <mat-form-field appearance="fill">
                                         <mat-label>Seleccione la categoría</mat-label>
@@ -167,7 +167,7 @@
                                 <th mat-header-cell *matHeaderCellDef> </th>
                                 <td mat-cell *matCellDef="let element" style="width: 130px;">
                                     <div class="button-container">
-                                        <button (click)="verReporte(element)" mat-mini-fab color="accent" aria-label="Ver cuestionario">
+                                        <button (click)="verReporte(element)" matTooltip="Ver reporte" matTooltipPosition="above" matTooltipHideDelay="100" mat-mini-fab color="accent" aria-label="Ver cuestionario">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                     </div>
@@ -177,8 +177,6 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
-                        <mat-paginator [pageSizeOptions]="[2, 4, 6]" showFirstLastButtons>
-                        </mat-paginator>
 
                         <!-- End Table -->
                     </div>

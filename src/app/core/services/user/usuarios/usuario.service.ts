@@ -130,7 +130,7 @@ export class UsuarioService implements Resolve<any> {
     let data: Usuario = {
       nombres: formulario.nombres,
       apellidos: formulario.apellidos,
-      photoURL: "https://firebasestorage.googleapis.com/v0/b/fir-auth-web-75274.appspot.com/o/user-img-profile-default.jpg?alt=media&token=6c90096b-6275-4497-8630-8ce52b1fbe68",
+      photoURL: "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png",
       cedula: formulario.cedula,
       correo: user.email,
       telefono: formulario.telefono,

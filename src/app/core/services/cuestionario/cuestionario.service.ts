@@ -202,6 +202,7 @@ export class CuestionarioService implements Resolve<any>{
               if (result.dismiss === Swal.DismissReason.timer) {
               }
             });
+
             this.router.navigate(["/cuestionario"]);
           })
           .catch((err) => this.alertaService.mensajeError("Error", err));
@@ -234,12 +235,12 @@ export class CuestionarioService implements Resolve<any>{
               if (result.dismiss === Swal.DismissReason.timer) {
               }
             });
+
             this.router.navigate(["/cuestionario"]);
           });
       }
       // Se desuscribe de la consulta para evitar bucle de adds
       this.subscripcion.unsubscribe();
-
     });
 
   };
