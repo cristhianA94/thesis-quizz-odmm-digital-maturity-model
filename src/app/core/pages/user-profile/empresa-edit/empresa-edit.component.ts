@@ -21,7 +21,10 @@ import { Provincia } from 'app/shared/models/provincia';
 @Component({
   selector: 'app-empresa-edit',
   templateUrl: './empresa-edit.component.html',
-  styles: []
+  styles: [
+    `
+    `
+  ]
 })
 export class EmpresaEditComponent implements OnInit {
 
@@ -187,7 +190,9 @@ export class EmpresaEditComponent implements OnInit {
     }
 
     this.empresaService.updateEmpresa(empresaEdit);
-    
+    this.newEmpresa = false;
+    this.editEmpresa = false;
+
   }
 
   eliminarEmpresa(empresa: Empresa) {

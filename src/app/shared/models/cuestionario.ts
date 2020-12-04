@@ -2,8 +2,12 @@ export interface Cuestionario {
   id?: string;
   idUser?: string,
   categoria?: string;
+  peso?: number;
+  descripcion?: string;
   respuestasUsuario?: RespuestasUsuario[];
   intento?: number;
+  fecha?: string;
+  puntuacionCategoria?:number
 }
 
 export interface RespuestasUsuario {

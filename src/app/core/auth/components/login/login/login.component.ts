@@ -64,6 +64,10 @@ export class LoginComponent implements OnInit {
   /* Login Google */
   loginGoogle(): void {
     this.authService.loginGoogleUser().then(() => {
+      // Guarda solo fecha de ingreso
+      let fecha = new Date(Date.now()).toLocaleString().split(' ')[0];
+      localStorage.setItem('fechaIngreso', fecha);
+      
       let timerInterval
       Swal.fire({
         title: '¡Acceso correcto!',
@@ -106,6 +110,9 @@ export class LoginComponent implements OnInit {
   /* Login Correo electronico */
   login() {
     this.authService.loginCorreo(this.loginForm.value);
+    // Guarda la fecha de ingreso
+    let fecha = new Date().toLocaleString();
+    localStorage.setItem('fechaIngreso', fecha);
   }
 
 

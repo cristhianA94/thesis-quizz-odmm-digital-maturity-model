@@ -72,16 +72,23 @@ export class ReportesComponent implements OnInit {
 
   }
 
-
-  // Metodos
+  /* Functions */
 
   // Permite ver la tabla con las diferentes evaluaciones hechas por el usuario según la categoría
   visualizacionResultados(cuestionario: Cuestionario) {
-    this.flagTabla = true;
-    this.cuestionario = cuestionario;
-    this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestasUser) => {
-      this.dataSource.data = respuestasUser;
-    });
+    // Reporte general
+    if (cuestionario == 'todas') {
+      this.verReporteGeneral();
+    }
+    else {
+      // Obtiene reporte individual
+      this.flagTabla = true;
+      this.cuestionario = cuestionario;
+      this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestasUser) => {
+        this.dataSource.data = respuestasUser;
+      });
+    }
+
   }
 
   // Permite ver detalladamente el resultado de la evaluación realizada
@@ -89,6 +96,11 @@ export class ReportesComponent implements OnInit {
     // Guarda el id del cuestionario
     localStorage.setItem("cuestionario", this.cuestionario.id);
     this.router.navigate(['/reporte', respuestasUsuario.id])
+  }
+
+  // Permite ver detalladamente el resultado de la evaluación realizada
+  verReporteGeneral() {
+    this.router.navigate(['/reporteGeneral']);
   }
 
   //                    ** ADMINISTRADOR  **

@@ -72,6 +72,12 @@ export class CuestionarioService implements Resolve<any>{
   }
 
 
+  // Obtiene un cuestionario en especifico
+  getCuestionarioID(id: string): Observable<Cuestionario> {
+    this.cuestionarioDoc = this.afs.collection("cuestionarios").doc(id);
+    return this.cuestionarioDoc.valueChanges();
+  }
+
   // Obtiene todos los cuestionarios
   getCuestionariosDB(): Observable<Cuestionario[]> {
     this.cuestionarioCollection = this.afs.collection("cuestionarios", ref => {
@@ -87,7 +93,7 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
-  // Obtiene los cuestionarios que ha respondido el usuario
+  // Obtiene los cuestionarios que ha respondido el usuario logueado
   getCuestionarioUserLogedDB(): Observable<Cuestionario[]> {
 
     let idUser = localStorage.getItem("uidUser");
@@ -106,8 +112,8 @@ export class CuestionarioService implements Resolve<any>{
     );
   }
 
-  // Obtiene los cuestionarios que ha respondido el usuario
-  getCuestionarioUserDB(idUsuario): Observable<Cuestionario[]> {
+  // Obtiene los cuestionarios que ha respondido X usuario
+  getCuestionarioUserDB(idUsuario: string): Observable<Cuestionario[]> {
 
     this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
       return ref.orderBy("categoria").where("idUser", "==", idUsuario);

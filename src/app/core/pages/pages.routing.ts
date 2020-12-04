@@ -13,6 +13,7 @@ import { CuestionaryComponent } from './cuestionary/cuestionary.component';
 import { CategoriasService } from '../services/cuestionario/categorias/categorias.service';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
+import { ReporteGeneralComponent } from './reportes/reporte-general/reporte-general.component';
 
 // Auth Guard Firebase
 import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
@@ -50,6 +51,17 @@ export const PagesRoutes: Routes = [
     {
         path: 'reporte/:id',
         component: ReporteComponent,
+        resolve: {
+            dataEmpresa: EmpresaService
+        },
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin },
+    },
+    {
+        path: 'reporteGeneral',
+        component: ReporteGeneralComponent,
+        resolve: {
+            dataEmpresa: EmpresaService
+        },
         canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin },
     },
     {

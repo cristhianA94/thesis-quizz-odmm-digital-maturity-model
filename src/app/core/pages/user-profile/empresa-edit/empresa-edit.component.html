@@ -18,8 +18,11 @@
             <hr>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4" *ngFor="let empresa of empresasList">
+                    <div class="col-md-4" *ngFor="let empresa of empresasList; let i = index">
                         <div class="card">
+                            <div *ngIf="(i == 0)" class="text-center">
+                                <mat-chip color="primary" name="primary" selected> PRINCIPAL </mat-chip>
+                            </div>
                             <div class="card-header text-center">
                                 <h4 class="card-title">{{empresa.razon_social}}</h4>
                                 <h4 class="card-title"><strong>Dirección: </strong>{{empresa.direccion}}</h4>

@@ -39,7 +39,8 @@ import { SectorIndustrialService } from '../services/user/sectorIndustrial/secto
 import { SubcategoriasService } from '../services/cuestionario/subcategorias/subcategorias.service';
 import { CuestionarioService } from '../services/cuestionario/cuestionario.service';
 import { ReporteComponent } from './reportes/reporte/reporte.component';
-import { ReportesService } from '../services/reportes/reportes.service';
+import { ReporteGeneralComponent } from './reportes/reporte-general/reporte-general.component';
+
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { ReportesService } from '../services/reportes/reportes.service';
     CuestionaryComponent,
     ReportesComponent,
     ReporteComponent,
+    ReporteGeneralComponent
   ],
   providers: [
     UsuarioService,
@@ -88,7 +90,6 @@ import { ReportesService } from '../services/reportes/reportes.service';
     CantonService,
     SubcategoriasService,
     CuestionarioService,
-    ReportesService,
   ]
 })
 

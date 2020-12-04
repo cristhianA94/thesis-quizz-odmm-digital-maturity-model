@@ -184,6 +184,7 @@ export class AuthService {
       // Elimina los datos del usuario en el local storage
       localStorage.removeItem("uidUser");
       localStorage.removeItem("token");
+      localStorage.removeItem("fechaIngreso");
       this.alertaService.mensajeExito('Adiós', '¡Hasta pronto!');
       this.router.navigate(['/login']);
     })

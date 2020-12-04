@@ -59,7 +59,6 @@
                             </div>
 
                             <div class="col-md-6 mx-auto text-center">
-
                                 <h3><strong>2</strong></h3>
                                 <div class="pt-5">
                                     <!-- De todos los usuarios -->
@@ -93,22 +92,24 @@
                                     <div class="jumbotron jumbotron-fluid" style="padding: 2rem;">
                                         <div class="container">
                                             <h4 class="display-4">¿Qué puedo hacer?</h4>
-                                            <p class="lead">Aquí podrás consultar los resultados de cada categoría que hayas evaluado anteriormente.
-                                                <br> Selecciona la categoría que desees consultar sus resultados y ver el informe generado
+                                            <p class="lead">Aquí podrás consultar los resultados y sugerencias de cada categoría que hayas evaluado anteriormente, o puedes consultar un reporte general de todas las categorías.
+                                                <br><br> Selecciona la categoría que desees consultar sus resultados y ver el informe generado
                                             </p>
                                         </div>
                                     </div>
+                                    <img src="../../../../assets/img/reportes.png" alt="imagen reportes" width="200px">
                                 </div>
+                                <hr>
                             </div>
                         </div>
                         <div class="row align-items-center">
+
                             <div class="col-md-6 mx-auto">
                                 <div class="text-center">
-                                    <img src="../../../../assets/img/reportes.png" alt="imagen reportes" width="200px">
-                                    <hr>
                                     <mat-form-field appearance="fill">
                                         <mat-label>Seleccione la categoría</mat-label>
                                         <mat-select #idCategoria name="Categorias" required>
+                                            <mat-option value="todas">Todas las categorias</mat-option>
                                             <mat-option *ngFor="let cuestionario of cuestionarios" [value]="cuestionario">
                                                 {{ cuestionario.categoria }}
                                             </mat-option>
@@ -122,6 +123,8 @@
                             </div>
 
                         </div>
+
+
                     </div>
 
                 </div>

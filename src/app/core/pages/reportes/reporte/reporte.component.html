@@ -3,108 +3,109 @@
 
         <app-loader *ngIf="!flag"></app-loader>
 
-        <div class="row" *ngIf="flag">
-            <div class="col-md-10 mx-auto">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="text-center">
-                            <div class="jumbotron jumbotron-fluid" style="padding: 1rem;">
-                                <div class="container">
-                                    <h5 class="display-4">NIVEL DE MADUREZ DIGITAL</h5>
-                                    <p class="lead">A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho cuestionario para
-                                        la cuantificación del nivel de madurez digital de tu negocio.</p>
-                                    <blockquote>*Necesita haber contestado mínimo 3 categorías del cuestionario para que se visualice correctamente el gráfico.</blockquote>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body mb-5">
-                        <div style="display: block">
-                            <canvas id="canvas" baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels" chartType="radar">
-                            </canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- Puntuacion nivel de madurez -->
         <div class="row" *ngIf="flag">
             <div class="col-md-12">
 
                 <div class="card">
                     <div class="card-header card-header-success">
-                        <h2 class="card-title text-center text-justify"><strong>REPORTE</strong></h2>
+                        <h2 class="card-title text-center text-justify"><strong>REPORTE CATEGORÍA:</strong></h2>
+                        <h2 class="card-title text-center text-justify"><strong>{{ categoria.categoria | uppercase }} </strong></h2>
                     </div>
-                    <!-- Card body -->
-                    <div class="card-body mx-auto">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!-- <img src="../../../../../assets/img/logo2.jpg" alt="ODMM logo" width="275px"> -->
 
-                                <div class="card card-stats">
-                                    <div class="card-header card-header-warning card-header-icon">
-                                        <div class="card-icon">
-                                            <i class="material-icons">pie_chart</i>
+                    <!-- Body principal -->
+                    <div class="card-body" #canvasPorcentaje id="canvasPorcentaje">
+
+                        <div class="row mt-4">
+                            <div class="mx-auto text-center">
+                                <h2 class="text-info" style="font-weight: bold; font-size: xx-large;">RESULTADO AUTODIAGNÓSTICO
+                                </h2>
+                                <div class="col-md-12">
+                                    <div class="card card-stats">
+                                        <div class="card-header card-header-success card-header-icon">
+                                            <div class="card-icon">
+                                                <i class="material-icons">pie_chart</i>
+                                            </div>
+                                            <p class="card-category text-primary" style="font-size: large; font-weight: 400"><strong>Nivel de madurez digital de: {{ categoria.categoria | uppercase }} </strong>
+                                            </p>
+                                            <h3 class="card-title"> {{ respuestasUsuario.puntuacionCategoria *10 | number:'1.0-2' }}/100
+                                                <small>%</small>
+                                            </h3>
                                         </div>
-                                        <p class="card-category">Porcentaje de madurez</p>
-                                        <h3 class="card-title">{{respuestasUsuario.puntuacionCategoria | number:'1.0-2'}}/100
-                                            <small>%</small>
-                                        </h3>
+                                        <div class="card-footer mx-auto">
+                                            <circle-progress [radius]="70" [responsive]="true" [percent]="respuestasUsuario.puntuacionCategoria *10" [showSubtitle]="false" [outerStrokeWidth]="12" [innerStrokeWidth]="10" [outerStrokeColor]="'#e6e60e'" [innerStrokeColor]="'#e6e60e'" [animation]="true"
+                                                [animationDuration]="1000" [titleFontWeight]="600" [titleFontSize]="30" [unitsFontSize]="20">
+                                            </circle-progress>
+                                        </div>
                                     </div>
-                                    <div class="card-footer">
-                                        <circle-progress [percent]="respuestasUsuario.puntuacionCategoria" [radius]="100" [outerStrokeWidth]="16" [innerStrokeWidth]="14" [outerStrokeColor]="'#78C000'" [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="500">
-                                        </circle-progress>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+
+                            <div class="col-md-10 mx-auto">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="text-center">
+                                            <div class="jumbotron jumbotron-fluid" style="padding: 1rem;">
+                                                <div class="container">
+                                                    <h5 class="display-4">NIVEL DE MADUREZ DIGITAL POR CATEGORÍAS</h5>
+                                                    <p class="lead">A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho
+                                                        cuestionario para la cuantificación del nivel de madurez digital de tu negocio.</p>
+                                                    <blockquote>*Necesita haber contestado mínimo 3 categorías del cuestionario para que se visualice correctamente el gráfico.</blockquote>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body mb-5">
+                                        <div style="display: block">
+                                            <canvas id="canvas" baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels" chartType="radar">
+                                            </canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
+                    <!-- Body principal -->
                 </div>
 
             </div>
         </div>
 
-        <div class="row" *ngIf="flag" id="respuestasData" #respuestasData>
-            <div class="col-md-12">
-                <!-- Respuestas -->
-                <div class="card" *ngFor="let metrica of respuestasUsuario.metricas">
-                    <div class="card-header">
-                        <h3 class="card-title">Métrica evaluada: <strong>{{ metrica.metrica }}</strong>
-                        </h3>
+        <!-- Recomendaciones -->
+        <div class="row" *ngIf="flag">
+            <div class="col-md-11 mx-auto">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h2 class="card-title text-center text-justify"><strong>RECOMENDACIONES</strong></h2>
                     </div>
-                    <hr>
-                    <div class="card-body pt-0">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card" id="opcion">
+
+                    <div #respuestasData>
+                        <div class="card-body" *ngFor="let metrica of respuestasUsuario.metricas" style="padding: 0px; margin: 0px;">
+                            <div class="col-md-9 mx-auto">
+                                <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title text-center"><strong>Opción contestada</strong></h4>
+                                        <h4 class="card-title">Recomendación de mejora para la métrica evaluada:
+                                            <strong>{{ metrica.metrica }}</strong></h4>
                                     </div>
+                                    <hr>
                                     <div class="card-body">
-                                        {{ metrica.respuesta["opcion"] }}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="col-md-6">
-                                <div class="card" id="recomendacion">
-                                    <div class="card-header">
-                                        <h4 class="card-title text-center"><strong>Recomendación</strong></h4>
-                                    </div>
-                                    <div class="card-body">
-                                        {{ metrica.respuesta["recomendacion"] }}
+                                        <p class="text-success">{{ metrica.respuesta["recomendacion"] }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
         <div class="col-md-12 text-right">
-            <button class="btn btn-info btn-block" (click)="abrirPDF()">Ver PDF</button>
+            <!-- <button class="btn btn-info btn-block" (click)="abrirPDF()">Ver PDF</button> -->
             <button class="btn btn-success btn-block" (click)="descargarReporte()">Descargar reporte</button>
             <button (click)="regresar()" mat-raised-button class="btn-block">
                 <mat-icon>keyboard_arrow_left</mat-icon>Regresar

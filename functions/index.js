@@ -1,11 +1,13 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
-var serviceAccount = require("./keys/serviceAccountKey.json");
+var serviceAccount = require("./keys/odmm-autodiagostico-firebase-adminsdk-davla-4c9cbc2ade.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://fir-auth-web-75274.firebaseio.com",
+    // databaseURL: "https://fir-auth-web-75274.firebaseio.com",
+    databaseURL: "https://odmm-autodiagostico.firebaseio.com",
 });
+
 
 const db = admin.firestore();
 
@@ -180,17 +182,20 @@ function onlyUnique(value, index, self) {
 exports.actualizarIntento = functions.firestore
     .document("cuestionarios/{cuestionarioId}/respuestas/{respuestaId}")
     .onCreate((snap, context) => {
-        // context.params.userId
+        const puntuacionCatRes = snap.data().puntuacionCategoria;
         const cuestionarioId = context.params.cuestionarioId;
         let cuestionarioRef = db.collection("cuestionarios").doc(cuestionarioId);
+        var puntuacionCategoria = puntuacionCatRes;
+
         return cuestionarioRef
             .get()
             .then((doc) => {
                 var cuestionario = doc.data();
                 var intento = cuestionario.intento + 1;
+
                 return Promise.all([
                     snap.ref.update({ intento }),
-                    cuestionarioRef.update({ intento }),
+                    cuestionarioRef.update({ intento, puntuacionCategoria }),
                 ]);
             })
             .catch((err) => {

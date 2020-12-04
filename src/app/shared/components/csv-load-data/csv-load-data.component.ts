@@ -91,42 +91,42 @@ export class CsvLoadDataComponent implements OnInit {
           let respuesta1: Respuesta = {
             opcion: element.opcion1,
             pesoRespuesta: 0,
-            recomendacion: element.opcion2
+            recomendacion: element.recomendacion1
           };
           respuestas.push(respuesta1);
 
           let respuesta2: Respuesta = {
             opcion: element.opcion2,
             pesoRespuesta: 2,
-            recomendacion: element.opcion3
+            recomendacion: element.recomendacion2
           };
           respuestas.push(respuesta2);
 
           let respuesta3: Respuesta = {
             opcion: element.opcion3,
             pesoRespuesta: 4,
-            recomendacion: element.opcion4
+            recomendacion: element.recomendacion3
           };
           respuestas.push(respuesta3);
 
           let respuesta4: Respuesta = {
             opcion: element.opcion4,
             pesoRespuesta: 6,
-            recomendacion: element.opcion5
+            recomendacion: element.recomendacion4
           };
           respuestas.push(respuesta4);
 
           let respuesta5: Respuesta = {
             opcion: element.opcion5,
             pesoRespuesta: 8,
-            recomendacion: element.opcion6
+            recomendacion: element.recomendacion5
           };
           respuestas.push(respuesta5);
 
           let respuesta6: Respuesta = {
             opcion: element.opcion6,
             pesoRespuesta: 10,
-            recomendacion: '¡Felicidades, estás manejando esta métrica adecuada y eficientemente, sigue así!'
+            recomendacion: element.recomendacion6
           };
           respuestas.push(respuesta6);
 
@@ -137,7 +137,7 @@ export class CsvLoadDataComponent implements OnInit {
             respuestas: respuestas,
             idCapacidad: element.idCapacidad
           }
-
+          
           this.metricasServices.createMetricaDB(metrica);
         });
 

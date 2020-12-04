@@ -73,6 +73,21 @@ export class EmpresaService implements Resolve<any>{
   }
 
   // Obtiene todas las empresas
+  getEmpresasUserID(idUser: string): Observable<Empresa[]> {
+    this.empresaCollection = this.afs.collection("empresas", ref => {
+      return ref.orderBy('razon_social').where('idUser', '==', idUser)
+    });
+    return this.empresaCollection.snapshotChanges().pipe(
+      map(actions =>
+        actions.map(res => {
+          const data = res.payload.doc.data() as Empresa;
+          const id = res.payload.doc.id;
+          return { id, ...data };
+        }))
+    );
+  }
+
+  // Obtiene todas las empresas
   getEmpresasDB(): Observable<Empresa[]> {
     this.empresaCollection = this.afs.collection("empresas", ref => {
       return ref.orderBy('razon_social')

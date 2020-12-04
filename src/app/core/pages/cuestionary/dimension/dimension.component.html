@@ -34,39 +34,33 @@
                                 Subcategoria: {{ subcategoria.nombre }}
                             </h3>
                         </div>
-                        <div class="card-body text-center">
+                        <!-- <div class="card-body text-center">
                             <h4>
                                 <strong>{{ subcategoria.descripcion }}</strong>
                             </h4>
-                        </div>
+                        </div> -->
 
                         <!-- Capacidades -->
                         <div *ngFor="let capacidad of subcategorias[iSubs].capacidades, let iCap = index">
                             <div class="col-md-11 mx-auto">
-                                <div class="card border-info">
-                                    <div class="card-header">
-                                        <h4>Capacidad: {{ capacidad.nombre }}</h4>
-                                    </div>
-                                    <div class="card-body text-info">
-                                        <h5 class="card-text"> <strong> {{ capacidad.descripcion }}</strong></h5>
-                                    </div>
-                                </div>
 
                                 <!-- Métrica -->
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3> Métrica [ {{ capacidad.metrica["nombre"] }}] <br> <strong class="text-success">{{ capacidad.metrica["pregunta"] }}</strong></h3>
+                                        <h4 class="text-info"><strong>Capacidad a evaluar:{{ capacidad.nombre }}</strong></h4>
+                                        <h4 class="card-text"> {{ capacidad.descripcion }}</h4>
+                                        <hr>
+                                        <!-- Métrica [ {{ capacidad.metrica["nombre"] }}] -->
+                                        <h4> <strong class="text-success">{{ capacidad.metrica["pregunta"] }}</strong></h4>
                                     </div>
                                     <div class="card-body">
-                                        <div class="col-xs-10">
-                                            <label> <small>Elija la opción más asequible a su empresa</small></label>
-                                            <!-- Respuestas -->
-                                            <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChangeOptionValues($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
-                                                <mat-radio-button class="radio-button" [value]="respuesta">
-                                                    <span class="wrap-mat-radio-label"> {{respuesta.opcion }}</span>
-                                                </mat-radio-button>
-                                            </mat-radio-group>
-                                        </div>
+                                        <label> <small>Elija la opción más asequible a su empresa</small></label>
+                                        <!-- Respuestas -->
+                                        <mat-radio-group class="radio-group" name="opciones{{iSubs}}{{iCap}}" (change)="onChangeOptionValues($event, iCap, subcategoria)" *ngFor="let respuesta of subcategorias[iSubs].capacidades[iCap].metrica.respuestas">
+                                            <mat-radio-button class="radio-button" [value]="respuesta">
+                                                <span class="wrap-mat-radio-label"> {{respuesta.opcion }}</span>
+                                            </mat-radio-button>
+                                        </mat-radio-group>
                                     </div>
                                 </div>
                             </div>

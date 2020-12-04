@@ -59,6 +59,7 @@ export class CategoriasService implements Resolve<any> {
     return new Promise((resolve, reject) => {
 
       const categoriaDoc = this.afs.doc<Categoria>(`categorias/${id}`);
+      
       categoriaDoc.valueChanges().subscribe((response: any) => {
         this.categoria = response;
         this.onCategoriaChanged.next(this.categoria);

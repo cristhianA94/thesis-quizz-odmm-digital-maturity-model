@@ -43,6 +43,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   btnSave: boolean = true;
   load: boolean = false;
 
+  categoriasEvaluadas: any[] = [];
   puntuajes: any[] = [];
 
   cuestionario: Cuestionario;
@@ -73,8 +74,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
       .subscribe((cuestionario) => {
         this.categoria = cuestionario;
         this.subcategorias = this.categoria.subcategorias;
+        this.load = true;
       });
-    this.load = true;
   }
 
   // Detecta las opciones elegida por cada subcategoria
@@ -99,7 +100,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     // Limpia arreglo temporal de subcategoria
     this.subcategoriasEvaluadas = [];
 
-    //console.log(this.puntuajes);
+    // console.log(this.puntuajes);
 
     // TODO Habilita el boton de guardar categoria cuando haya contestado a cada subcategoria; varia segun subcategorias
     if (this.puntuajes.length == 3) {
@@ -148,7 +149,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.respuestasUsuario.push(this.respuestaUsuario);
     // Filtra la subcategoria contestada
     //console.log(this.respuestaUsuario);
-    
+
     var respuestasFiltred: any = [...new Set(this.respuestasUsuario)];
 
     // Objeto para guardar la informacion de los puntuajes obtenidos de la subcategoria
@@ -166,6 +167,8 @@ export class DimensionComponent implements OnInit, OnDestroy {
 
   guardarCategoria() {
 
+    // Fecha para el registro del cuestionario
+    let fecha = new Date(Date.now()).toLocaleString().split(' ')[0];
     let puntuajeCategoria: number = 0;
 
     // Calcula peso categoria
@@ -173,7 +176,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
       puntuajeCategoria += puntuaje["puntuacionSubcategoria"];
     });
     // TODO Porcentaje de madurez
-    Number((puntuajeCategoria *= 10).toFixed(4));
+    //Number((puntuajeCategoria *= 10).toFixed(4));
     // Agrega al objeto puntuajes la puntuacion de la categoria
     this.puntuajes.push(puntuajeCategoria);
 
@@ -181,15 +184,17 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this.cuestionario = {
       idUser: this.idUser,
       categoria: this.categoria.nombre,
-      intento: 0
+      peso: this.categoria.peso,
+      descripcion: this.categoria.descripcion,
+      intento: 0,
+      fecha: fecha,
+      puntuacionCategoria: Number(puntuajeCategoria.toFixed(2))
     };
 
-    // Fecha para el registro del cuestionario
-    let fecha = new Date().toLocaleString();
     this.respuestaUsuario = {
       intento: 0,
       fecha: fecha,
-      puntuacionCategoria: puntuajeCategoria,
+      puntuacionCategoria: Number(puntuajeCategoria.toFixed(2)),
       peso: this.categoria.peso,
       metricas: this.puntuajes[0].metricas.metricas
     }
@@ -211,43 +216,43 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-/* 
-  test() {
-    this.cuestionario = {
-      idUser: this.idUser,
-      categoria: this.categoria.nombre
-    };
-
-    let fecha = new Date().toLocaleString();
-    let obj = {
-      intento: 2,
-      fecha: fecha,
-      puntuacionCategoria: 60,
-      metricas: [
-        {
-          metrica: "Nombre metrica",
-          respuesta:
+  /* 
+    test() {
+      this.cuestionario = {
+        idUser: this.idUser,
+        categoria: this.categoria.nombre
+      };
+  
+      let fecha = new Date().toLocaleString();
+      let obj = {
+        intento: 2,
+        fecha: fecha,
+        puntuacionCategoria: 60,
+        metricas: [
           {
-            opcion: "Opcion ejem",
-            recomendacion: "Recomendacion ejem"
+            metrica: "Nombre metrica",
+            respuesta:
+            {
+              opcion: "Opcion ejem",
+              recomendacion: "Recomendacion ejem"
+            },
+            subcategoria: "Subcategoria ejem"
           },
-          subcategoria: "Subcategoria ejem"
-        },
-        {
-          metrica: "Nombre metrica",
-          respuesta:
           {
-            opcion: "Opcion ejem",
-            recomendacion: "Recomendacion ejem"
+            metrica: "Nombre metrica",
+            respuesta:
+            {
+              opcion: "Opcion ejem",
+              recomendacion: "Recomendacion ejem"
+            },
+            subcategoria: "Subcategoria ejem"
           },
-          subcategoria: "Subcategoria ejem"
-        },
-
-      ]
+  
+        ]
+      }
+  
+      // Crea el cuestionario en la BD
+      this.cuestionarioService.createCuestionarioDB(this.cuestionario, obj);
     }
-
-    // Crea el cuestionario en la BD
-    this.cuestionarioService.createCuestionarioDB(this.cuestionario, obj);
-  }
-   */
+     */
 }
