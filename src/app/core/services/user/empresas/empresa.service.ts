@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { Observable, BehaviorSubject } from "rxjs";
+import { map } from "rxjs/operators";
 
 import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-  AngularFirestore
-} from '@angular/fire/firestore';
+  AngularFirestore,
+} from "@angular/fire/firestore";
 
-import { Empresa } from 'app/shared/models/empresa';
-import { AlertsService } from '../../notificaciones/alerts.service';
-import { UsuarioService } from '../usuarios/usuario.service';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { Empresa } from "app/shared/models/empresa";
+import { AlertsService } from "../../notificaciones/alerts.service";
+import { UsuarioService } from "../usuarios/usuario.service";
+import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { groupBy } from "lodash";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class EmpresaService implements Resolve<any>{
-
+export class EmpresaService implements Resolve<any> {
   public idUser: string;
 
   empresaCollection: AngularFirestoreCollection<Empresa>;
@@ -29,9 +29,9 @@ export class EmpresaService implements Resolve<any>{
   constructor(
     private afs: AngularFirestore,
     private alertaService: AlertsService,
-    private usuarioService: UsuarioService,
+    private userService: UsuarioService
   ) {
-    this.idUser = usuarioService.idUser;
+    this.idUser = userService.idUser;
     this.onEmpresaChanged = new BehaviorSubject({});
   }
 
@@ -50,76 +50,112 @@ export class EmpresaService implements Resolve<any>{
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
     this.idReporte = route.params.id;
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       Promise.all([
-        this.getEmpresasUserDB()
-      ]).then(
-        () => {
-          resolve();
-        },
-        reject
-      );
+        this.getEmpresasUserDB(),
+        this.userService.getUsersEmpresas(this.idUser),
+      ]).then(() => {
+        resolve();
+      }, reject);
     });
   }
 
   // Obtiene las empresas del usuario logeado
   getEmpresasUserDB() {
     return new Promise((resolve, reject) => {
-      this.empresaCollection = this.afs.collection("empresas", ref => {
-        return ref.orderBy('razon_social').where('idUser', '==', this.idUser)
+      this.empresaCollection = this.afs.collection("empresas", (ref) => {
+        return ref.orderBy("razon_social").where("idUser", "==", this.idUser);
       });
-      return this.empresaCollection.snapshotChanges()
+      return this.empresaCollection
+        .snapshotChanges()
         .pipe(
-          map(actions =>
-            actions.map(res => {
+          map((actions) =>
+            actions.map((res) => {
               const data = res.payload.doc.data() as Empresa;
               const id = res.payload.doc.id;
               return { id, ...data };
             })
           )
-        ).subscribe(response => {
+        )
+        .subscribe((response) => {
           this.empresas = response;
           this.onEmpresaChanged.next(this.empresas);
           resolve(this.empresas);
-        },
-          reject
-        )
-    })
+        }, reject);
+    });
   }
 
   // Obtiene todas las empresas
-  getEmpresasUserSectorID(idUser: string, idSector: string): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresas", ref => {
-      return ref.orderBy('fechaCreacion').where('idUser', '==', idUser).where('idSectorInd', '==', idSector)
+  getEmpresasUserSectorID(
+    idUser: string,
+    idSector: string
+  ): Observable<Empresa[]> {
+    this.empresaCollection = this.afs.collection("empresas", (ref) => {
+      return ref
+        .orderBy("fechaCreacion")
+        .where("idUser", "==", idUser)
+        .where("idSectorInd", "==", idSector);
     });
     return this.empresaCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(res => {
+      map((actions) =>
+        actions.map((res) => {
           const data = res.payload.doc.data() as Empresa;
           const id = res.payload.doc.id;
           return { id, ...data };
-        }))
+        })
+      )
     );
+  }
+
+  getEmpresasByUser(userId) {
+    const empresasRef = this.afs
+      .collection<Empresa>(`empresas`, (ref) =>
+        ref.where("idUser", "==", userId)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) =>
+          actions.map((res) => {
+            const data = res.payload.doc.data() as Empresa;
+            const id = res.payload.doc.id;
+            return { id, ...data };
+          })
+        )
+      );
+
+    return new Promise((resolve, reject) => {
+      empresasRef.subscribe((response: any) => {
+        const usuariosFiltros = groupBy(response, "idSectorInd");
+        console.log(
+          "🚀 ~ file: usuario.service.ts ~ line 155 ~ UsuarioService ~ usuarioRef.subscribe ~ usuariosFiltros",
+          usuariosFiltros
+        );
+
+        // this.usuarios = response;
+        // this.onUsuariosChanged.next(this.usuarios);
+        resolve(response);
+      }, reject);
+    });
   }
 
   // Obtiene todas las empresas
   getEmpresasUserID(idUser: string): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresas", ref => {
-      return ref.orderBy('fechaCreacion').where('idUser', '==', idUser)
+    this.empresaCollection = this.afs.collection("empresas", (ref) => {
+      return ref.orderBy("fechaCreacion").where("idUser", "==", idUser);
     });
     return this.empresaCollection.snapshotChanges().pipe(
-      map(actions =>
-        actions.map(res => {
+      map((actions) =>
+        actions.map((res) => {
           const data = res.payload.doc.data() as Empresa;
           const id = res.payload.doc.id;
           return { id, ...data };
-        }))
+        })
+      )
     );
   }
 
   // Registro nueva empresa
   createEmpresaDB(uidUser: string, formulario: any) {
-
     const data: Empresa = {
       razon_social: formulario.razon_social,
       anio_creacion: formulario.anio_creacion,
@@ -130,28 +166,37 @@ export class EmpresaService implements Resolve<any>{
       idUser: uidUser,
       idCanton: formulario.idCanton,
       idSectorInd: formulario.idSectorInd,
-      fechaCreacion: new Date()
-    }
+      fechaCreacion: new Date(),
+    };
 
-    this.empresaCollection = this.afs.collection('empresas');
-    this.empresaCollection.add(data)
-      .then(() => this.alertaService.mensajeExito('¡Éxito!', 'Empresa registrada correctamente'))
-      .catch((error) => this.alertaService.mensajeError('Error', error))
+    this.empresaCollection = this.afs.collection("empresas");
+    this.empresaCollection
+      .add(data)
+      .then(() =>
+        this.alertaService.mensajeExito(
+          "¡Éxito!",
+          "Empresa registrada correctamente"
+        )
+      )
+      .catch((error) => this.alertaService.mensajeError("Error", error));
   }
 
   updateEmpresa(empresa: Empresa) {
     this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
     delete empresa.id;
     this.empresaDoc.update(empresa);
-    this.alertaService.mensajeExito('¡Éxito!', 'Datos actualizados correctamente');
+    this.alertaService.mensajeExito(
+      "¡Éxito!",
+      "Datos actualizados correctamente"
+    );
   }
 
   deleteEmpresa(empresa: Empresa) {
-
     this.empresaDoc = this.afs.doc(`empresas/${empresa.id}`);
     this.empresaDoc.delete();
-    this.alertaService.mensajeExito('¡Éxito!', 'Empresa eliminada correctamente');
+    this.alertaService.mensajeExito(
+      "¡Éxito!",
+      "Empresa eliminada correctamente"
+    );
   }
-
-
 }

@@ -7,6 +7,7 @@ export interface Empresa {
     direccion: string;
     tamanio_empresa: string;
     idUser?: string;
+    usuario?: boolean;
     idCanton?: string;
     idSectorInd?: string;
     fechaCreacion?: any
