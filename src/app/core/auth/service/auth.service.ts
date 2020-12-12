@@ -41,7 +41,7 @@ export class AuthService {
     this.guardarStorage(credential.user.uid);
     // Comprueba si existe el usuario
     this.usuarioService.getUser(credential.user.uid);
-    if (!this.usuarioService.usuario) {
+    if (this.usuarioService.usuario == null) {
       //console.log("No existe usuario");
       // Si no existe se crea en Firestore
       this.usuarioService.createUserSocial(credential.user);

@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-header card-header-success">
                         <h2 class="card-title text-center text-justify"><strong>REPORTE CATEGORÍA:</strong></h2>
-                        <h2 class="card-title text-center text-justify"><strong>{{ categoria.categoria | uppercase }} </strong></h2>
+                        <h2 class="card-title text-center text-justify"><strong>{{ categoria.categoriaNombre | uppercase }} </strong></h2>
                     </div>
 
                     <!-- Body principal -->
@@ -26,7 +26,7 @@
                                             <div class="card-icon">
                                                 <i class="material-icons">pie_chart</i>
                                             </div>
-                                            <p class="card-category text-primary" style="font-size: large; font-weight: 400"><strong>Nivel de madurez digital de: {{ categoria.categoria | uppercase }} </strong>
+                                            <p class="card-category text-primary" style="font-size: large; font-weight: 400"><strong>Nivel de madurez digital de: {{ categoria.categoriaNombre | uppercase }} </strong>
                                             </p>
                                             <h3 class="card-title"> {{ respuestasUsuario.puntuacionCategoria *10 | number:'1.0-2' }}/100
                                                 <small>%</small>
@@ -69,7 +69,7 @@
 
                         </div>
                     </div>
-                    <!-- Body principal -->
+                    <!-- FIN Body principal -->
                 </div>
 
             </div>

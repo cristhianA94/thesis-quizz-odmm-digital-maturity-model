@@ -7,6 +7,7 @@ import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service'
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Usuario } from 'app/shared/models/usuario';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -49,10 +50,20 @@ export class ReportesComponent implements OnInit {
 
   cargarData() {
     //  **USUARIO
-    // Cargar los cuestionarios del usuario logueado
-    this.cuestionarioService.getCuestionarioUserLogedDB().subscribe((cuestionarioUserDB: Cuestionario[]) => {
-      this.cuestionarios = cuestionarioUserDB;
-    });
+    // Cargar los cuestionarios del usuario logueado ordenados
+    this.cuestionarioService.getCuestionarioUserLogedDB().
+      pipe(
+        // Los ordena alfabeticamente
+        map((data) => {
+          data.sort((a, b) => {
+            return a.categoriaNombre < b.categoriaNombre ? -1 : 1;
+          });
+          return data;
+        })
+      ).subscribe((cuestionarioUserDB: Cuestionario[]) => {
+        this.cuestionarios = cuestionarioUserDB;
+      });
+
     //  **ADMINISTRADOR
     this.userService.getUsersDB().subscribe((users) => {
       this.usuarios = users;
@@ -80,8 +91,8 @@ export class ReportesComponent implements OnInit {
     if (cuestionario == 'todas') {
       this.verReporteGeneral();
     }
+    // Obtiene reporte individual
     else {
-      // Obtiene reporte individual
       this.flagTabla = true;
       this.cuestionario = cuestionario;
       this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestasUser) => {
@@ -89,13 +100,6 @@ export class ReportesComponent implements OnInit {
       });
     }
 
-  }
-
-  // Permite ver detalladamente el resultado de la evaluación realizada
-  verReporte(respuestasUsuario: RespuestasUsuario) {
-    // Guarda el id del cuestionario
-    localStorage.setItem("cuestionario", this.cuestionario.id);
-    this.router.navigate(['/reporte', respuestasUsuario.id])
   }
 
   // Permite ver detalladamente el resultado de la evaluación realizada

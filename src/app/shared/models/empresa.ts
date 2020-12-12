@@ -9,4 +9,5 @@ export interface Empresa {
     idUser?: string;
     idCanton?: string;
     idSectorInd?: string;
+    fechaCreacion?: any
 }

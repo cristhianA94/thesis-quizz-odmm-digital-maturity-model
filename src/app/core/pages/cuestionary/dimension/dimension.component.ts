@@ -58,6 +58,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   respuestas: Respuesta[] = [];
   respuestasUsuario: RespuestasUsuario[] = [];
   respuestaUsuario: RespuestasUsuario = { metricas: [] };
+  idCategoria: string;
 
   constructor(
     private cuestionarioService: CuestionarioService,
@@ -69,6 +70,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.idUser = localStorage.getItem("uidUser");
     // REST para obtener cuestionario
+    this.idCategoria = this.cuestionarioService.idCategoria;
     this.cuestionarioService.onCuestionarioChanged
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((cuestionario) => {
@@ -123,7 +125,6 @@ export class DimensionComponent implements OnInit, OnDestroy {
     subcategoria.capacidades.forEach((capacidad, i) => {
       // Objeto Respuestas Usuario
       objMetrica = {
-        subcacategoria: subcategoria.nombre, // TODO eliminar por si
         metrica: capacidad.metrica.nombre,
         respuesta: {
           opcion: this.respuestas[i].opcion,
@@ -168,7 +169,7 @@ export class DimensionComponent implements OnInit, OnDestroy {
   guardarCategoria() {
 
     // Fecha para el registro del cuestionario
-    let fecha = new Date(Date.now()).toLocaleString().split(' ')[0];
+    let fecha = new Date();
     let puntuajeCategoria: number = 0;
 
     // Calcula peso categoria
@@ -183,11 +184,10 @@ export class DimensionComponent implements OnInit, OnDestroy {
     /* Guardar categoria DB */
     this.cuestionario = {
       idUser: this.idUser,
-      categoria: this.categoria.nombre,
-      peso: this.categoria.peso,
-      descripcion: this.categoria.descripcion,
+      categoria: this.idCategoria,
+      categoriaNombre: this.categoria.nombre,
+      peso: Number(this.categoria.peso),
       intento: 0,
-      fecha: fecha,
       puntuacionCategoria: Number(puntuajeCategoria.toFixed(2))
     };
 
@@ -195,7 +195,6 @@ export class DimensionComponent implements OnInit, OnDestroy {
       intento: 0,
       fecha: fecha,
       puntuacionCategoria: Number(puntuajeCategoria.toFixed(2)),
-      peso: this.categoria.peso,
       metricas: this.puntuajes[0].metricas.metricas
     }
 
@@ -216,43 +215,5 @@ export class DimensionComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-  /* 
-    test() {
-      this.cuestionario = {
-        idUser: this.idUser,
-        categoria: this.categoria.nombre
-      };
   
-      let fecha = new Date().toLocaleString();
-      let obj = {
-        intento: 2,
-        fecha: fecha,
-        puntuacionCategoria: 60,
-        metricas: [
-          {
-            metrica: "Nombre metrica",
-            respuesta:
-            {
-              opcion: "Opcion ejem",
-              recomendacion: "Recomendacion ejem"
-            },
-            subcategoria: "Subcategoria ejem"
-          },
-          {
-            metrica: "Nombre metrica",
-            respuesta:
-            {
-              opcion: "Opcion ejem",
-              recomendacion: "Recomendacion ejem"
-            },
-            subcategoria: "Subcategoria ejem"
-          },
-  
-        ]
-      }
-  
-      // Crea el cuestionario en la BD
-      this.cuestionarioService.createCuestionarioDB(this.cuestionario, obj);
-    }
-     */
 }

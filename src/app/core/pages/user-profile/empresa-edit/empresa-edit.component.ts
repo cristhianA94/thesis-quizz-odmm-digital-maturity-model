@@ -186,7 +186,8 @@ export class EmpresaEditComponent implements OnInit {
       tamanio_empresa: this.empresaForm.value.tamanio_empresa,
       idUser: this.idUser,
       idCanton: this.empresaForm.value.idCanton,
-      idSectorInd: this.empresaForm.value.idSectorInd
+      idSectorInd: this.empresaForm.value.idSectorInd,
+      fechaCreacion: new Date()
     }
 
     this.empresaService.updateEmpresa(empresaEdit);

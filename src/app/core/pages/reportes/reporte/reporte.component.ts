@@ -9,6 +9,7 @@ import { ChartDataSets, RadialChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 // PDF
 import * as jsPDF from 'jspdf';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -62,14 +63,14 @@ export class ReporteComponent implements OnInit, OnDestroy {
   cargarData() {
 
     // Cargar data en grafico dependiendo del id
-    let idCuestionario = localStorage.getItem("cuestionario");
+    let idCuestionario = this.actRouter.snapshot.queryParams['idCuestionario'];
     let idRespuesta = this.actRouter.snapshot.paramMap.get('id');
 
     let arrayDataUltimoIntento: number[] = [];
     let arrayDataPnultimoIntento: number[] = [];
 
     // Consulta la categoria consultada
-    this.cuestionarioService.getCuestionarioID(idCuestionario).subscribe((cat: any) => {
+    this.cuestionarioService.getCuestionarioID(idCuestionario).subscribe((cat: Cuestionario) => {
       this.categoria = cat;
     });
 
@@ -89,38 +90,46 @@ export class ReporteComponent implements OnInit, OnDestroy {
     });
 
     // Carga los cuestionarios evaluados por del usuario
-    this.cuestionarioService.getCuestionarioUserLogedDB().subscribe((cuestionarioUserDB: Cuestionario[]) => {
-      this.cuestionarios = cuestionarioUserDB;
+    this.cuestionarioService.getCuestionarioUserLogedDB()
+      .pipe(
+        map((data) => {
+          data.sort((a, b) => {
+            return a.categoriaNombre < b.categoriaNombre ? -1 : 1;
+          });
+          return data;
+        })
+      ).subscribe((cuestionarioUserDB: Cuestionario[]) => {
+        this.cuestionarios = cuestionarioUserDB;
 
-      // Recorre cada categoria evaluada
-      this.cuestionarios.forEach((cuestionario: Cuestionario, index) => {
-        // Labels para grafico de radar
-        this.radarChartLabels.push(cuestionario.categoria);
+        // Recorre cada categoria evaluada
+        this.cuestionarios.forEach((cuestionario: Cuestionario, index) => {
+          // Labels para grafico de radar
+          this.radarChartLabels.push(cuestionario.categoriaNombre);
 
-        // Obtiene las respuestas de cada categoria
-        this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestas: any) => {
-          // Asigna el ultimo intento de respuestas a cada categoria evaluada del usuario
-          this.cuestionarios[index].respuestasUsuario = respuestas[0];
+          // Obtiene las respuestas de cada categoria
+          this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestas: any) => {
+            // Asigna el ultimo intento de respuestas a cada categoria evaluada del usuario
+            this.cuestionarios[index].respuestasUsuario = respuestas[0];
 
-          // Data para grafico de radar
-          // Guarda la puntuacion de cada categoria evaluada del ultimo intento, mostrada en Porcentaje%
-          arrayDataUltimoIntento.push((respuestas[0].puntuacionCategoria) * 10);
+            // Data para grafico de radar
+            // Guarda la puntuacion de cada categoria evaluada del ultimo intento, mostrada en Porcentaje%
+            arrayDataUltimoIntento.push((respuestas[0].puntuacionCategoria) * 10);
 
-          // Valida si no existe otro intento
-          if (respuestas[1]) {
-            // Guarda la puntuacion de cada categoria evaluada del penultimo intento
-            arrayDataPnultimoIntento.push(respuestas[1].puntuacionCategoria);
-            //console.log("No tiene otro intento ");
-          } else {
-            arrayDataPnultimoIntento.push(0);
-          }
-          this.radarChartData[0].data = arrayDataUltimoIntento;
-          this.radarChartData[1].data = arrayDataPnultimoIntento;
+            // Valida si no existe otro intento
+            if (respuestas[1]) {
+              // Guarda la puntuacion de cada categoria evaluada del penultimo intento
+              arrayDataPnultimoIntento.push(respuestas[1].puntuacionCategoria);
+              //console.log("No tiene otro intento ");
+            } else {
+              arrayDataPnultimoIntento.push(0);
+            }
+            this.radarChartData[0].data = arrayDataUltimoIntento;
+            this.radarChartData[1].data = arrayDataPnultimoIntento;
+          });
         });
-      });
-      this.flag = true;
+        this.flag = true;
 
-    });
+      });
   };
 
 
@@ -177,7 +186,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
     doc.setTextColor(75, 86, 100);
     doc.text(15, 30, "1. ÍNDICE");
     var splitText = doc.splitTextToSize(textoIndice, 260);
-    doc.setTextColor(123,129,146);
+    doc.setTextColor(123, 129, 146);
     doc.setFontSize(14);
     doc.text(15, 45, splitText);
     // Separa el texto en otras lineas **Ajustar probando
@@ -258,7 +267,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
     doc.text(15, 40, splitText);
 
     //          ** 3.1 Grafico porcentaje **
-    let textoPorcentaje = `El nivel de madurez digital de la categoria ${this.categoria['categoria']} es:`;
+    let textoPorcentaje = `El nivel de madurez digital de la categoria ${this.categoria['categoriaNombre']} es:`;
 
     doc.setDrawColor(139, 196, 65);
     doc.setLineWidth(1.5);

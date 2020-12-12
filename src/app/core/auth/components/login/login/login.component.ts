@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
         if (result.dismiss === Swal.DismissReason.timer) {
         }
       });
-      //this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
+      this.alertaService.mensajeExito('¡Éxito!', 'Acceso correcto al sistema.');
       this.router.navigate(['/home']);
     }).catch(err => this.alertaService.mensajeError('Error', err.message));
   }

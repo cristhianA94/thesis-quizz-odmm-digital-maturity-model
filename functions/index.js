@@ -1,13 +1,11 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
-var serviceAccount = require("./keys/odmm-autodiagostico-firebase-adminsdk-davla-4c9cbc2ade.json");
+var serviceAccount = require("./keys/serviceAccountKey.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    // databaseURL: "https://fir-auth-web-75274.firebaseio.com",
     databaseURL: "https://odmm-autodiagostico.firebaseio.com",
 });
-
 
 const db = admin.firestore();
 
@@ -114,7 +112,6 @@ app.get("/", cors(), (req, res) => {
             var metricas = [];
             // Capacidades de cada subcategoria
             capacidadesSnap.forEach((capacidades) => {
-
                 capacidades.forEach((capacidad) => {
                     // Guarda el id de cada capacidad
                     const capacidadUid = capacidad.id;
@@ -137,7 +134,6 @@ app.get("/", cors(), (req, res) => {
                     categoria.subcategorias[elementPos].capacidades.push(capacidadObj);
                     metricas.push(capacidadUid);
                 });
-
             });
             // Elimina duplicado
             metricas = metricas.filter(onlyUnique);
@@ -177,15 +173,16 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
-
-// Actualiza los intentoss de cada categoria evaluada
+// Actualiza los intentoss de cada categoria evaluada y la puntuacion de la categoria
 exports.actualizarIntento = functions.firestore
     .document("cuestionarios/{cuestionarioId}/respuestas/{respuestaId}")
     .onCreate((snap, context) => {
-        const puntuacionCatRes = snap.data().puntuacionCategoria;
+        const data = snap.data();
         const cuestionarioId = context.params.cuestionarioId;
         let cuestionarioRef = db.collection("cuestionarios").doc(cuestionarioId);
-        var puntuacionCategoria = puntuacionCatRes;
+
+        var puntuacionCategoria = data.puntuacionCategoria;
+        var fechaCreacion = data.fecha;
 
         return cuestionarioRef
             .get()
@@ -195,7 +192,7 @@ exports.actualizarIntento = functions.firestore
 
                 return Promise.all([
                     snap.ref.update({ intento }),
-                    cuestionarioRef.update({ intento, puntuacionCategoria }),
+                    cuestionarioRef.update({ intento, fechaCreacion, puntuacionCategoria }),
                 ]);
             })
             .catch((err) => {

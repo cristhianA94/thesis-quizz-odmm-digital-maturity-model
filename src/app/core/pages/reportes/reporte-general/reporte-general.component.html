@@ -75,7 +75,7 @@
                                             <p class="card-category text-primary" style="font-size: large; font-weight: 400"><strong>NIVEL DE MADUREZ
                                                     DIGITAL DEL NEGOCIO</strong>
                                             </p>
-                                            <h3 class="card-title"> {{ puntuancionGlobal | number:'1.0-2' }}/100
+                                            <h3 class="card-title"> {{ puntuancionGlobal *10 | number:'1.0-2' }}/100
                                                 <small>%</small>
                                             </h3>
                                         </div>
@@ -102,7 +102,7 @@
                                             <i class="material-icons">pie_chart</i>
                                         </div>
                                         <p class="card-category text-primary" style="font-size: large; font-weight: 400">
-                                            <strong>{{ categoria.categoria | uppercase }}</strong></p>
+                                            <strong>{{ categoria.categoriaNombre | uppercase }}</strong></p>
                                         <h3 class="card-title">
                                             {{ categoria.respuestasUsuario['puntuacionCategoria'] *10 | number:'1.0-2' }}/100
                                             <small>%</small>
@@ -139,7 +139,7 @@
 
                                 <div class="card" *ngFor="let categoria of cuestionarios, let i = index">
                                     <div class="card-header" [style.color]="colors[i]">
-                                        <h3> Categoría: <strong>{{categoria.categoria | uppercase }} </strong>
+                                        <h3> Categoría: <strong>{{categoria.categoriaNombre | uppercase }} </strong>
                                         </h3>
                                         <h3>Porcentaje de Nivel de Madurez Digital obtenido:
                                             <strong>{{categoria.respuestasUsuario['puntuacionCategoria'] *10 | number:'1.0-2'}}
@@ -168,10 +168,6 @@
                 </button>
 
             </div>
-
-
-
-
 
 
         </div>

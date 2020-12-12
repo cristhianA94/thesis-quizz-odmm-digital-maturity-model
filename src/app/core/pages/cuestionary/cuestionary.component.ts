@@ -3,9 +3,12 @@ import { Router } from '@angular/router';
 
 // Services
 import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
+import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
 import { Categoria } from 'app/shared/models/categoria';
-import { CuestionarioService } from '../../services/cuestionario/cuestionario.service';
-import { Cuestionario } from '../../../shared/models/cuestionario';
+import { Cuestionario } from 'app/shared/models/cuestionario';
+
+import { keyBy, filter } from 'lodash';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cuestionary',
@@ -19,6 +22,7 @@ export class CuestionaryComponent implements OnInit {
 
   categorias: Categoria[] = [];
   categoriasEvaluadas: any[] = [];
+  cuestionarios: Cuestionario[] = [];
   load: boolean = false;
   select: boolean = false;
   evaluada: boolean = false;
@@ -36,54 +40,28 @@ export class CuestionaryComponent implements OnInit {
 
   cargarCategorias() {
     this.categoriasServices.getCategoriasDB().subscribe(categorias => {
+      this.cuestionarioServices.getCuestionarioDiaUserLogedDB().subscribe(cuestionarios => {
+        // Ids categorias del mismo dia
+        var idsCategorias = keyBy(cuestionarios, (o) => { return o.categoria.id });
+        // Filtro que contiene idCategorias diferentes a categorias
+        this.categorias = filter(categorias, (u) => {
+          return idsCategorias[u.id] === undefined;
+        });
 
-      this.categorias = categorias;
-      categorias.forEach((cate: Categoria) => {
-        // Comprueba si ya evaluo alguna categoria
-        this.categoriasEvaluadas = this.comprobarCatEvaluada(cate);
-        //console.log(this.categorias);
+        if (this.categorias.length === 0) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: '¡Excelente! Ha contestado todas las categorías.',
+            text: 'Vaya a la sección de "Reportes" para ver sus resultados.',
+            showConfirmButton: true,
+          })
+        };
 
+        this.load = true;
       });
-      console.log(this.categoriasEvaluadas);
-      console.log(this.categorias);
     });
   }
-
-  comprobarCatEvaluada(categoria: Categoria):any {
-    this.cuestionarioServices.getCuestionarioUserLogedDB().subscribe((respuestasUser: Cuestionario[]) => {
-
-      respuestasUser.forEach((cuestionario: Cuestionario) => {
-        let fechaIngreso = localStorage.getItem('fechaIngreso');
-        // Extrae el dia ingreso
-        let diaIngreso = fechaIngreso.split('/')[0];
-        let diaCatEvaluada = cuestionario.fecha.split('/')[0] || 1;
-
-        if (categoria.nombre == cuestionario.categoria) {
-          //this.categorias.push(categoria);
-          //console.log(this.categorias);
-          return this.categoriasEvaluadas;
-          /* // Sino coincide no las muestra
-          if (diaIngreso != diaCatEvaluada) {
-            //this.categorias.push(categoria);
-            return null;
-          } else {
-            return categoria;
-          } */
-        }
-        /* else{
-          this.categorias.push(categoria);
-          var arrTem: any = [...new Set(this.categorias)];
-          return arrTem;
-          
-        } */
-        // console.log(`Dia ingreso: ${diaIngreso} / Dia Categoria: ${diaCatEvaluada}`);
-      });
-
-    });
-
-    this.load = true;
-  }
-
 
   realizarEncuesta(categoria: Categoria) {
     this.select = true;

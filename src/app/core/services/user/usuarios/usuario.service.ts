@@ -26,7 +26,7 @@ export class UsuarioService implements Resolve<any> {
   idUser: string;
   usuario: Usuario;
   onUsuarioChanged: BehaviorSubject<any>;
-  
+
   adminCheck: BehaviorSubject<boolean>;
   adminUser: Observable<boolean>;
 
@@ -183,7 +183,7 @@ export class UsuarioService implements Resolve<any> {
       this.router.navigate(['/login']);
       this.alertaService.mensajeExito('¡Contraseña cambiada!', 'Por seguridad tienes que volver a loguearte.');
     }
-    else{
+    else {
       this.usuarioDoc = this.dbFire.doc(`usuarios/${usuario.id}`);
       delete usuario.id;
       delete usuario.clave;

@@ -48,13 +48,13 @@
                                         <mat-label>Seleccione la categoría</mat-label>
                                         <mat-select #idCategoria formControlName="idCategoria" name="Categorias" required>
                                             <mat-option *ngFor="let cuestionario of cuestionariosUser" [value]="cuestionario">
-                                                {{ cuestionario.categoria }}
+                                                {{ cuestionario.categoriaNombre }}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <button mat-raised-button type="button" [disabled]="!idCategoria.value" (click)="consultarUsuario()">
-                                                <mat-icon matSuffix>search</mat-icon>Consultar usuario
-                                            </button>
+                                        <mat-icon matSuffix>search</mat-icon>Consultar usuario
+                                    </button>
                                 </form>
                             </div>
 
@@ -104,14 +104,14 @@
                         </div>
                         <div class="row align-items-center">
 
-                            <div class="col-md-6 mx-auto">
+                            <div class="col-md-6 mx-auto" *ngIf="cuestionarios.length >= 1">
                                 <div class="text-center">
                                     <mat-form-field appearance="fill">
                                         <mat-label>Seleccione la categoría</mat-label>
                                         <mat-select #idCategoria name="Categorias" required>
                                             <mat-option value="todas">Todas las categorias</mat-option>
                                             <mat-option *ngFor="let cuestionario of cuestionarios" [value]="cuestionario">
-                                                {{ cuestionario.categoria }}
+                                                {{ cuestionario.categoriaNombre }}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -140,9 +140,8 @@
                         <div class="card-icon">
                             <i class="material-icons"></i>
                         </div>
-                        <h3 class="card-title"> <strong>Respuestas de la categoría: {{ cuestionario.categoria }}
-                            </strong>
-                        </h3>
+                        <h3 class="card-title"> Respuestas de la categoría:
+                            <strong>{{ cuestionario.categoriaNombre }}</strong></h3>
                     </div>
                     <div class="card-body">
                         <!-- Tabla -->
@@ -157,7 +156,9 @@
                             <!-- Fecha Column -->
                             <ng-container matColumnDef="Fecha">
                                 <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                                <td mat-cell *matCellDef="let element"> {{element.fecha }} </td>
+                                <!-- TODO Pipe transforma data tipo TimeStamp de Firestore -->
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.fecha.toDate() | date: 'dd MMM hh:mm' }} </td>
                             </ng-container>
                             <!-- Intento Column -->
                             <ng-container matColumnDef="Intento">
@@ -170,7 +171,7 @@
                                 <th mat-header-cell *matHeaderCellDef> </th>
                                 <td mat-cell *matCellDef="let element" style="width: 130px;">
                                     <div class="button-container">
-                                        <button (click)="verReporte(element)" matTooltip="Ver reporte" matTooltipPosition="above" matTooltipHideDelay="100" mat-mini-fab color="accent" aria-label="Ver cuestionario">
+                                        <button [routerLink]="['/reporte/'+ element.id]" [queryParams]="{idCuestionario: cuestionario.id}" matTooltip="Ver reporte" matTooltipPosition="above" matTooltipHideDelay="100" mat-mini-fab color="accent" aria-label="Ver cuestionario">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                     </div>

@@ -11,7 +11,7 @@ import {
 import { Empresa } from 'app/shared/models/empresa';
 import { AlertsService } from '../../notificaciones/alerts.service';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ export class EmpresaService implements Resolve<any>{
   empresaDoc: AngularFirestoreDocument<Empresa>;
   empresas: Empresa[];
   onEmpresaChanged: BehaviorSubject<any>;
+  idReporte: string;
 
   constructor(
     private afs: AngularFirestore,
@@ -34,7 +35,21 @@ export class EmpresaService implements Resolve<any>{
     this.onEmpresaChanged = new BehaviorSubject({});
   }
 
-  resolve(): Observable<any> | Promise<any> | any {
+  // resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
+  //   this.categoryUid = route.params.id;
+
+  //   return new Promise((resolve, reject) => {
+  //     Promise.all([
+  //       this.getCategoriaDB(this.categoryUid),
+  //     ])
+  //       .then(() => {
+  //         resolve();
+  //       }, reject);
+  //   });
+  // }
+
+  resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
+    this.idReporte = route.params.id;
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getEmpresasUserDB()
@@ -73,9 +88,9 @@ export class EmpresaService implements Resolve<any>{
   }
 
   // Obtiene todas las empresas
-  getEmpresasUserID(idUser: string): Observable<Empresa[]> {
+  getEmpresasUserSectorID(idUser: string, idSector: string): Observable<Empresa[]> {
     this.empresaCollection = this.afs.collection("empresas", ref => {
-      return ref.orderBy('razon_social').where('idUser', '==', idUser)
+      return ref.orderBy('fechaCreacion').where('idUser', '==', idUser).where('idSectorInd', '==', idSector)
     });
     return this.empresaCollection.snapshotChanges().pipe(
       map(actions =>
@@ -88,9 +103,9 @@ export class EmpresaService implements Resolve<any>{
   }
 
   // Obtiene todas las empresas
-  getEmpresasDB(): Observable<Empresa[]> {
+  getEmpresasUserID(idUser: string): Observable<Empresa[]> {
     this.empresaCollection = this.afs.collection("empresas", ref => {
-      return ref.orderBy('razon_social')
+      return ref.orderBy('fechaCreacion').where('idUser', '==', idUser)
     });
     return this.empresaCollection.snapshotChanges().pipe(
       map(actions =>
@@ -114,7 +129,8 @@ export class EmpresaService implements Resolve<any>{
       tamanio_empresa: formulario.tamanio_empresa,
       idUser: uidUser,
       idCanton: formulario.idCanton,
-      idSectorInd: formulario.idSectorInd
+      idSectorInd: formulario.idSectorInd,
+      fechaCreacion: new Date()
     }
 
     this.empresaCollection = this.afs.collection('empresas');

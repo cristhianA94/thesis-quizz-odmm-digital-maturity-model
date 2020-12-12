@@ -7,43 +7,36 @@
             </div>
         </div>
 
+        <mat-card>
+            <mat-card-content>
+                <h2 class="card-title text-center"><strong>CATEGORÍAS A EVALUAR</strong></h2>
+                <p class="card-category">El tiempo estimado por cada categoría son de 10-15 minutos. Puede ir evaluando cada categoría independientemente si no cuenta con suficiente tiempo para evaluar todas a la vez.
+                </p>
+                <div class="row">
 
-
-        <div *ngIf="!select">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title text-center"><strong>CATEGORÍAS A EVALUAR</strong></h2>
-                    <p class="card-category">El tiempo estimado por cada categoría son de 10-15 minutos. Puede ir evaluando cada categoría independientemente si no cuenta con suficiente tiempo para evaluar todas a la vez.
-                    </p>
-                </div>
-                <div class="card-body">
-                    <!-- <div class="col-md-12">
-                        <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
-                    </div> -->
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let categoria of categorias">
-                            <div class="card card-chart" [id]="categoria.nombre">
-                                <div class="card-header card-header-info">
-                                    <div class="ct-chart" id="dailySalesChart"></div>
-                                </div>
-                                <div class="card-body">
-                                    <h3 class="card-title text-center"> <strong> <i class="material-icons">category</i>
-                                            {{ categoria.nombre | uppercase }}</strong></h3>
-                                    <p class="card-category">
-                                        <span class="text-success">{{ categoria.descripcion }} </span> </p>
-                                </div>
-                                <div class="text-center">
-                                    <button (click)="realizarEncuesta(categoria)" class="btn-block" mat-stroked-button aria-label="Elegir categoria a evaluar">
-                                        <mat-icon>arrow_forward_ios</mat-icon> Evaluar
-                                    </button>
-                                </div>
+                    <div class="col-4" *ngFor="let categoria of categorias">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-info">
+                                <div class="ct-chart" id="dailySalesChart"></div>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-center"> <strong> <i class="material-icons">category</i>
+                                        {{ categoria.nombre | uppercase }}</strong></h3>
+                                <p class="card-category">
+                                    <span class="text-success">{{ categoria.descripcion }} </span> </p>
+                            </div>
+                            <div class="text-center">
+                                <button (click)="realizarEncuesta(categoria)" class="btn-block" mat-stroked-button aria-label="Elegir categoria a evaluar">
+                                    <mat-icon>arrow_forward_ios</mat-icon> Evaluar
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+            </mat-card-content>
+        </mat-card>
 
-            </div>
-        </div>
+
 
         <div class="row" *ngIf="select">
             <div class="col-md-12">

@@ -15,8 +15,8 @@ import { AlertsService } from '../notificaciones/alerts.service';
 export class CuestionarioService implements Resolve<any>{
 
   // URL dev and production
-  URL_LOCAL: string = "http://localhost:5001/fir-auth-web-75274/us-central1";
-  URL_API: string = "https://us-central1-fir-auth-web-75274.cloudfunctions.net";
+  URL_LOCAL: string = "http://localhost:5000/odmm-autodiagostico/us-central1";
+  URL_API: string = "https://us-central1-odmm-autodiagostico.cloudfunctions.net";
 
   cuestionarioCollection: AngularFirestoreCollection<Cuestionario>;
   cuestionarioDoc: AngularFirestoreDocument<Cuestionario>;
@@ -30,6 +30,7 @@ export class CuestionarioService implements Resolve<any>{
   subscripcion: Subscription;
 
   duplicated: boolean = false;
+  idCategoria: any;
 
   constructor(
     private http: HttpClient,
@@ -41,11 +42,11 @@ export class CuestionarioService implements Resolve<any>{
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
-    let idCategoria = route.params.id;
+    this.idCategoria = route.params.id;
 
     return new Promise((resolve, reject) => {
       Promise.all([
-        this.getCuestionarioAPI(idCategoria),
+        this.getCuestionarioAPI(this.idCategoria),
       ])
         .then(() => {
           resolve();
@@ -92,15 +93,55 @@ export class CuestionarioService implements Resolve<any>{
         }))
     );
   }
+  // 
+  getCuestionarioDiaUserLogedDB(): Observable<Cuestionario[]> {
 
+    let idUser = localStorage.getItem("uidUser");
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
+
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref.where("idUser", "==", idUser).where("fechaCreacion", ">=", fechaActual);
+    });
+    return this.cuestionarioCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as Cuestionario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      )
+    );
+  }
   // Obtiene los cuestionarios que ha respondido el usuario logueado
   getCuestionarioUserLogedDB(): Observable<Cuestionario[]> {
 
     let idUser = localStorage.getItem("uidUser");
 
     this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
-      return ref.orderBy("categoria").where("idUser", "==", idUser);
+      return ref.where("idUser", "==", idUser);
     });
+    return this.cuestionarioCollection.snapshotChanges().pipe(
+      map((actions) =>
+        actions.map((a) => {
+          const data = a.payload.doc.data() as Cuestionario;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })
+      )
+    );
+  }
+  
+  // Valida que solo se agregue solo un documento por usuario y categoria
+  validarUsuarioCategoria(categoriaId): Observable<Cuestionario[]> {
+
+    let idUser = localStorage.getItem("uidUser");
+    const categoriaRef = this.afs.doc(`categorias/${categoriaId}`).ref;
+
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref.where("idUser", "==", idUser).where("categoria", "==", categoriaRef).limit(1);
+    });
+
     return this.cuestionarioCollection.snapshotChanges().pipe(
       map((actions) =>
         actions.map((a) => {
@@ -152,40 +193,24 @@ export class CuestionarioService implements Resolve<any>{
     return this.cuestionario_respuestasDoc.valueChanges();
   }
 
-  /* 
-  getBanks({commit},payload){
-      const arrayBank =[]
-      db.collection('AreaConocimiento').doc(payload.idArea).collection('Bloques').doc(payload.idBlock).collection('BancoPreguntas').get().then(snapshot => {
-        snapshot.forEach(doc => {
-          let bank = doc.data();
-          bank.id = doc.id
-          arrayBank.push(bank)
-        });
-      })
-  */
-
   // Guarda el cuestionario de la categoria evaluada
-  createCuestionarioDB(cuestionario: Cuestionario, respuestaUser: any) {
+  async createCuestionarioDB(cuestionario: Cuestionario, respuestaUser: any) {
 
     cuestionario.intento = 0;
+    // Asigna la fecha de creacion
+    cuestionario.fechaCreacion = new Date();
+
     // Obtiene los cuestionarios de el usuario logueado
-    this.subscripcion = this.getCuestionarioUserLogedDB().subscribe((cuestionarioDB: any) => { /// ESTE lo buelve a ejecutar
-      //console.log(cuestionarioDB);
+    this.subscripcion = this.validarUsuarioCategoria(cuestionario.categoria).subscribe((cuestionariodb: any) => { /// ESTE lo buelve a ejecutar
+      cuestionario.categoria = this.afs.doc(`categorias/${cuestionario.categoria}`).ref;
 
-      // Filtra el cuestionario de la categoria evaluada
-      let cuestionarioEvaluado: any = cuestionarioDB.filter((cat: Cuestionario) => cat.categoria === cuestionario.categoria);
+      // Detecta si contesto la categoria ya
+      this.duplicated = cuestionariodb.length > 0 ? true : false;
 
-      // Control cuando sea una categoria nueva
-      if (typeof cuestionarioEvaluado != "undefined") {
-        let objTemp = { categoria: " " };
-        cuestionarioEvaluado.push(objTemp);
-      }
-
-      // Busca entre los cuestionarios la categoria evaluada actual, para que no se agregue una duplicidad de docs
-      if (cuestionario.categoria == cuestionarioEvaluado[0].categoria) {
-        this.duplicated = true;
-        // Agrega las metricas del nuevo intento de esa categoria.
-        this.afs.collection('cuestionarios/' + cuestionarioEvaluado[0].id + '/respuestas').add(respuestaUser)
+      // Agrega las respuestas a una categoria ya contestada
+      if (this.duplicated) {
+        //await this.afs.doc(`cuestionarios/${cuestionariodb[0].id}`).update({ fechaCreacion: cuestionario.fechaCreacion });
+        this.afs.collection('cuestionarios/' + cuestionariodb[0].id + '/respuestas').add(respuestaUser)
           .then(() => {
             // Notificacion
             let timerInterval
@@ -212,10 +237,9 @@ export class CuestionarioService implements Resolve<any>{
             this.router.navigate(["/cuestionario"]);
           })
           .catch((err) => this.alertaService.mensajeError("Error", err));
-      }
 
-      // Registra la nueva categoria evaluada
-      if (!this.duplicated) {
+      // Si no ha contestado la categoria se agrega como nueva.
+      } else {
         this.cuestionarioCollection = this.afs.collection('cuestionarios');
         this.cuestionarioCollection.add(cuestionario)
           .then((docCuestionario) => {

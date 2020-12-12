@@ -1,14 +1,5 @@
 {
   "projects": {
-    "default": "fir-auth-web-75274"
-  },
-  "targets": {
-    "fir-auth-web-75274": {
-      "hosting": {
-        "material-dashboard-angular": [
-          "fir-auth-web-75274"
-        ]
-      }
-    }
+    "default": "odmm-autodiagostico"
   }
 }

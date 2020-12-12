@@ -9,6 +9,10 @@ import { MetricasService } from "app/core/services/cuestionario/metricas/metrica
 import { Subcategoria } from 'app/shared/models/subcategoria';
 import { Capacidad } from 'app/shared/models/capacidad';
 import { Metrica, Respuesta } from 'app/shared/models/metrica';
+import { Sector_Industrial } from '../../models/sector_industrial';
+import { SectorIndustrialService } from '../../../core/services/user/sectorIndustrial/sector-industrial.service';
+import { Categoria } from '../../models/categoria';
+import { CategoriasService } from '../../../core/services/cuestionario/categorias/categorias.service';
 
 
 @Component({
@@ -31,9 +35,11 @@ export class CsvLoadDataComponent implements OnInit {
 
   constructor(
     private ngxCsvParser: NgxCsvParser,
+    private sectorIndustrialService: SectorIndustrialService,
+    private categoriasServices: CategoriasService,
     private subcategoriasServices: SubcategoriasService,
     private capacidadesServices: CapacidadesService,
-    private metricasServices: MetricasService
+    private metricasServices: MetricasService,
   ) { }
 
   ngOnInit(): void { }
@@ -69,6 +75,18 @@ export class CsvLoadDataComponent implements OnInit {
 
   cargarData() {
     switch (this.tipo) {
+      case "SectorIndustrial":
+        this.csvRecords.forEach((element: Sector_Industrial) => {
+          element.nombre = element.nombre;
+          this.sectorIndustrialService.createSectorIndustrialDB(element);
+        });
+        break;
+      case "Categoria":
+        this.csvRecords.forEach((element: Categoria) => {
+          element.peso = Number(element.peso)
+          this.categoriasServices.createCategoriaDB(element);
+        });
+        break;
       case "Subcategoria":
         this.csvRecords.forEach((element: Subcategoria) => {
           element.peso = Number(element.peso)
@@ -137,7 +155,7 @@ export class CsvLoadDataComponent implements OnInit {
             respuestas: respuestas,
             idCapacidad: element.idCapacidad
           }
-          
+
           this.metricasServices.createMetricaDB(metrica);
         });
 

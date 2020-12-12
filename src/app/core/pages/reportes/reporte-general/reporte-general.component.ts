@@ -8,17 +8,15 @@ import { RespuestasUsuario, Cuestionario } from 'app/shared/models/cuestionario'
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
 import { EmpresaService } from 'app/core/services/user/empresas/empresa.service';
 import { UsuarioService } from 'app/core/services/user/usuarios/usuario.service';
-import { SectorIndustrialService } from 'app/core/services/user/sectorIndustrial/sector-industrial.service';
 
 import { ChartDataSets, RadialChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 // PDF
 import * as jsPDF from 'jspdf';
 // Lodash
-import 'lodash';
-declare var _: any;
-
-
+//import { keyBy, filter, uniqueId } from 'lodash';
+import { of, Subscription, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reporte-general',
@@ -36,18 +34,25 @@ export class ReporteGeneralComponent implements OnInit {
   cuestionariosUsers: Cuestionario[] = [];
   respuestasUsuario: RespuestasUsuario;
   metricas: any[] = [];
-  categoria: any;
 
   empresas: Empresa[] = [];
   empresa: Empresa;
   empresasUsers: Empresa[] = [];
-  empresaUser: Empresa;
+
+  cuestionariosUsersSector: any[] = [];
 
   puntuancionGlobal: number;
 
+  subscripcion: Subscription;
+  subscripcion2: Subscription;
+
+  $empresasUsersMismoS: Observable<Empresa[]>;
+
+  puntuacionesUsers: any[] = [];
+
   // Colores para los puntuajes
   colors = ["#f28020", "#8bc441", "#e7c120", "#1a97d5", "#12b5b2", "#12ae4b"];
-  colorsOpacity = ["#ecb180", "#c4e995", "#e9d687", "#70bee6", "#63d6d4", "#75b98e"];
+  colorsOpacity = ["#ecb180", "#c4e995", "#e9d687", "#94cbe6", "#95d5c0", "#a0d5b3"];
 
   // Radar
   public radarChartOptions: RadialChartOptions = {
@@ -73,11 +78,11 @@ export class ReporteGeneralComponent implements OnInit {
     private cuestionarioService: CuestionarioService,
     private empresaService: EmpresaService,
     private userService: UsuarioService,
-    private sectorIService: SectorIndustrialService,
   ) { }
 
   ngOnInit(): void {
     this._cargarData();
+
   }
 
 
@@ -87,52 +92,61 @@ export class ReporteGeneralComponent implements OnInit {
       this.empresas = empresas
       this.empresa = empresas[0];
     });
-    this._extraerData();
-    this._extraerDataEmpresas();
+    this.extraerData();
+    // this._extraerDataEmpresas();
   };
 
-  private _extraerData() {
+  private extraerData() {
     let arrayDataUltimoIntento: number[] = [];
     let arrayDataPnultimoIntento: number[] = [];
 
     let arrayPuntuacionGloblal: number[] = [];
 
     // Carga los cuestionarios evaluados por del usuario
-    this.cuestionarioService.getCuestionarioUserLogedDB().subscribe((cuestionarioUserDB: Cuestionario[]) => {
+    this.cuestionarioService.getCuestionarioUserLogedDB().pipe(
+      // Ordenad las categorias alfabeticamente
+      map((data) => {
+        data.sort((a, b) => {
+          return a.categoriaNombre < b.categoriaNombre ? -1 : 1;
+        });
+        return data;
+      })
+    ).subscribe((cuestionarioUserDB: Cuestionario[]) => {
       this.cuestionarios = cuestionarioUserDB;
 
-      // Recorre cada categoria evaluada
+      // Recorre cada  evaluada
       this.cuestionarios.forEach((cuestionario: Cuestionario, index) => {
 
         // Labels para grafico de radar
-        this.radarChartLabels.push(cuestionario.categoria);
+        this.radarChartLabels.push(cuestionario.categoriaNombre);
 
-        // Obtiene las respuestas de cada categoria
+        // Obtiene las respuestas de cada
         this.cuestionarioService.getCuestionarioRespuestasDB(cuestionario.id).subscribe((respuestas: any) => {
-          // Asigna el ultimo intento de respuestas a cada categoria evaluada del usuario
+          // Asigna el ultimo intento de respuestas a cada  evaluada del usuario
           this.cuestionarios[index].respuestasUsuario = respuestas[0];
 
           this.flag = true;
-          // Asigna las respuestas de cada categoria
+          // Asigna las respuestas de cada
           this.metricas.push(this.cuestionarios[index].respuestasUsuario["metricas"]);
 
-          // Data para grafico de radar
-          // Guarda la puntuacion de cada categoria evaluada del ultimo intento
+          //        Data para grafico de radar
+          // Guarda la puntuacion de cada  evaluada del ultimo intento
           arrayDataUltimoIntento.push(respuestas[0].puntuacionCategoria * 10);
 
           // Valida si no existe otro intento
           if (respuestas[1]) {
-            // Guarda la puntuacion de cada categoria evaluada del penultimo intento
+            // Guarda la puntuacion de cada  evaluada del penultimo intento
             arrayDataPnultimoIntento.push(respuestas[1].puntuacionCategoria);
             //console.log("No tiene otro intento ");
           } else {
             arrayDataPnultimoIntento.push(0);
           }
+          // Asigna las puntuaciones a la data del grafico de radar del ultimo y penultimo intento
           this.radarChartData[0].data = arrayDataUltimoIntento;
           this.radarChartData[1].data = arrayDataPnultimoIntento;
 
           // TODO Madurez digital global
-          //Agrega todas las puntuaciones de cada categoria
+          //Agrega todas las puntuaciones de cada
           arrayPuntuacionGloblal.push(this.cuestionarios[index].respuestasUsuario['puntuacionCategoria'] * this.cuestionarios[index].peso);
           // Suma todos los elementos del calculo anterior
           this.puntuancionGlobal = arrayPuntuacionGloblal.reduce((x, y) => x + y);
@@ -145,64 +159,69 @@ export class ReporteGeneralComponent implements OnInit {
 
   private _extraerDataEmpresas() {
 
-    let empresas_mismoSectorI: Empresa[] = [];
-    var empresasSectorI: Empresa[] = [];
-
-    let cuestionariosSector: any[] = []
-    let cuestionario
-
-    let arrayDataUltimoIntento: number[] = [];
-    let arrayDataPnultimoIntento: number[] = [];
-
-    this.userService.getUsersDB().subscribe((users: Usuario[]) => {
+    this.subscripcion = this.userService.getUsersDB().subscribe((users: Usuario[]) => {
       // Recorre a cada usuario
-      users.forEach((user: Usuario, iUser: number) => {
+      users.forEach((user: Usuario) => {
         // Consulta las empresas de cada usuario
-        this.empresaService.getEmpresasUserID(user.id).subscribe((empresas: Empresa[]) => {
+        this.empresaService.getEmpresasUserSectorID(user.id, this.empresa.idSectorInd).subscribe((empresas: Empresa[]) => {
           // Escoge la primera empresa registrada como la principal
-          this.empresaUser = empresas[0];
-          // Crea un array de cada usuario con su principal empresa
-          this.empresasUsers.push(this.empresaUser);
-
-          //TODO Filtra las empresas del mismo sector industrial
-          this.empresasUsers.forEach(empresa => {
-            if (empresa.idSectorInd == this.empresa.idSectorInd) {
-              empresas_mismoSectorI.push(empresa);
-            }
+          empresas.forEach((empresa: Empresa) => {
+            this.empresasUsers.push(empresa);
           });
-          // Depura array a empresas del mismo sector
-          empresasSectorI = [...new Set(empresas_mismoSectorI)];
-
-          empresasSectorI.forEach((empresa: Empresa, index: number) => {
-            // Obtiene todos los cuestionarios de cada empresa del mismo sector Industrial
-            this.cuestionarioService.getCuestionarioUserDB(empresa.idUser).subscribe((cuestionariosUser: Cuestionario[]) => {
-              // Asigna todos los cuestionarios a cada usuario
-              cuestionariosSector[index] = cuestionariosUser;
-            });
-
-          });
-
-          console.log('cuestioanriso Sector', cuestionariosSector);
-          cuestionariosSector.forEach((cuestionarioUser: Cuestionario) => {
-            this.cuestionariosUsers.push(cuestionarioUser);
-
-
-          });
-
-          console.log(this.cuestionariosUsers);
-          
-          // Depura array a empresas del mismo sector
-          //var test = [...new Set(this.cuestionariosUsers)];
-
-
-
         });
-
-
+        // this.subscripcion2.unsubscribe();
       });
+      this.$empresasUsersMismoS = of(this.empresasUsers);
 
-
+      // console.log('aqui1', this.empresasUsers);
+      this._calcularResultadosSectores(this.$empresasUsersMismoS);
+      //this.subscripcion.unsubscribe();
     });
+  }
+
+  private _calcularResultadosSectores($empresas: Observable<Empresa[]>) {
+    var idsEmpresas: any[];
+    var test: any[] = [];
+    var test2: any[] = [];
+
+    this.$empresasUsersMismoS.subscribe((empresasUser) => {
+
+      // Consulta los puntuajes de las categorias por cada empresa con el mismo sector empresarial
+      // console.log('aqui', empresasUser);
+      empresasUser.forEach(empresa => {
+
+        console.log('aqui', empresa);
+
+        /* this.cuestionarioService.getCuestionarioUserDB(empresa.idUser).subscribe((cuestionariosUser: Cuestionario[]) => { //array[5] x usuario => lenght = usuarios
+          // console.log('idUser - ', empresa.idUser, '-', cuestionariosUser);
+          // Recorre cada categoria evaluada de los usuarios
+          cuestionariosUser.forEach((cuestionario, index) => { // lenght = 5 x cada categoria
+            // TODO Agrega los puntuajes de cada categoria  de los usuarios
+            this.puntuacionesUsers.push(cuestionario);
+          });
+        }); */
+        // this.puntuaciones = [... new Set(this.puntuaciones)];
+      });
+    });
+
+    // Extrae solo los idsUsuarios
+    // idsEmpresas = empresas.map((empresa => empresa.idUser));
+
+    // console.log(this.cuestionariosUsersSector);
+    // console.log('aqui', this.puntuacionesUsers);
+    //console.log('aqui', test);
+
+
+
+    /* test = this.cuestionariosUsersSector.filter((item, pos) => {
+      return this.cuestionariosUsersSector.indexOf(item) == pos;
+    }); */
+    // console.log('test ', test);
+    /* test = filter(this.cuestionariosUsersSector, (user) => {
+      return user.puntuacionCategoria;
+    }); */
+
+
 
   }
 
@@ -303,14 +322,14 @@ export class ReporteGeneralComponent implements OnInit {
     doc.addPage();
 
     //          ** 2. INTRODUCCION 2 **
-    let textCategorias = "     1. Dinamismo estratégico: Evalúa hasta qué punto la organización puede definir e implementar estrategias digitales eficaces basadas en una visión corporativa y un conjunto de objetivos claros.\n\n     2. Centrado en el cliente: Evalúa hasta qué punto la organización utiliza activamente los conocimientos del cliente para ofrecer una experiencia ROADS personalizada a sus clientes. La ODMM asume que los mejores negocios digitales hacen esto a través de un enfoque en la marca, la experiencia del cliente y el gobierno de la experiencia.\n\n     3. Cultura digital, talento y habilidades: Esta categoría mide las herramientas, habilidades y procesos necesarios para capacitar a una fuerza laboral digital, evaluando cómo una organización contrata, retiene y motiva a los miembros de su equipo.\n\n     4. Innovación y entrega: Esta categoría evalúa la capacidad de la organización para crear y ofrecer de forma rápida y eficaz productos y servicios digitales innovadores junto con un ecosistema de socios.\n\n     5. Big Data e IA: Evalúa el grado en que la organización utiliza los datos para crear negocios a través del impulso de la eficacia operativa y la reducción de costes, y a través de ingresos crecientes.\n\n     6. Liderazgo Tecnológico: Esta categoría evalúa hasta qué punto la organización es capaz de adoptar nuevas tecnologías digitales junto con un gobierno efectivo y bien definido para ofrecer operaciones totalmente automatizadas, escalables y fiables."
+    let texts = "     1. Dinamismo estratégico: Evalúa hasta qué punto la organización puede definir e implementar estrategias digitales eficaces basadas en una visión corporativa y un conjunto de objetivos claros.\n\n     2. Centrado en el cliente: Evalúa hasta qué punto la organización utiliza activamente los conocimientos del cliente para ofrecer una experiencia ROADS personalizada a sus clientes. La ODMM asume que los mejores negocios digitales hacen esto a través de un enfoque en la marca, la experiencia del cliente y el gobierno de la experiencia.\n\n     3. Cultura digital, talento y habilidades: Esta categoría mide las herramientas, habilidades y procesos necesarios para capacitar a una fuerza laboral digital, evaluando cómo una organización contrata, retiene y motiva a los miembros de su equipo.\n\n     4. Innovación y entrega: Esta categoría evalúa la capacidad de la organización para crear y ofrecer de forma rápida y eficaz productos y servicios digitales innovadores junto con un ecosistema de socios.\n\n     5. Big Data e IA: Evalúa el grado en que la organización utiliza los datos para crear negocios a través del impulso de la eficacia operativa y la reducción de costes, y a través de ingresos crecientes.\n\n     6. Liderazgo Tecnológico: Esta categoría evalúa hasta qué punto la organización es capaz de adoptar nuevas tecnologías digitales junto con un gobierno efectivo y bien definido para ofrecer operaciones totalmente automatizadas, escalables y fiables."
     // Linea superior
     doc.setDrawColor(139, 196, 65);
     doc.setLineWidth(1.5);
     doc.line(10, 13, 200, 13);
 
     doc.text(15, 30, "ODMM se divide en seis categorías principales:");
-    var splitText2 = doc.splitTextToSize(textCategorias, 180);
+    var splitText2 = doc.splitTextToSize(texts, 180);
     doc.setFontSize(12);
     doc.text(15, 40, splitText2);
 
@@ -327,7 +346,7 @@ export class ReporteGeneralComponent implements OnInit {
     doc.setLineWidth(1.5);
     doc.line(10, 13, 200, 13);
 
-    let textoResultados = "A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho cuestionario para la cuantificación del nivel de madurez digital de tu negocio.";
+    let textoResultados = "A continuación se ofrece una valoración y análisis a detalle de los resultados obtenidos al realizar el cuestionario de autodiagnóstico, considerando cada respuesta reflejada en las preguntas de dicho cuestionario para la cuantificación del nivel de madurez digital de su negocio.";
 
     doc.setFontSize(20);
     doc.setFontStyle("bold");
@@ -339,35 +358,181 @@ export class ReporteGeneralComponent implements OnInit {
     doc.setFontSize(12);
     doc.text(15, 40, splitText)
 
+    // Porcentajes de madurez de cada categoria
+    let porcentCat1 = (Number(this.cuestionarios[0].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+    let porcentCat2 = (Number(this.cuestionarios[1].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+    let porcentCat3 = (Number(this.cuestionarios[2].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+    let porcentCat4 = (Number(this.cuestionarios[3].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+    let porcentCat5 = (Number(this.cuestionarios[4].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+    let porcentCat6 = (Number(this.cuestionarios[5].respuestasUsuario['puntuacionCategoria'] * 10).toFixed(0)).toString() + '%' || '0';
+
+    let porcentajeGlobal = (Number(this.puntuancionGlobal * 10).toFixed(0)).toString() + '%';
+
+    var catTotalText = 'NIVEL DE MADUREZ DIGITAL DEL NEGOCIO';
+    var cat1Text = 'Categoría: BIG DATA E IA';
+    var cat2Text = 'Categoría: CENTRO DE ATENCIÓN AL CLIENTE';
+    var cat3Text = 'Categoría: CULTURA DIGITAL, TALENTO Y HABILIDADES';
+    var cat4Text = 'Categoría: DINAMISMO ESTRATÉGICO';
+    var cat5Text = 'Categoría: INNOVACIÓN Y ENTREGA RÁPIDA';
+    var cat6Text = 'Categoría: LIDERAZGO TECNOLÓGICO';
+
+    // Porcentaje nivel madurez total
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(catTotalText, 78);
+    doc.text(75, 65, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(230, 230, 14);
+    doc.roundedRect(80, 75, 50, 50, 24, 24, 'FD');
+    doc.setFillColor(254, 255, 225);
+    doc.roundedRect(85, 80, 40, 40, 19, 19, 'FD');
+    doc.setFontSize(30);
+    doc.setFontStyle("bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text(96, 102, porcentajeGlobal);
+
+    //        ** Porcentajes nivel madurez por categorias **
+    // Categoria 1
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat1Text, 55);
+    doc.text(22, 140, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(242, 128, 32);
+    doc.roundedRect(20, 160, 40, 40, 19, 19, 'FD');
+    doc.setFillColor(236, 177, 128);
+    doc.roundedRect(25, 165, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(32, 182, porcentCat1);
+
+    // Categoria 2
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat2Text, 60);
+    doc.text(80, 140, splitText);
 
     doc.setLineWidth(0)
     doc.setDrawColor(0)
     doc.setFillColor(139, 196, 65);
-    doc.roundedRect(80, 70, 40, 40, 19, 19, 'FD');
+    doc.roundedRect(85, 160, 40, 40, 19, 19, 'FD');
     doc.setFillColor(196, 233, 149);
-    doc.roundedRect(85, 75, 30, 30, 14, 14, 'FD');
-    doc.setFontSize(23);
+    doc.roundedRect(90, 165, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
     doc.setFontStyle("bold");
     doc.setTextColor(255, 255, 255);
-    doc.text(93, 93, '50%');
+    doc.text(98, 182, porcentCat2);
 
-    //          ** 3.1 Grafico radar **
+    // Categoria 3
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat3Text, 60);
+    doc.text(146, 140, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(231, 193, 32);
+    doc.roundedRect(150, 160, 40, 40, 19, 19, 'FD');
+    doc.setFillColor(233, 214, 135);
+    doc.roundedRect(155, 165, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(162, 182, porcentCat3);
+
+    // Categoria 4
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat4Text, 55);
+    doc.text(22, 215, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(26, 151, 213);
+    doc.roundedRect(20, 235, 40, 40, 19, 19, 'FD');
+    doc.setFillColor(148, 203, 230);
+    doc.roundedRect(25, 240, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(32, 257, porcentCat4);
+
+    // Categoria 5
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat5Text, 60);
+    doc.text(80, 215, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(18, 181, 178);
+    doc.roundedRect(85, 235, 40, 40, 19, 19, 'FD');
+    doc.setFillColor(149, 213, 192);
+    doc.roundedRect(90, 240, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(98, 257, porcentCat5);
+
+    // Categoria 6
+    doc.setFontSize(16);
+    doc.setTextColor(156, 58, 185);
+    doc.setFontStyle("bold");
+    var splitText = doc.splitTextToSize(cat6Text, 60);
+    doc.text(146, 215, splitText);
+
+    doc.setLineWidth(0)
+    doc.setDrawColor(0)
+    doc.setFillColor(18, 174, 75);
+    doc.roundedRect(150, 235, 40, 40, 19, 19, 'FD');
+    doc.setFillColor(160, 213, 179);
+    doc.roundedRect(155, 240, 30, 30, 14, 14, 'FD');
+    doc.setFontSize(24);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(162, 257, porcentCat6);
+
+    // Linea inferior
+    doc.setDrawColor(139, 196, 65);
+    doc.setLineWidth(1.5);
+    doc.line(10, 285, 200, 285);
+    // Crea otra pag
+    doc.addPage();
+
+    //                ** 3.1 Grafico radar **
+
+    // Linea superior
+    doc.setDrawColor(139, 196, 65);
+    doc.setLineWidth(1.5);
+    doc.line(10, 13, 200, 13);
+
     let textoRadar = "Aquí puede ver el nivel de madurez obtenido por cada categoría evaluada.\nLos datos reflejados son los porcentajes del último y penúltimo intento de sus evaluaciones por cada categoría.";
 
     doc.setFontSize(16);
     doc.setFontStyle("bold");
     doc.setTextColor(75, 86, 100);
-    doc.text(15, 125, "3.2. Gráfico de nivel de madurez digital por categoría");
+    doc.text(15, 30, "3.2. Gráfico de nivel de madurez digital por categoría");
     doc.setFontStyle("normal");
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
     var splitText = doc.splitTextToSize(textoRadar, 180);
-    doc.text(15, 135, splitText);
+    doc.text(15, 40, splitText);
 
     // Grafico radar
     let canvas: any = document.getElementById("canvas");
     let canvasImg = canvas.toDataURL("image/png");
-    doc.addImage(canvasImg, 'PNG', 40, 160, 120, 100);
+    doc.addImage(canvasImg, 'PNG', 50, 62, 100, 80);
 
     // Linea inferior
     doc.setDrawColor(139, 196, 65);
@@ -409,6 +574,7 @@ export class ReporteGeneralComponent implements OnInit {
     },
       margins
     );
+
   }
 
 }
