@@ -35,19 +35,6 @@ export class EmpresaService implements Resolve<any> {
     this.onEmpresaChanged = new BehaviorSubject({});
   }
 
-  // resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
-  //   this.categoryUid = route.params.id;
-
-  //   return new Promise((resolve, reject) => {
-  //     Promise.all([
-  //       this.getCategoriaDB(this.categoryUid),
-  //     ])
-  //       .then(() => {
-  //         resolve();
-  //       }, reject);
-  //   });
-  // }
-
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
     this.idReporte = route.params.id;
     return new Promise<void>((resolve, reject) => {
@@ -83,75 +70,6 @@ export class EmpresaService implements Resolve<any> {
           resolve(this.empresas);
         }, reject);
     });
-  }
-
-  // Obtiene todas las empresas
-  getEmpresasUserSectorID(
-    idUser: string,
-    idSector: string
-  ): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresas", (ref) => {
-      return ref
-        .orderBy("fechaCreacion")
-        .where("idUser", "==", idUser)
-        .where("idSectorInd", "==", idSector);
-    });
-    return this.empresaCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((res) => {
-          const data = res.payload.doc.data() as Empresa;
-          const id = res.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
-  }
-
-  getEmpresasByUser(userId) {
-    const empresasRef = this.afs
-      .collection<Empresa>(`empresas`, (ref) =>
-        ref.where("idUser", "==", userId)
-      )
-      .snapshotChanges()
-      .pipe(
-        map((actions) =>
-          actions.map((res) => {
-            const data = res.payload.doc.data() as Empresa;
-            const id = res.payload.doc.id;
-            return { id, ...data };
-          })
-        )
-      );
-
-    return new Promise((resolve, reject) => {
-      empresasRef.subscribe((response: any) => {
-        const usuariosFiltros = groupBy(response, "idSectorInd");
-        console.log(
-          "🚀 ~ file: usuario.service.ts ~ line 155 ~ UsuarioService ~ usuarioRef.subscribe ~ usuariosFiltros",
-          usuariosFiltros
-        );
-
-        // this.usuarios = response;
-        // this.onUsuariosChanged.next(this.usuarios);
-        resolve(response);
-      }, reject);
-    });
-  }
-
-  // Obtiene todas las empresas
-  getEmpresasUserID(idUser: string): Observable<Empresa[]> {
-    this.empresaCollection = this.afs.collection("empresas", (ref) => {
-      return ref.orderBy("fechaCreacion").where("idUser", "==", idUser);
-    });
-    return this.empresaCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((res) => {
-          const data = res.payload.doc.data() as Empresa;
-          const id = res.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
   }
 
   // Registro nueva empresa

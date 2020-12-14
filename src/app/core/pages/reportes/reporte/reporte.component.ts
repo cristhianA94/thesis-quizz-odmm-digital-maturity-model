@@ -113,12 +113,16 @@ export class ReporteComponent implements OnInit, OnDestroy {
 
             // Data para grafico de radar
             // Guarda la puntuacion de cada categoria evaluada del ultimo intento, mostrada en Porcentaje%
-            arrayDataUltimoIntento.push((respuestas[0].puntuacionCategoria) * 10);
+            arrayDataUltimoIntento.push(
+              Number((respuestas[0].puntuacionCategoria * 10).toFixed(2))
+            );
 
             // Valida si no existe otro intento
             if (respuestas[1]) {
               // Guarda la puntuacion de cada categoria evaluada del penultimo intento
-              arrayDataPnultimoIntento.push(respuestas[1].puntuacionCategoria);
+              arrayDataPnultimoIntento.push(
+                Number((respuestas[1].puntuacionCategoria * 10).toFixed(2))
+              );
               //console.log("No tiene otro intento ");
             } else {
               arrayDataPnultimoIntento.push(0);

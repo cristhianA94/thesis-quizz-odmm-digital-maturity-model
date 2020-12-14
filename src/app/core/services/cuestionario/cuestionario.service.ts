@@ -86,12 +86,9 @@ export class CuestionarioService implements Resolve<any> {
 
   // Obtiene todos los cuestionarios
   getCuestionariosDB(): Observable<Cuestionario[]> {
-    this.cuestionarioCollection = this.afs.collection(
-      "cuestionarios",
-      (ref) => {
-        return ref.orderBy("categoria");
-      }
-    );
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref.orderBy("categoria");
+    });
     return this.cuestionarioCollection.snapshotChanges().pipe(
       map((actions) =>
         actions.map((a) => {
@@ -102,20 +99,17 @@ export class CuestionarioService implements Resolve<any> {
       )
     );
   }
-  //
+  // Obtiene los cuestionarios que no contestó aun el mismo dia
   getCuestionarioDiaUserLogedDB(): Observable<Cuestionario[]> {
     let idUser = localStorage.getItem("uidUser");
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
 
-    this.cuestionarioCollection = this.afs.collection(
-      "cuestionarios",
-      (ref) => {
-        return ref
-          .where("idUser", "==", idUser)
-          .where("fechaCreacion", ">=", fechaActual);
-      }
-    );
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref
+        .where("idUser", "==", idUser)
+        .where("fechaCreacion", ">=", fechaActual);
+    });
     return this.cuestionarioCollection.snapshotChanges().pipe(
       map((actions) =>
         actions.map((a) => {
@@ -192,12 +186,13 @@ export class CuestionarioService implements Resolve<any> {
     );
   }
 
-  getCuestionarioByUser(idUsuario: string): Observable<Cuestionario[]> {
-    this.cuestionarioCollection = this.afs.collection(
-      "cuestionarios",
-      (ref) => {
-        return ref.orderBy("categoria").where("idUser", "==", idUsuario);
-      }
+  // Obtiene los cuestionarios de un usuario especifico
+  getCuestionarioUserID(idUsuario: string): Observable<Cuestionario[]> {
+    this.cuestionarioCollection = this.afs.collection("cuestionarios", (ref) => {
+      return ref
+        .orderBy("categoria")
+        .where("idUser", "==", idUsuario);
+    }
     );
     return this.cuestionarioCollection.valueChanges();
   }

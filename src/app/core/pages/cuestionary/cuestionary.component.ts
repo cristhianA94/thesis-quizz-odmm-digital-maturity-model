@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { Categoria } from 'app/shared/models/categoria';
+import { Cuestionario } from 'app/shared/models/cuestionario';
 
 // Services
 import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
-import { Categoria } from 'app/shared/models/categoria';
-import { Cuestionario } from 'app/shared/models/cuestionario';
 
 import { keyBy, filter } from 'lodash';
 import Swal from 'sweetalert2';
@@ -40,10 +40,11 @@ export class CuestionaryComponent implements OnInit {
 
   cargarCategorias() {
     this.categoriasServices.getCategoriasDB().subscribe(categorias => {
+      // Obtiene los cuestionarios que no contesta aun
       this.cuestionarioServices.getCuestionarioDiaUserLogedDB().subscribe(cuestionarios => {
-        // Ids categorias del mismo dia
+        // Agrupa por ids los cuestionarios obtenidos del mismo dia
         var idsCategorias = keyBy(cuestionarios, (o) => { return o.categoria.id });
-        // Filtro que contiene idCategorias diferentes a categorias
+        // Elimina del array las categorias que ya ha evaluado hoy
         this.categorias = filter(categorias, (u) => {
           return idsCategorias[u.id] === undefined;
         });

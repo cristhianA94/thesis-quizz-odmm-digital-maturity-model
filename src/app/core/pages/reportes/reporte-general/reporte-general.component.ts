@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { Usuario } from "app/shared/models/usuario";
 import { Empresa } from "app/shared/models/empresa";
 import {
   RespuestasUsuario,
@@ -17,10 +16,9 @@ import { Label } from "ng2-charts";
 // PDF
 import * as jsPDF from "jspdf";
 // Lodash
-//import { keyBy, filter, uniqueId } from 'lodash';
-import { of, Subscription, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import * as _ from "lodash";
+
 
 @Component({
   selector: "app-reporte-general",
@@ -29,7 +27,8 @@ import * as _ from "lodash";
 })
 export class ReporteGeneralComponent implements OnInit {
   @ViewChild("respuestasData") respuestasData: ElementRef;
-  @ViewChild("canvasPorcentaje") canvasPorcentaje: ElementRef;
+  @ViewChild("graficoCategorias") graficoCategorias: ElementRef;
+  @ViewChild("graficoSectores") graficoSectores: ElementRef;
 
   flag: boolean = false;
 
@@ -45,11 +44,6 @@ export class ReporteGeneralComponent implements OnInit {
   cuestionariosUsersSector: any[] = [];
 
   puntuancionGlobal: number;
-
-  subscripcion: Subscription;
-  subscripcion2: Subscription;
-
-  $empresasUsersMismoS: Observable<Empresa[]>;
 
   puntuacionesUsers: any[] = [];
 
@@ -89,25 +83,27 @@ export class ReporteGeneralComponent implements OnInit {
     private cuestionarioService: CuestionarioService,
     private empresaService: EmpresaService,
     private userService: UsuarioService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this._cargarData();
+  }
+
+  private _cargarData() {
+    this.empresaService.onEmpresaChanged.subscribe((empresas) => {
+
+      this.empresas = empresas;
+      this.empresa = empresas[0];
+    });
+    this.extraerData();
+    // Extrae las empresas con el mismo sector industrial
     this.userService.onUsuariosChanged.subscribe((usuarios) => {
       this.usuarios = usuarios;
       this._calcularResultadosSectores(usuarios);
     });
   }
 
-  private _cargarData() {
-    this.empresaService.onEmpresaChanged.subscribe((empresas) => {
-      this.empresas = empresas;
-      this.empresa = empresas[0];
-    });
-    this.extraerData();
-    // this._extraerDataEmpresas();
-  }
-
+  // Consulta los cuestionarios y respuestas del usuario, con sus puntuaciones y recomendaciones
   private extraerData() {
     let arrayDataUltimoIntento: number[] = [];
     let arrayDataPnultimoIntento: number[] = [];
@@ -150,14 +146,14 @@ export class ReporteGeneralComponent implements OnInit {
               //        Data para grafico de radar
               // Guarda la puntuacion de cada  evaluada del ultimo intento
               arrayDataUltimoIntento.push(
-                respuestas[0].puntuacionCategoria * 10
+                Number((respuestas[0].puntuacionCategoria * 10).toFixed(2))
               );
 
               // Valida si no existe otro intento
               if (respuestas[1]) {
                 // Guarda la puntuacion de cada  evaluada del penultimo intento
                 arrayDataPnultimoIntento.push(
-                  respuestas[1].puntuacionCategoria
+                  Number((respuestas[1].puntuacionCategoria * 10).toFixed(2))
                 );
                 //console.log("No tiene otro intento ");
               } else {
@@ -167,11 +163,14 @@ export class ReporteGeneralComponent implements OnInit {
               this.radarChartData[0].data = arrayDataUltimoIntento;
               this.radarChartData[1].data = arrayDataPnultimoIntento;
 
+
+              this.radarChartDataSectores[0].data = arrayDataUltimoIntento;
+
               // TODO Madurez digital global
               //Agrega todas las puntuaciones de cada
               arrayPuntuacionGloblal.push(
                 this.cuestionarios[index].respuestasUsuario[
-                  "puntuacionCategoria"
+                "puntuacionCategoria"
                 ] * this.cuestionarios[index].peso
               );
               // Suma todos los elementos del calculo anterior
@@ -183,35 +182,48 @@ export class ReporteGeneralComponent implements OnInit {
       });
   }
 
+  // Permite calcular el promedio de los puntuajes de todas las categorias de los usuaios con el mismo sector empresarial
   private _calcularResultadosSectores(empresasUser) {
     let categorias;
+
     this.radarChartDataSectores[1].data = [];
     empresasUser.forEach((empresa) => {
       this.cuestionarioService
-        .getCuestionarioByUser(empresa.idUser)
+        .getCuestionarioUserID(empresa.idUser)
+        .pipe(
+          // Ordena las categorias alfabeticamente
+          map((data) => {
+            data.sort((a, b) => {
+              return a.categoriaNombre < b.categoriaNombre ? -1 : 1;
+            });
+            return data;
+          })
+        )
         .subscribe((cuestionariosUser: Cuestionario[]) => {
           cuestionariosUser.forEach((cuestionario, index) => {
             this.puntuacionesUsers.push(cuestionario);
           });
+
+          // Agrupa el array con el id de los nombres de cada categoria
           categorias = _.groupBy(this.puntuacionesUsers, "categoriaNombre");
+          // Mapea la agrupacion anterior y 
           categorias = _.map(categorias, (element, key) => {
-            const total = element.reduce((x, y) =>
+            const totalPromedio = element.reduce((x, y) =>
               Number(
                 (
-                  ((x.puntuacionCategoria + y.puntuacionCategoria) /
-                    element.length) *
-                  10
+                  ((x.puntuacionCategoria + y.puntuacionCategoria) / element.length) * 10
                 ).toFixed(2)
               )
             );
-          
-            if (!isNaN(total)) this.radarChartDataSectores[1].data.push(total);
-            if (!isNaN(total)) this.radarChartLabelsSectores.push(key);
+            // Valida si tiene datos o no
+            if (!isNaN(totalPromedio)) this.radarChartDataSectores[1].data.push(totalPromedio);
+            //console.log("🚀 ~ file: reporte-general.component.ts ~ line 220 ~ ReporteGeneralComponent ~ categorias=_.map ~ this.radarChartDataSectores[1].data", this.radarChartDataSectores[1].data)
+            if (!isNaN(totalPromedio)) this.radarChartLabelsSectores.push(key);
 
-            return { key, total };
+            return { key, totalPromedio };
           });
 
-       
+
         });
     });
   }
@@ -263,7 +275,7 @@ export class ReporteGeneralComponent implements OnInit {
 
     //          ** 1. ÍNDICE **
     let textoIndice =
-      "    1. Índice\n    2. Introducción\n    3. Resultados\n    4. Benchmarking\n       4.1. Nivel madurez digital por categoría\n       4.2. Gráfico de nivel de madurez digital por categoría\n       4.3. Nivel madurez digital por sector\n    5. Recomendaciones\n";
+      "    1. Índice\n    2. Introducción\n    3. Resultados\n    4. Benchmarking\n       4.1. Nivel madurez digital por categorías\n       4.2. Nivel madurez digital por sector industrial\n    5. Recomendaciones\n";
     // Linea superior
     doc.setDrawColor(139, 196, 65);
     doc.setLineWidth(1.5);
@@ -404,7 +416,7 @@ export class ReporteGeneralComponent implements OnInit {
     var cat5Text = "Categoría: INNOVACIÓN Y ENTREGA RÁPIDA";
     var cat6Text = "Categoría: LIDERAZGO TECNOLÓGICO";
 
-    // Porcentaje nivel madurez total
+    // Porcentaje nivel madurez totalPromedio
     doc.setFontSize(16);
     doc.setTextColor(156, 58, 185);
     doc.setFontStyle("bold");
@@ -545,23 +557,43 @@ export class ReporteGeneralComponent implements OnInit {
     doc.setLineWidth(1.5);
     doc.line(10, 13, 200, 13);
 
-    let textoRadar =
-      "Aquí puede ver el nivel de madurez obtenido por cada categoría evaluada.\nLos datos reflejados son los porcentajes del último y penúltimo intento de sus evaluaciones por cada categoría.";
+    doc.setFontSize(20);
+    doc.setFontStyle("bold");
+    doc.setTextColor(75, 86, 100);
+    doc.text(15, 30, "4. BENCHMARKING");
+
+    let textoRadar = "Aquí puede ver el nivel de madurez obtenido por cada categoría evaluada.\nLos datos reflejados son los porcentajes del último y penúltimo intento de sus evaluaciones por cada categoría.";
+    let textoSector = "Aquí puede ver el nivel de madurez obtenido por cada categoría evaluada de su negocio con el resto de empresas de tu sector diagnosticadas.";
 
     doc.setFontSize(16);
     doc.setFontStyle("bold");
     doc.setTextColor(75, 86, 100);
-    doc.text(15, 30, "3.2. Gráfico de nivel de madurez digital por categoría");
+    doc.text(15, 40, "4.1. Gráfico de nivel de madurez digital por categorías");
     doc.setFontStyle("normal");
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     var splitText = doc.splitTextToSize(textoRadar, 180);
-    doc.text(15, 40, splitText);
+    doc.text(15, 50, splitText);
 
     // Grafico radar
-    let canvas: any = document.getElementById("canvas");
+    let canvas: any = this.graficoCategorias.nativeElement;
     let canvasImg = canvas.toDataURL("image/png");
-    doc.addImage(canvasImg, "PNG", 50, 62, 100, 80);
+    doc.addImage(canvasImg, "PNG", 25, 60, 160, 90);
+
+    doc.setFontSize(16);
+    doc.setFontStyle("bold");
+    doc.setTextColor(75, 86, 100);
+    doc.text(15, 165, "4.2. Nivel madurez digital por sector industrial");
+    doc.setFontStyle("normal");
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    var splitText = doc.splitTextToSize(textoSector, 180);
+    doc.text(15, 175, splitText);
+
+    // Grafico Sector
+    let canvas2: any = this.graficoSectores.nativeElement;
+    let canvasSector = canvas2.toDataURL("image/png");
+    doc.addImage(canvasSector, "PNG", 25, 185, 160, 90);
 
     // Linea inferior
     doc.setDrawColor(139, 196, 65);

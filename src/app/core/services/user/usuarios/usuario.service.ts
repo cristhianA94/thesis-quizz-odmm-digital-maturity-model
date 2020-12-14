@@ -4,8 +4,9 @@ import { Observable, BehaviorSubject, combineLatest, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 import { Usuario } from "app/shared/models/usuario";
+import { Empresa } from "app/shared/models/empresa";
 
-/* Firestores */
+/* Firestore */
 import { AngularFireAuth } from "@angular/fire/auth";
 import {
   AngularFirestore,
@@ -13,13 +14,9 @@ import {
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
 
+import { groupBy, uniq } from "lodash";
 /* Services */
 import { AlertsService } from "../../notificaciones/alerts.service";
-import Swal from "sweetalert2";
-import { chain, groupBy, uniq } from "lodash";
-import { User } from "firebase";
-import { Empresa } from "app/shared/models/empresa";
-import * as _ from "lodash";
 
 @Injectable({
   providedIn: "root",
@@ -77,7 +74,8 @@ export class UsuarioService implements Resolve<any> {
     );
   }
 
-  getUsersEmpresas(idUser): Promise<any> {
+  // TODO Get colleccion dentro de una coleccion
+  getUsersEmpresas(idUser: string): Promise<any> {
     const usuarioRef = this.dbFire
       .collection<Usuario>("usuarios")
       .snapshotChanges()
@@ -91,15 +89,18 @@ export class UsuarioService implements Resolve<any> {
         )
       )
       .pipe(
+        // Permite concatenar otra coleccion relacionada
         switchMap((usuarios) => {
-          const usersIds = uniq(usuarios.map((bp) => bp.id));
+          const usersIds = uniq(usuarios.map((user) => user.id));
           if (usuarios.length === 0) {
             return [[], []];
           } else {
+            // combineLatest([a, b, c])
             return combineLatest(
               of(usuarios),
               combineLatest(
                 usersIds.map((userId) =>
+                  // Obtiene la primera empresa del usuario creada y la toma como la principal
                   this.dbFire
                     .collection<Empresa>(`empresas`, (ref) =>
                       ref
@@ -123,6 +124,7 @@ export class UsuarioService implements Resolve<any> {
             );
           }
         }),
+        // Adjunta al objeto usuario el array de sus empresas
         map(([usuarios, empresas]) => {
           if (!usuarios) {
             return [];
@@ -131,12 +133,12 @@ export class UsuarioService implements Resolve<any> {
               return {
                 ...usuario,
                 empresas: empresas[index],
-                // empresas,
               };
             });
           }
         })
       );
+    // Filtra las empreasas de la misma categoria insdustrial
     return new Promise((resolve, reject) => {
       usuarioRef.subscribe((response: any) => {
         const empresas = [];
@@ -158,7 +160,6 @@ export class UsuarioService implements Resolve<any> {
           }
         }
         this.usuarios = sectoresUser;
-        console.log("🚀 ~ sectoresUser", sectoresUser);
         this.onUsuariosChanged.next(this.usuarios);
         resolve(this.usuarios);
       }, reject);
