@@ -3,7 +3,8 @@
 functions/keys
 
 # envoriment
-src/environments
+/src/environments/environment.prod.ts
+/src/environments/environment.ts
 
 # compiled output
 /dist
