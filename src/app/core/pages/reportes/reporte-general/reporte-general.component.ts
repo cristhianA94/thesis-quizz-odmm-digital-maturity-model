@@ -169,9 +169,7 @@ export class ReporteGeneralComponent implements OnInit {
               // TODO Madurez digital global
               //Agrega todas las puntuaciones de cada
               arrayPuntuacionGloblal.push(
-                this.cuestionarios[index].respuestasUsuario[
-                "puntuacionCategoria"
-                ] * this.cuestionarios[index].peso
+                this.cuestionarios[index].respuestasUsuario["puntuacionCategoria"] * this.cuestionarios[index].peso
               );
               // Suma todos los elementos del calculo anterior
               this.puntuancionGlobal = arrayPuntuacionGloblal.reduce(
@@ -365,43 +363,47 @@ export class ReporteGeneralComponent implements OnInit {
     doc.setFontSize(12);
     doc.text(15, 40, splitText);
 
+    var porcentCat1 = ' ';
+    var porcentCat2 = ' ';
+    var porcentCat3 = ' ';
+    var porcentCat4 = ' ';
+    var porcentCat5 = ' ';
+    var porcentCat6 = ' ';
+
+    var porcentCat1 = (this.cuestionarios[0].respuestasUsuario) ? Number(this.cuestionarios[0].respuestasUsuario["puntuacionCategoria"] * 10)
+      .toFixed(0).toString() + "%"
+      : ' ';
     // Porcentajes de madurez de cada categoria
-    let porcentCat1 =
-      Number(
-        this.cuestionarios[0].respuestasUsuario["puntuacionCategoria"] * 10
-      )
-        .toFixed(0)
-        .toString() + "%" || "0";
-    let porcentCat2 =
+    porcentCat2 =
       Number(
         this.cuestionarios[1].respuestasUsuario["puntuacionCategoria"] * 10
       )
         .toFixed(0)
-        .toString() + "%" || "0";
-    let porcentCat3 =
+        .toString() + "%";
+    porcentCat3 =
       Number(
         this.cuestionarios[2].respuestasUsuario["puntuacionCategoria"] * 10
       )
         .toFixed(0)
-        .toString() + "%" || "0";
-    let porcentCat4 =
+        .toString() + "%";
+    porcentCat4 =
       Number(
         this.cuestionarios[3].respuestasUsuario["puntuacionCategoria"] * 10
       )
         .toFixed(0)
-        .toString() + "%" || "0";
-    let porcentCat5 =
+        .toString() + "%";
+    porcentCat5 =
       Number(
         this.cuestionarios[4].respuestasUsuario["puntuacionCategoria"] * 10
       )
         .toFixed(0)
-        .toString() + "%" || "0";
-    let porcentCat6 =
+        .toString() + "%";
+    porcentCat6 =
       Number(
         this.cuestionarios[5].respuestasUsuario["puntuacionCategoria"] * 10
       )
         .toFixed(0)
-        .toString() + "%" || "0";
+        .toString() + "%";
 
     let porcentajeGlobal =
       Number(this.puntuancionGlobal * 10)
@@ -409,12 +411,12 @@ export class ReporteGeneralComponent implements OnInit {
         .toString() + "%";
 
     var catTotalText = "NIVEL DE MADUREZ DIGITAL DEL NEGOCIO";
-    var cat1Text = "Categoría: BIG DATA E IA";
-    var cat2Text = "Categoría: CENTRO DE ATENCIÓN AL CLIENTE";
-    var cat3Text = "Categoría: CULTURA DIGITAL, TALENTO Y HABILIDADES";
-    var cat4Text = "Categoría: DINAMISMO ESTRATÉGICO";
-    var cat5Text = "Categoría: INNOVACIÓN Y ENTREGA RÁPIDA";
-    var cat6Text = "Categoría: LIDERAZGO TECNOLÓGICO";
+    var cat1Text = (this.cuestionarios[0]) ? `Categoría: ${this.cuestionarios[0].categoriaNombre}` : ' ';
+    var cat2Text = (this.cuestionarios[1]) ? `Categoría: ${this.cuestionarios[1].categoriaNombre}` : ' ';
+    var cat3Text = (this.cuestionarios[2]) ? `Categoría: ${this.cuestionarios[2].categoriaNombre}` : ' ';
+    var cat4Text = (this.cuestionarios[3]) ? `Categoría: ${this.cuestionarios[3].categoriaNombre}` : ' ';
+    var cat5Text = (this.cuestionarios[4]) ? `Categoría: ${this.cuestionarios[4].categoriaNombre}` : ' ';
+    var cat6Text = (this.cuestionarios[5]) ? `Categoría: ${this.cuestionarios[5].categoriaNombre}` : ' ';
 
     // Porcentaje nivel madurez totalPromedio
     doc.setFontSize(16);
@@ -611,7 +613,7 @@ export class ReporteGeneralComponent implements OnInit {
     doc.setFontSize(20);
     doc.setFontStyle("bold");
     doc.setTextColor(75, 86, 100);
-    doc.text(15, 30, "4. RECOMENDACIONES");
+    doc.text(15, 30, "5. RECOMENDACIONES");
     doc.setTextColor(0, 0, 0);
     doc.setFontStyle("normal");
     var splitText = doc.splitTextToSize(
@@ -638,6 +640,8 @@ export class ReporteGeneralComponent implements OnInit {
 
         var blob = doc.output("blob");
         window.open(URL.createObjectURL(blob));
+        // TODO Guarda el .PDF
+        // doc.save('ReporteGeneral_EncuestaODMM.pdf');
       },
       margins
     );
