@@ -19,20 +19,19 @@
                                         <div class="container">
                                             <h4 class="display-4">¿Qué puedo hacer?</h4>
                                             <p class="lead">Aquí podrás consultar los cuestionarios contestados de:
-                                                <br> 1. Un usuario específico. <br> 2.Consultar todos los cuestionarios
+                                                <br> - Cualquiera categoría de un usuario específico. <br> - Cualquiera todas las categorías de un usuario específico.
                                             </p>
                                         </div>
                                     </div>
+                                    <img class="mx-auto" src="../../../../assets/img/reportes.png"
+                                        alt="imgagen reportes" width="200px">
                                 </div>
+                                <hr>
                             </div>
-                            <img class="mx-auto" src="../../../../assets/img/reportes.png" alt="imgagen reportes"
-                                width="200px">
                         </div>
-                        <hr>
 
-                        <div class="row">
+                        <div class="row align-items-center">
                             <div class="col-md-6 mx-auto text-center">
-                                <h3><strong>1</strong></h3>
 
                                 <form class="mt-4" [formGroup]="consultaForm" autocomplete="on">
                                     <!-- Seleccionar usuario -->
@@ -49,6 +48,9 @@
                                         <mat-label>Seleccione la categoría</mat-label>
                                         <mat-select #idCategoria formControlName="idCategoria" name="Categorias"
                                             required>
+                                            <!-- TODO Aqui cambie -->
+                                            <!-- <mat-option *ngIf="cuestionariosUser.length == 6" value="todas">Todas las
+                                                categorias</mat-option> -->
                                             <mat-option *ngFor="let cuestionario of cuestionariosUser"
                                                 [value]="cuestionario">
                                                 {{ cuestionario.categoriaNombre }}
@@ -62,15 +64,6 @@
                                 </form>
                             </div>
 
-                            <div class="col-md-6 mx-auto text-center">
-                                <h3><strong>2</strong></h3>
-                                <div class="pt-5">
-                                    <!-- De todos los usuarios -->
-                                    <button mat-raised-button type="button" (click)="consultarReportesUsuarios()">
-                                        <mat-icon matSuffix>search</mat-icon>Consultar todos los cuestionarios
-                                    </button>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
@@ -109,10 +102,10 @@
                                 <hr>
                             </div>
                         </div>
+
                         <div class="row align-items-center">
 
-                            <div class="col-md-6 mx-auto" *ngIf="cuestionarios.length >= 1">
-                                <div class="text-center">
+                            <div class="col-md-6 mx-auto text-center" *ngIf="cuestionarios.length >= 1">
                                     <mat-form-field appearance="fill">
                                         <mat-label>Seleccione la categoría</mat-label>
                                         <mat-select #idCategoria name="Categorias" required>
@@ -129,7 +122,6 @@
                                         (click)="visualizacionResultados(idCategoria.value)">
                                         <mat-icon matSuffix>search</mat-icon>Consultar
                                     </button>
-                                </div>
                             </div>
 
                         </div>

@@ -14,8 +14,8 @@ import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-dimension",
-  templateUrl: "./dimension.component.html",
+  selector: "app-cuestionarioId",
+  templateUrl: "./cuestionarioID.component.html",
   styles: [
     `
       .radio-group {
@@ -34,7 +34,7 @@ import { Router } from '@angular/router';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class DimensionComponent implements OnInit, OnDestroy {
+export class CuestionarioIDComponent implements OnInit, OnDestroy {
 
   private _unsubscribeAll: Subject<any>;
   idUser: string;

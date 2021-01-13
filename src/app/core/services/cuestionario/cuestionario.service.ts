@@ -198,9 +198,7 @@ export class CuestionarioService implements Resolve<any> {
   }
 
   // Obtiene las respuestas de una categoria que ha respondido el usuario
-  getCuestionarioRespuestasDB(
-    idCuestionario: string
-  ): Observable<RespuestasUsuario[]> {
+  getCuestionarioRespuestasDB(idCuestionario: string): Observable<RespuestasUsuario[]> {
     this.cuestionario_respuestasCollection = this.afs.collection(
       "cuestionarios/" + idCuestionario + "/respuestas",
       (ref) => {

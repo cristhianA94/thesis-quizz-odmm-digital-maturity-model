@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CuestionaryRoutingModule } from "./cuestionary.routing";
 import { MaterialModule } from "../material.module";
 import { ComponentsModule } from 'app/shared/components.module';
-import { DimensionComponent } from './dimension/dimension.component';
+import { CuestionarioIDComponent } from './cuestionarioID/cuestionarioID.component';
 
 
 // Services
@@ -24,8 +24,8 @@ import { SubcategoriasService } from "app/core/services/cuestionario/subcategori
     MaterialModule,
     ComponentsModule,
   ],
-  declarations: [DimensionComponent],
-  exports: [DimensionComponent],
+  declarations: [CuestionarioIDComponent],
+  exports: [CuestionarioIDComponent],
   providers: [
     CategoriasService,
     SubcategoriasService,

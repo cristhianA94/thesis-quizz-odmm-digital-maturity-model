@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Categoria } from 'app/shared/models/categoria';
 import { Cuestionario } from 'app/shared/models/cuestionario';
 

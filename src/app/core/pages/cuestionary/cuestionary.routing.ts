@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { CategoriasService } from "app/core/services/cuestionario/categorias/categorias.service";
-import { DimensionComponent } from './dimension/dimension.component';
+import { CuestionarioIDComponent } from './cuestionarioID/cuestionarioID.component';
 import { CuestionarioService } from 'app/core/services/cuestionario/cuestionario.service';
 
 import { redirectUnauthorizedTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
@@ -11,7 +11,7 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 export const cuestionaryRoutes: Routes = [
   {
     path: "dimension/:id",
-    component: DimensionComponent,
+    component: CuestionarioIDComponent,
     resolve: {
       categoria: CategoriasService,
       data: CuestionarioService

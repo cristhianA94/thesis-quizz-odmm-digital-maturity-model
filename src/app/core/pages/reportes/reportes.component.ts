@@ -23,6 +23,7 @@ export class ReportesComponent implements OnInit {
   consultaForm: FormGroup;
 
   usuarios: Usuario[] = [];
+  usuarioSelected: string = '';
 
   cuestionariosUser: Cuestionario[] = [];
   cuestionarios: Cuestionario[] = [];
@@ -74,6 +75,7 @@ export class ReportesComponent implements OnInit {
       this.cuestionarioService.getCuestionarioUserDB(idUsuarioSelect).subscribe((cuestionariosUser) => {
         this.cuestionariosUser = cuestionariosUser;
       });
+      this.usuarioSelected = idUsuarioSelect;
     })
   }
   // Table
@@ -88,7 +90,9 @@ export class ReportesComponent implements OnInit {
   // Permite ver la tabla con las diferentes evaluaciones hechas por el usuario según la categoría
   visualizacionResultados(cuestionario: Cuestionario) {
     // Reporte general
+    console.log(cuestionario);
     if (cuestionario == 'todas') {
+      // TODO router link con params idUser 
       this.verReporteGeneral();
     }
     // Obtiene reporte individual
@@ -118,6 +122,8 @@ export class ReportesComponent implements OnInit {
   }
 
   consultarUsuario() {
+    console.log(this.usuarioSelected);
+    
     this.flagTabla = true;
     let idUser = this.consultaForm.get("idUsuario").value;
     localStorage.setItem("idUserCuestionario", idUser);
@@ -129,12 +135,6 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  consultarReportesUsuarios() {
-    this.cuestionarioService.getCuestionariosDB().subscribe((cuestionarios) => {
-      //console.log(cuestionarios);
-
-    });
-  }
 
 
 }
