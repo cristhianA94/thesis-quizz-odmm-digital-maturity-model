@@ -84,16 +84,18 @@
                     </div>
 
                     <div #respuestasData>
-                        <div class="card-body" *ngFor="let metrica of respuestasUsuario.metricas" style="padding: 0px; margin: 0px;">
+                        <div class="card-body" *ngFor="let metrica of respuestasUsuario.metricas, let i = index" style="padding: 0px; margin: 0px;">
                             <div class="col-md-9 mx-auto">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Recomendación de mejora para la métrica evaluada:
-                                            <strong>{{ metrica.metrica }}</strong></h4>
+                                        <h4 class="card-title">Recomendación de mejora para la métrica evaluada: <strong>{{ metrica.metrica }}</strong></h4>
+                                        <br>
+                                        <h4><strong>{{i + 1}} - {{ metrica.pregunta }} </strong></h4>
+                                        <p style="font-size: 18px; color: gray; ">Tu respuesta: {{ metrica.respuesta["opcion"] }}</p>
                                     </div>
                                     <hr>
                                     <div class="card-body">
-                                        <p class="text-success">{{ metrica.respuesta["recomendacion"] }}</p>
+                                        <p style="font-size: 18px; font-style: italic; color: #9bc531;">Recomendación: <strong>{{ metrica.respuesta["recomendacion"] }}</strong></p>
                                     </div>
                                 </div>
                             </div>

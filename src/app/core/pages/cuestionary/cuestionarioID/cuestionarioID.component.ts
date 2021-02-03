@@ -123,9 +123,12 @@ export class CuestionarioIDComponent implements OnInit, OnDestroy {
 
     // Recorre cada capacidad para hacer el cálculo de cada métrica y capacidad
     subcategoria.capacidades.forEach((capacidad, i) => {
+      console.log("aquiiiiii", capacidad);
+      
       // Objeto Respuestas Usuario
       objMetrica = {
         metrica: capacidad.metrica.nombre,
+        pregunta: capacidad.metrica.pregunta,
         respuesta: {
           opcion: this.respuestas[i].opcion,
           recomendacion: this.respuestas[i].recomendacion
@@ -215,5 +218,5 @@ export class CuestionarioIDComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
-  
+
 }

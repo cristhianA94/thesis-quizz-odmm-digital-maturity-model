@@ -10,6 +10,8 @@ import { Label } from 'ng2-charts';
 // PDF
 import * as jsPDF from 'jspdf';
 import { map } from 'rxjs/operators';
+import { SectorIndustrialService } from '../../../services/user/sectorIndustrial/sector-industrial.service';
+import { Sector_Industrial } from '../../../../shared/models/sector_industrial';
 
 
 @Component({
@@ -28,6 +30,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
   categoria: any;
   empresas: Empresa[] = [];
   empresa: Empresa;
+  sectorI: Sector_Industrial;
 
   puntuaje: number;
 
@@ -48,6 +51,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
     private router: Router,
     private cuestionarioService: CuestionarioService,
     private empresaService: EmpresaService,
+    private sectorIndustrialService: SectorIndustrialService,
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +82,9 @@ export class ReporteComponent implements OnInit, OnDestroy {
       this.empresas = empresas
       // Escoje la primera empresa registrada como la principal
       this.empresa = empresas[0];
+      this.sectorIndustrialService.getSectorIndustrialDB(this.empresa.idSectorInd).subscribe((sector)=>{
+        this.sectorI = sector;
+      })
     });
 
 
@@ -166,10 +173,12 @@ export class ReporteComponent implements OnInit, OnDestroy {
     doc.setTextColor(0, 0, 0);
     doc.setFontStyle("bold");
     doc.text(this.empresa.razon_social, 105, 140, null, null, "center");
+    doc.setFontSize(16);
+    doc.text(this.sectorI.nombre, 105, 150, null, null, "center");
 
-    doc.setFontStyle("bold");
+    doc.setFontSize(20);
     doc.setTextColor(75, 86, 100);
-    doc.text(fecha, 105, 160, null, null, "center");
+    doc.text(fecha, 105, 170, null, null, "center");
 
     // Linea inferior
     doc.setDrawColor(139, 196, 65);
