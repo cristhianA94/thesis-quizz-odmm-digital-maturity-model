@@ -1,0 +1,33 @@
+.titulo-home {
+    font-weight: 900;
+}
+
+.section-fondo {
+    background-color: #f2f2f2;
+}
+
+.section-fondo h3 {
+    font-weight: 700;
+}
+
+.section-fondo p {
+    font-size: larger;
+}
+
+.section-fondo i, span {
+    font-size: 5em;
+}
+
+.listadopasos {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.listadopasos h3 {
+    font-weight: 500;
+}
+
+.listadopasos p {
+    font-size: large;
+}
+
