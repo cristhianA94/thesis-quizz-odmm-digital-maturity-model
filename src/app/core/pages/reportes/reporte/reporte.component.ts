@@ -17,7 +17,13 @@ import { Sector_Industrial } from '../../../../shared/models/sector_industrial';
 @Component({
   selector: 'app-reporte',
   templateUrl: './reporte.component.html',
-  styles: [``]
+  styles: [`
+  @media screen and (max-width: 600px) {
+    /* .chart {
+      background-color:grey;
+    } */
+  }
+  `]
 })
 export class ReporteComponent implements OnInit, OnDestroy {
 
@@ -37,6 +43,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
   // Radar
   public radarChartOptions: RadialChartOptions = {
     responsive: true,
+    // maintainAspectRatio: false,
   };
 
   public radarChartLabels: Label[] = [];
@@ -82,7 +89,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
       this.empresas = empresas
       // Escoje la primera empresa registrada como la principal
       this.empresa = empresas[0];
-      this.sectorIndustrialService.getSectorIndustrialDB(this.empresa.idSectorInd).subscribe((sector)=>{
+      this.sectorIndustrialService.getSectorIndustrialDB(this.empresa.idSectorInd).subscribe((sector) => {
         this.sectorI = sector;
       })
     });

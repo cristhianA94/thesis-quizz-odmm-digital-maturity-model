@@ -638,10 +638,10 @@ export class ReporteGeneralComponent implements OnInit {
         doc.setLineWidth(1.5);
         doc.line(10, 285, 200, 285);
 
-        var blob = doc.output("blob");
-        window.open(URL.createObjectURL(blob));
+        // var blob = doc.output("blob");
+        // window.open(URL.createObjectURL(blob));
         // TODO Guarda el .PDF
-        // doc.save('ReporteGeneral_EncuestaODMM.pdf');
+        doc.save('ReporteGeneral_EncuestaODMM.pdf');
       },
       margins
     );

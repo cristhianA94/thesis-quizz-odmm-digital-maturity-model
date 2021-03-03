@@ -117,7 +117,7 @@
                             </div>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <!-- Niveles de madurez(%) por categoria -->
                         <div class="row">
@@ -167,10 +167,10 @@
                     </div>
 
                     <div #respuestasData>
-                        <div class="card-body">
-                            <div class="col-md-10 mx-auto">
-                                <div class="card" *ngFor="let categoria of cuestionarios; let i = index">
-                                    <div class="card-header" [style.color]="colors[i]">
+                        <div class="card-body" *ngFor="let categoria of cuestionarios; let i = index" style="padding: 0px; margin: 0px;">
+                            <div class="col-md-9 mx-auto">
+                                <div class="card">
+                                    <div class="card-header" [style.color]="colors[i]" style="border-style: solid;">
                                         <h3>
                                             Categoría:
                                             <strong>{{ categoria.categoriaNombre | uppercase }}
@@ -187,13 +187,18 @@
                                     <p>
                                         ____________________________________________________________________________________
                                     </p>
-                                    <div class="card-body" *ngFor="let metrica of metricas[i]">
+                                    <div class="card-body" *ngFor="let metrica of metricas[i]; let iMetri = index" style="border-style: outset;">
                                         <h4 class="card-title">
                                             Recomendación de mejora para la métrica evaluada:
                                             <strong> {{ metrica.metrica }}</strong>
                                         </h4>
-                                        <p class="text-success">
-                                            {{ metrica.respuesta["recomendacion"] }}
+                                        <h4><strong>{{iMetri + 1}} - {{ metrica.pregunta }} </strong></h4>
+                                        <p style="font-size: 18px; color: gray; ">Tu respuesta: {{ metrica.respuesta["opcion"] }}</p>
+
+                                        <hr>
+
+                                        <p style="font-size: 18px; font-style: italic; color: #9bc531;">Recomendación: 
+                                            <strong>{{ metrica.respuesta["recomendacion"] }}</strong>
                                         </p>
                                     </div>
                                     <p>
