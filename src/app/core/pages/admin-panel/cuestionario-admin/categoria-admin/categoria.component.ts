@@ -81,25 +81,25 @@ export class CategoriaComponent implements OnInit {
       }
 
       if (result.event == "Agregar") {
-        this.createCategoria(this.categoria);
+        this.crearCategoria(this.categoria);
       } else if (result.event == "Actualizar") {
-        this.updatePais(this.categoria);
+        this.actualizarCategoria(this.categoria);
       } else if (result.event == "Eliminar") {
-        this.deletePais(this.categoria);
+        this.borrarCategoria(this.categoria);
       }
 
     });
   }
 
-  createCategoria(categoria: Categoria) {
-    this.categoriaService.createCategoriaDB(categoria);
+  crearCategoria(categoria: Categoria) {
+    this.categoriaService.crearCategoriaDB(categoria);
   }
 
-  updatePais(categoria: Categoria) {
-    this.categoriaService.updateCategoriaDB(categoria);
+  actualizarCategoria(categoria: Categoria) {
+    this.categoriaService.actualizarCategoriaDB(categoria);
   }
 
-  deletePais(categoria: Categoria) {
+  borrarCategoria(categoria: Categoria) {
     this.categoriaService.deleteCategoriaDB(categoria);
   }
 

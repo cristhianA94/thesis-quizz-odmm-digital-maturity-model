@@ -69,21 +69,21 @@ export class SubcategoriasService {
     return this.subcategoriaDoc.valueChanges();
   }
 
-  createSubcategoriaDB(subcategoria: Subcategoria) {
+  crearSubcategoriaDB(subcategoria: Subcategoria) {
     subcategoria.idCategoria = this.afs.collection("categorias").doc(subcategoria.idCategoria).ref;
     this.subcategoriaCollection = this.afs.collection("subcategorias");
     //this.subcategoriaDoc.set(subcategoria, { merge: true })
     this.subcategoriaCollection.add(subcategoria);
   }
 
-  updateSubcategoriaDB(subcategoria: Subcategoria) {
+  actualizarSubcategoriaDB(subcategoria: Subcategoria) {
     subcategoria.idCategoria = this.afs.collection("categorias").doc(subcategoria.idCategoria).ref;
     this.subcategoriaDoc = this.afs.doc(`subcategorias/${subcategoria.id}`);
     delete subcategoria.id;
     this.subcategoriaDoc.update(subcategoria);
   }
 
-  deleteSubcategoriaDB(id: string) {
+  borrarSubcategoriaDB(id: string) {
     this.subcategoriaDoc = this.afs.doc(`subcategorias/${id}`);
     this.subcategoriaDoc.delete();
   }

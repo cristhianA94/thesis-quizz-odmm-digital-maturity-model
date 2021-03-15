@@ -85,22 +85,22 @@ export class MetricasComponent implements OnInit {
       }
 
       if (result.event == "Agregar") {
-        this.createMetrica(this.metrica["data"]);
+        this.crearMetrica(this.metrica["data"]);
       } else if (result.event == "Actualizar") {
-        this.updateMetrica(this.metrica);
+        this.actualizarMetrica(this.metrica);
       } else if (result.event == "Eliminar") {
-        this.deleteMetrica(this.metrica);
+        this.borrarMetrica(this.metrica);
       }
 
       // this.metricas = [];
     });
   }
 
-  createMetrica(obj: Metrica) {
-    this.metricasService.createMetricaDB(obj);
+  crearMetrica(obj: Metrica) {
+    this.metricasService.crearMetricaDB(obj);
   }
 
-  updateMetrica(obj: any) {
+  actualizarMetrica(obj: any) {
 
     let respuestas = [];
     const data: Metrica = obj.data;
@@ -115,10 +115,10 @@ export class MetricasComponent implements OnInit {
       respuestas: respuestas
     };
 
-    this.metricasService.updateMetricaDB(metricaEdit);
+    this.metricasService.actualizarMetricaDB(metricaEdit);
   }
 
-  deleteMetrica(metrica: any) {
-    this.metricasService.deleteMetricaDB(metrica.id);
+  borrarMetrica(metrica: any) {
+    this.metricasService.borrarMetricaDB(metrica.id);
   }
 }

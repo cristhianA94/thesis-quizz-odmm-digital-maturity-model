@@ -86,28 +86,28 @@ export class CapacidadesComponent implements OnInit {
       }
 
       if (result.event == "Agregar") {
-        this.createCapacidad(this.capacidad);
+        this.crearCapacidad(this.capacidad);
       } else if (result.event == "Actualizar") {
-        this.updateCapacidad(this.capacidad);
+        this.actualizarCapacidad(this.capacidad);
       } else if (result.event == "Eliminar") {
-        this.deleteCapacidad(this.capacidad);
+        this.borrarCapacidad(this.capacidad);
       }
 
       this.capacidades = [];
     });
   }
 
-  createCapacidad(obj: any) {
+  crearCapacidad(obj: any) {
     const CapacidadNew: Capacidad = {
       nombre: obj.nombre,
       descripcion: obj.descripcion,
       peso: obj.peso,
       idSubcategoria: obj.idRelacion,
     };
-    this.capacidadesService.createCapacidadDB(CapacidadNew);
+    this.capacidadesService.crearCapacidadDB(CapacidadNew);
   }
 
-  updateCapacidad(obj: any) {
+  actualizarCapacidad(obj: any) {
     const CapacidadEdit: Capacidad = {
       id: obj.id,
       nombre: obj.nombre,
@@ -115,10 +115,10 @@ export class CapacidadesComponent implements OnInit {
       peso: obj.peso,
       idSubcategoria: obj.idRelacion,
     };
-    this.capacidadesService.updateCapacidadDB(CapacidadEdit);
+    this.capacidadesService.actualizarCapacidadDB(CapacidadEdit);
   }
 
-  deleteCapacidad(capacidad: any) {
-    this.capacidadesService.deleteCapacidadDB(capacidad.id);
+  borrarCapacidad(capacidad: any) {
+    this.capacidadesService.borrarCapacidadDB(capacidad.id);
   }
 }

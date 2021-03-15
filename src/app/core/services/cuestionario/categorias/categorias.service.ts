@@ -69,13 +69,13 @@ export class CategoriasService implements Resolve<any> {
   }
 
   // Crear categoria
-  createCategoriaDB(categoria: Categoria) {
+  crearCategoriaDB(categoria: Categoria) {
     this.categoriaCollection = this.afs.collection("categorias");
     this.categoriaCollection.add(categoria);
   }
 
   // Actualizar categoria
-  updateCategoriaDB(categoria: Categoria) {
+  actualizarCategoriaDB(categoria: Categoria) {
     this.categoriaDoc = this.afs.doc(`categorias/${categoria.id}`);
     delete categoria.id;
     this.categoriaDoc.update(categoria);

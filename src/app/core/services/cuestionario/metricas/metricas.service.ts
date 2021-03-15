@@ -52,7 +52,7 @@ export class MetricasService {
     return this.metricasDoc.valueChanges();
   }
 
-  createMetricaDB(metrica: Metrica) {
+  crearMetricaDB(metrica: Metrica) {
     metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
     
     this.metricasDoc = this.afs.collection('metricas').doc(metrica.idCapacidad.id);
@@ -60,14 +60,14 @@ export class MetricasService {
     return this.metricasDoc.set(metrica);
   }
 
-  updateMetricaDB(metrica: Metrica) {
+  actualizarMetricaDB(metrica: Metrica) {
     metrica.idCapacidad = this.afs.collection("capacidades").doc(metrica.idCapacidad).ref;
     this.metricasDoc = this.afs.doc(`metricas/${metrica.id}`);
     delete metrica.id;
     this.metricasDoc.update(metrica);
   }
 
-  deleteMetricaDB(id: string) {
+  borrarMetricaDB(id: string) {
     this.metricasDoc = this.afs.doc(`metricas/${id}`);
     this.metricasDoc.delete();
   }

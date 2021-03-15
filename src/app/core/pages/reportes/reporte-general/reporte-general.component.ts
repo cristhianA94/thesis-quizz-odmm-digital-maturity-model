@@ -641,7 +641,7 @@ export class ReporteGeneralComponent implements OnInit {
         // var blob = doc.output("blob");
         // window.open(URL.createObjectURL(blob));
         // TODO Guarda el .PDF
-        doc.save('ReporteGeneral_EncuestaODMM.pdf');
+        doc.save(`ReporteGeneral_ODMM_${fecha}.pdf`);
       },
       margins
     );

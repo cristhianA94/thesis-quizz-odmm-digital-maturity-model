@@ -78,25 +78,25 @@ export class CsvLoadDataComponent implements OnInit {
       case "SectorIndustrial":
         this.csvRecords.forEach((element: Sector_Industrial) => {
           element.nombre = element.nombre;
-          this.sectorIndustrialService.createSectorIndustrialDB(element);
+          this.sectorIndustrialService.crearSectorIndustrialDB(element);
         });
         break;
       case "Categoria":
         this.csvRecords.forEach((element: Categoria) => {
           element.peso = Number(element.peso)
-          this.categoriasServices.createCategoriaDB(element);
+          this.categoriasServices.crearCategoriaDB(element);
         });
         break;
       case "Subcategoria":
         this.csvRecords.forEach((element: Subcategoria) => {
           element.peso = Number(element.peso)
-          this.subcategoriasServices.createSubcategoriaDB(element);
+          this.subcategoriasServices.crearSubcategoriaDB(element);
         });
         break;
       case "Capacidades":
         this.csvRecords.forEach((element: Capacidad) => {
           element.peso = Number(element.peso)
-          this.capacidadesServices.createCapacidadDB(element);
+          this.capacidadesServices.crearCapacidadDB(element);
         });
         break;
       case "Metricas":
@@ -156,7 +156,7 @@ export class CsvLoadDataComponent implements OnInit {
             idCapacidad: element.idCapacidad
           }
 
-          this.metricasServices.createMetricaDB(metrica);
+          this.metricasServices.crearMetricaDB(metrica);
         });
 
         break;

@@ -65,9 +65,9 @@ export class CuestionaryComponent implements OnInit {
     });
   }
 
-  realizarEncuesta(categoria: Categoria) {
+  realizarCuestionario(categoria: Categoria) {
     this.select = true;
-    this.router.navigate(['dimension/', categoria.id]);
+    this.router.navigate(['categoria/', categoria.id]);
   }
 
 

@@ -40,7 +40,7 @@ export class SectorIndustrialService {
   }
 
   // Crear sectorIndustrial
-  createSectorIndustrialDB(sectorI: Sector_Industrial) {
+  crearSectorIndustrialDB(sectorI: Sector_Industrial) {
     this.sectorICollection = this.afs.collection('sectorIndustrial');
     this.sectorICollection.add(sectorI)
   }

@@ -375,7 +375,8 @@ export class ReporteComponent implements OnInit, OnDestroy {
       // window.open(URL.createObjectURL(blob));
 
       // TODO Guarda el .PDF
-      doc.save('Reporte_EncuestaODMM.pdf');
+      doc.save(`Reporte_${this.categoria.categoriaNombre}_ODMM_${fecha}.pdf`);
+      //doc.save('Reporte_EncuestaODMM.pdf');
     },
       margins
     );

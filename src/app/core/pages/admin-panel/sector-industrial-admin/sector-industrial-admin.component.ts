@@ -97,7 +97,7 @@ export class SectorIndustrialAdminComponent implements OnInit {
   }
 
   createSectorI(sectorI: Sector_Industrial) {
-    this.sectorIService.createSectorIndustrialDB(sectorI);
+    this.sectorIService.crearSectorIndustrialDB(sectorI);
   }
 
   updateSectorI(sectorI: Sector_Industrial) {

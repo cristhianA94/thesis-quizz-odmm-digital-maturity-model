@@ -10,7 +10,7 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 export const cuestionaryRoutes: Routes = [
   {
-    path: "dimension/:id",
+    path: "categoria/:id",
     component: CuestionarioIDComponent,
     resolve: {
       categoria: CategoriasService,

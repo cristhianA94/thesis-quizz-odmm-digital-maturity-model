@@ -90,7 +90,7 @@ export class ReportesComponent implements OnInit {
   // Permite ver la tabla con las diferentes evaluaciones hechas por el usuario según la categoría
   visualizacionResultados(cuestionario: Cuestionario) {
     // Reporte general
-    console.log(cuestionario);
+    //console.log(cuestionario);
     if (cuestionario == 'todas') {
       // TODO router link con params idUser 
       this.verReporteGeneral();
@@ -122,8 +122,7 @@ export class ReportesComponent implements OnInit {
   }
 
   consultarUsuario() {
-    console.log(this.usuarioSelected);
-    
+
     this.flagTabla = true;
     let idUser = this.consultaForm.get("idUsuario").value;
     localStorage.setItem("idUserCuestionario", idUser);

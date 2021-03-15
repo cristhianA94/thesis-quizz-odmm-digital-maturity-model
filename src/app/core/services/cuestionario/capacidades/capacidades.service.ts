@@ -36,20 +36,20 @@ export class CapacidadesService {
     return this.capacidadesDoc.valueChanges();
   }
 
-  createCapacidadDB(capacidad: Capacidad) {
+  crearCapacidadDB(capacidad: Capacidad) {
     capacidad.idSubcategoria = this.afs.collection("subcategorias").doc(capacidad.idSubcategoria).ref;
     this.capacidadesCollection = this.afs.collection('capacidades');
     this.capacidadesCollection.add(capacidad);
   }
 
-  updateCapacidadDB(capacidad: Capacidad) {
+  actualizarCapacidadDB(capacidad: Capacidad) {
     capacidad.idSubcategoria = this.afs.collection("subcategorias").doc(capacidad.idSubcategoria).ref;
     this.capacidadesDoc = this.afs.doc(`capacidades/${capacidad.id}`);
     delete capacidad.id;
     this.capacidadesDoc.update(capacidad);
   }
 
-  deleteCapacidadDB(id: string) {
+  borrarCapacidadDB(id: string) {
     this.capacidadesDoc = this.afs.doc(`capacidades/${id}`);
     this.capacidadesDoc.delete();
   }

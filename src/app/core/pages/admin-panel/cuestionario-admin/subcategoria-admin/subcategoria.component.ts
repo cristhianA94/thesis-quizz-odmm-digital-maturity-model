@@ -99,18 +99,18 @@ export class SubcategoriaComponent implements OnInit {
       }
 
       if (result.event == "Agregar") {
-        this.createSubcategoria(this.subcategoria);
+        this.crearSubcategoria(this.subcategoria);
       } else if (result.event == "Actualizar") {
-        this.updateSubcategoria(this.subcategoria);
+        this.actualizarSubcategoria(this.subcategoria);
       } else if (result.event == "Eliminar") {
-        this.deleteSubcategoria(this.subcategoria);
+        this.borrarSubcategoria(this.subcategoria);
       }
 
       this.subcategorias = [];
     });
   }
 
-  createSubcategoria(obj: any) {
+  crearSubcategoria(obj: any) {
 
     let subCategoriaNew: Subcategoria = {
       nombre: obj.nombre,
@@ -118,10 +118,10 @@ export class SubcategoriaComponent implements OnInit {
       peso: obj.peso,
       idCategoria: obj.idRelacion,
     };
-    this.subcategoriasService.createSubcategoriaDB(subCategoriaNew);
+    this.subcategoriasService.crearSubcategoriaDB(subCategoriaNew);
   }
 
-  updateSubcategoria(obj: any) {
+  actualizarSubcategoria(obj: any) {
 
     let subCategoriaEdit: Subcategoria = {
       id: obj.id,
@@ -130,11 +130,11 @@ export class SubcategoriaComponent implements OnInit {
       peso: obj.peso,
       idCategoria: obj.idRelacion,
     };
-    this.subcategoriasService.updateSubcategoriaDB(subCategoriaEdit);
+    this.subcategoriasService.actualizarSubcategoriaDB(subCategoriaEdit);
   }
 
-  deleteSubcategoria(subcategoria: any) {
-    this.subcategoriasService.deleteSubcategoriaDB(subcategoria.id);
+  borrarSubcategoria(subcategoria: any) {
+    this.subcategoriasService.borrarSubcategoriaDB(subcategoria.id);
   }
 
 }
