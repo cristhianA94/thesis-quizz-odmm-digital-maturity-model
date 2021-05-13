@@ -2,7 +2,6 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Categoria } from 'app/shared/models/categoria';
-import { Cuestionario } from 'app/shared/models/cuestionario';
 
 // Services
 import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
@@ -23,7 +22,6 @@ export class CuestionaryComponent implements OnInit {
 
   categorias: Categoria[] = [];
   categoriasEvaluadas: any[] = [];
-  cuestionarios: Cuestionario[] = [];
   load: boolean = false;
   select: boolean = false;
   evaluada: boolean = false;
@@ -38,6 +36,7 @@ export class CuestionaryComponent implements OnInit {
   ngOnInit(): void {
     this.cargarCategorias();
   }
+
 
   cargarCategorias() {
     this.categoriasServices.getCategoriasDB().subscribe(categorias => {

@@ -34,8 +34,6 @@ import { CuestionarioAdminModule } from './cuestionario-admin/cuestionario-admin
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 
-
-``
 @NgModule({
   imports: [
     CommonModule,
@@ -59,10 +57,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     DialogFormCantonComponent,
     SectorIndustrialAdminComponent,
     DialogFormSectorIndustrialComponent,
-
-    
   ],
-  providers:[
+  providers: [
     UsuarioService,
     EmpresaService,
     SectorIndustrialService,

@@ -19,6 +19,7 @@ export class SubcategoriasService {
   onSubcategoriaChanged: BehaviorSubject<any>;
   subcategoria: Subcategoria;
 
+
   constructor(private afs: AngularFirestore) {
     this.onSubcategoriaChanged = new BehaviorSubject([]);
   }
@@ -37,7 +38,6 @@ export class SubcategoriasService {
   }
 
   getSubcategorias_CategoriaDB(idCategoria: string): Promise<Subcategoria[]> {
-
     return new Promise((resolve, reject) => {
       // Crea la referencia de la categoria a la que pertenecen las subcategorias
       const categoriaRef = this.afs.collection("categorias").doc(idCategoria).ref;
@@ -62,6 +62,18 @@ export class SubcategoriasService {
           resolve(response);
         }, reject);
     });
+  }
+
+  checkSubcategorias(idCategoria: string) {
+    // Crea la referencia de la categoria a la que pertenecen las subcategorias
+    const categoriaRef = this.afs.collection("categorias").doc(idCategoria).ref;
+
+    const subs = this.afs
+      .collection("subcategorias", (ref) => {
+        return ref.where("idCategoria", "==", categoriaRef);
+      })
+      .snapshotChanges();
+    return subs;
   }
 
   getSubcategoriaDB(id: string): Observable<Subcategoria> {

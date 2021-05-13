@@ -2,6 +2,7 @@ import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+
 @Component({
   selector: 'app-dialog-form-categoria',
   templateUrl: './dialog-form-categoria.component.html',

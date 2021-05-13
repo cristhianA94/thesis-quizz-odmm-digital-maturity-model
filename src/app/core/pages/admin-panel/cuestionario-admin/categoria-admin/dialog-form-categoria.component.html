@@ -5,14 +5,18 @@
             <mat-form-field appearance="outline">
                 <mat-label>Nombre</mat-label>
                 <input formControlName="nombre" placeholder="Nombre" matInput required [value]="local_data.nombre">
-                <mat-error *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El nombre es requerido.
+                <mat-error
+                    *ngIf="dataForm.controls['nombre'].hasError('required') && dataForm.controls['nombre'].touched">El
+                    nombre es requerido.
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Descripción</mat-label>
-                <textarea formControlName="descripcion" placeholder="Breve descripción de lo que comprende" matInput required></textarea>
-                <mat-error *ngIf="dataForm.controls['descripcion'].hasError('required') && dataForm.controls['descripcion'].touched">
+                <textarea formControlName="descripcion" placeholder="Breve descripción de lo que comprende" matInput
+                    required></textarea>
+                <mat-error
+                    *ngIf="dataForm.controls['descripcion'].hasError('required') && dataForm.controls['descripcion'].touched">
                     La descripcion es requerida.
                 </mat-error>
             </mat-form-field>
@@ -26,13 +30,15 @@
             </mat-form-field>
         </div>
     </form>
+
     <ng-template #elseTemplate>
         <p>¿Está seguro de eliminar </p>
         <b>{{local_data.nombre}} </b>?
         <hr>
     </ng-template>
-</div>
-<div mat-dialog-actions class="dialog-actions" align="center">
-    <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
-    <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
+
+    <div mat-dialog-actions class="dialog-actions" align="center">
+        <button mat-raised-button color="warn" (click)="closeDialog()">Cancelar</button>
+        <button mat-raised-button [disabled]="dataForm.invalid" (click)="doAction()">{{action}}</button>
+    </div>
 </div>

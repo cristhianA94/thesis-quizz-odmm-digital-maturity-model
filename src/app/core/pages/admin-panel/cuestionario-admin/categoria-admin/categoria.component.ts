@@ -7,6 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogFormCategoriaComponent } from './dialog-form-categoria.component';
 import { Categoria } from 'app/shared/models/categoria';
 import { CategoriasService } from 'app/core/services/cuestionario/categorias/categorias.service';
+import { SubcategoriasService } from 'app/core/services/cuestionario/subcategorias/subcategorias.service';
+import Swal from 'sweetalert2';
+
+
 
 @Component({
   selector: 'app-categoria',
@@ -20,6 +24,8 @@ export class CategoriaComponent implements OnInit {
   categorias: Categoria[] = [];
   categoria: Categoria;
 
+  contieneSubcategorias: boolean = false;
+
   displayedColumns: string[] = ['Nombre', 'Descripción', 'Peso', ' '];
 
   dataSource = new MatTableDataSource<Categoria>();
@@ -27,6 +33,7 @@ export class CategoriaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
     public categoriaService: CategoriasService,
+    public subcategoriaService: SubcategoriasService,
     public dialog: MatDialog
   ) { }
 
@@ -85,7 +92,8 @@ export class CategoriaComponent implements OnInit {
       } else if (result.event == "Actualizar") {
         this.actualizarCategoria(this.categoria);
       } else if (result.event == "Eliminar") {
-        this.borrarCategoria(this.categoria);
+        this.comprobarSubcategorias(this.categoria);
+        // this.borrarCategoria(this.categoria);
       }
 
     });
@@ -97,6 +105,22 @@ export class CategoriaComponent implements OnInit {
 
   actualizarCategoria(categoria: Categoria) {
     this.categoriaService.actualizarCategoriaDB(categoria);
+  }
+
+  comprobarSubcategorias(categoria: Categoria) {
+
+    this.subcategoriaService.checkSubcategorias(categoria.id).subscribe((res) => {
+      if (res.length != 0) {
+        this.contieneSubcategorias = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La categoría que desea eliminar cuenta con subcategorías asociadas.',
+        });
+      } else {
+        this.borrarCategoria(categoria);
+      }
+    });
   }
 
   borrarCategoria(categoria: Categoria) {

@@ -10,7 +10,9 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && ng serve -o"
+        "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && ng serve -o",
+        "buildstats": "ng build --stats-json",
+        "analizar": "webpack-bundle-analyzer dist/stats.json"
     },
     "repository": {
         "type": "git",
@@ -130,6 +132,7 @@
         "protractor": "~7.0.0",
         "ts-node": "8.6.2",
         "tslint": "~6.1.0",
-        "typescript": "3.9.7"
+        "typescript": "3.9.7",
+        "webpack-bundle-analyzer": "^4.4.1"
     }
 }
