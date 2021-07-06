@@ -13,7 +13,6 @@ export const cuestionaryRoutes: Routes = [
     path: "categoria/:id",
     component: CuestionarioIDComponent,
     resolve: {
-      categoria: CategoriasService,
       data: CuestionarioService
     },
     canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
@@ -23,7 +22,7 @@ export const cuestionaryRoutes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(cuestionaryRoutes)],
   exports: [RouterModule],
-  providers: [CategoriasService],
+  providers: [CuestionarioService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CuestionaryRoutingModule { }

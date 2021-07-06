@@ -16,11 +16,9 @@ Basado en **[Material Dashboard Angular](https://www.creative-tim.com/product/ma
   - [Tabla de Contenidos](#tabla-de-contenidos)
   - [Quick start](#quick-start)
   - [Terminal Commands](#terminal-commands)
-    - [Lo que está incluido](#lo-que-está-incluido)
   - [Browser Support](#browser-support)
   - [Resources](#resources)
   - [Reporting Issues](#reporting-issues)
-  - [Useful Links](#useful-links)
   - [Licensing](#licensing)
     - [Social Media](#social-media)
 
@@ -45,80 +43,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Para obtener más ayuda en el CLI Angular usa "ayuda" o ve a ver el [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-### Lo que está incluido
-
-Directorios y archivos:
-
-```
-material-dashboard-angular
-├── CHANGELOG.md
-├── LICENSE.md
-├── README.md
-├── angular-cli.json
-├── documentation
-├── e2e
-├── karma.conf.js
-├── package-lock.json
-├── package.json
-├── protractor.conf.js
-├── src
-│   ├── app
-│   │   ├── app.component.css
-│   │   ├── app.component.html
-│   │   ├── app.component.spec.ts
-│   │   ├── app.component.ts
-│   │   ├── app.module.ts
-│   │   ├── app.routing.ts
-│   │   ├── components
-│   │   │   ├── components.module.ts
-│   │   │   ├── footer
-│   │   │   │   ├── footer.component.css
-│   │   │   │   ├── footer.component.html
-│   │   │   │   ├── footer.component.spec.ts
-│   │   │   │   └── footer.component.ts
-│   │   │   ├── navbar
-│   │   │   │   ├── navbar.component.css
-│   │   │   │   ├── navbar.component.html
-│   │   │   │   ├── navbar.component.spec.ts
-│   │   │   │   └── navbar.component.ts
-│   │   │   └── sidebar
-│   │   │       ├── sidebar.component.css
-│   │   │       ├── sidebar.component.html
-│   │   │       ├── sidebar.component.spec.ts
-│   │   │       └── sidebar.component.ts
-│   │   ├── dashboard
-│   │   │   ├── dashboard.component.css
-│   │   │   ├── dashboard.component.html
-│   │   │   ├── dashboard.component.spec.ts
-│   │   │   └── dashboard.component.ts
-│   │   └── user-profile
-│   │       ├── user-profile.component.css
-│   │       ├── user-profile.component.html
-│   │       ├── user-profile.component.spec.ts
-│   │       └── user-profile.component.ts
-│   ├── assets
-│   │   ├── css
-│   │   │   └── demo.css
-│   │   ├── img
-│   │   └── scss
-│   │       ├── core
-│   │       └── material-dashboard.scss
-│   ├── environments
-│   ├── favicon.ico
-│   ├── index.html
-│   ├── main.ts
-│   ├── polyfills.ts
-│   ├── styles.css
-│   ├── test.ts
-│   ├── tsconfig.app.json
-│   ├── tsconfig.spec.json
-│   └── typings.d.ts
-├── tsconfig.json
-├── tslint.json
-└── typings
-
-```
-
 ## Browser Support
 
 En la actualidad, nuestro objetivo oficial es apoyar las dos últimas versiones de los siguientes navegadores:
@@ -131,15 +55,11 @@ En la actualidad, nuestro objetivo oficial es apoyar las dos últimas versiones 
 
 ## Reporting Issues
 
-Usamos GitHub Issues como el rastreador oficial de errores para el repositorio. Aquí hay algunos consejos para los usuarios que quieran reportar un problema:
+Se usa GitHub Issues como el rastreador oficial de errores para el repositorio. Aquí hay algunos consejos para los usuarios que quieran reportar un problema:
 
 1. Asegúrese de que está usando la última versión del repositorio. Revise el CHANGELOG
 2. Proporcionarnos pasos reproducibles para el asunto reducirá el tiempo que se tarda en arreglarlo.
 3. Algunos problemas pueden ser específicos de un navegador, así que especificar en qué navegador se encontró el problema podría ayudar.
-
-## Useful Links
-
-- [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w)
 
 ## Licensing
 

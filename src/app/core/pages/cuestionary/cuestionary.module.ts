@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CuestionaryRoutingModule } from "./cuestionary.routing";
 import { MaterialModule } from "../material.module";
 import { ComponentsModule } from 'app/shared/components.module';
+
 import { CuestionarioIDComponent } from './cuestionarioID/cuestionarioID.component';
 
 
@@ -33,4 +34,4 @@ import { SubcategoriasService } from "app/core/services/cuestionario/subcategori
     MetricasService,
   ],
 })
-export class CuestionaryModule {}
+export class CuestionaryModule { }

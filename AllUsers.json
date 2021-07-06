@@ -1,0 +1,161 @@
+{"users": [
+{
+  "localId": "0U7hEAdfr7M6ZQBTqJag4xeHYtb2",
+  "email": "juan.jumbo@kradac.com",
+  "emailVerified": true,
+  "passwordHash": "I62KqDEd2wJiczuAC3LOnTM/MHYF1I5bRgRKKa33usO4FABS7LH6pCGDvu8/NB+Kz3aaYxvPl04IkAH0sA3TWg==",
+  "salt": "KVnX9S0zuIYj9g==",
+  "lastSignedInAt": "1615516948361",
+  "createdAt": "1615516948361",
+  "providerUserInfo": []
+},
+{
+  "localId": "177Vw2f2JFTG4Y3189XOrVVVNM82",
+  "email": "jonathan.arrobo@kradac.com",
+  "emailVerified": true,
+  "passwordHash": "33Q5ue6rm67riRXW4uHW7dPFH1vrGk0b6lYGHdWcgqb07VvfBOdNOqJod6cE7gG7B9biAK8M6fw/16oo5ctx/w==",
+  "salt": "NxR7BZhJyF5adA==",
+  "lastSignedInAt": "1616445031984",
+  "createdAt": "1616444443694",
+  "providerUserInfo": []
+},
+{
+  "localId": "7rXNnVBW7JfBpGLS6pbt67220zM2",
+  "email": "rich0206vi@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "hK7tgVCHbboKozLz+ufXMC3loO7ugCTc0OIcH0y9FKRAK7dpvxuh/lke6cKCfh7xNjVnsoJil8+5hbSLS6ZKTw==",
+  "salt": "aUAWebQXPzvOmw==",
+  "lastSignedInAt": "1615698650016",
+  "createdAt": "1615686681991",
+  "providerUserInfo": []
+},
+{
+  "localId": "BWL1Lq5kgJYunEv8gwAy7JhimRF3",
+  "email": "karlanovillo85@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "AV4KP03pcUXH2x55KnMor3CWY8F9r3WDZ1d2iVrzuOoSxvkGXXtnxwgBbNJ+JFqfrYocU5M1YI+To6Z3EWmFCA==",
+  "salt": "m/U8itlvjI17jg==",
+  "lastSignedInAt": "1614191502673",
+  "createdAt": "1614191502673",
+  "providerUserInfo": []
+},
+{
+  "localId": "EtvcQlNnhYOUECKlfzwGWxeVtIx2",
+  "email": "ivan.hofmann@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "hGUD+GOoQQeg4t1YFNy9a/ul8jawPnmZCTwZgnyfhK0HcyW7DqQKh4O40ZO8l4c224JeR+Jmb2/iogn0KcUgQQ==",
+  "salt": "/UsNjYQrgZ7XuA==",
+  "lastSignedInAt": "1614712958427",
+  "createdAt": "1614712958427",
+  "providerUserInfo": []
+},
+{
+  "localId": "JMncJxSEbVPP4Cxjt8GYoEpir5C3",
+  "email": "jleiva@coopmego.com",
+  "emailVerified": true,
+  "passwordHash": "RVFA08sEXgr3vPyVVK+b5HxobDF/1+jfTjmuXIQ7O7HunOhgJYAdFpA6oAvXil+WDCC8wGYrqB57Bi4L+t9jCw==",
+  "salt": "KdEeF+CR6y5Puw==",
+  "lastSignedInAt": "1614560400259",
+  "createdAt": "1614183342807",
+  "providerUserInfo": []
+},
+{
+  "localId": "JXn26wgADmXU9euwoArxXmHGQam1",
+  "email": "pedro.salinas@lamotora.com",
+  "emailVerified": true,
+  "passwordHash": "CKIDQUxTyHLucUyl38iH8V7YbRZ5oi6OGVM//xWfr6Sxq0dOy3iIMkLdSXFjpSUTcwj/6u9E7XOyGcIgcYDslA==",
+  "salt": "WwakVRPS6KgTVA==",
+  "lastSignedInAt": "1615735681144",
+  "createdAt": "1615685733683",
+  "providerUserInfo": []
+},
+{
+  "localId": "LFLP1iONxeTZ80Xj686hPqbJi673",
+  "email": "bravob@malca.ec",
+  "emailVerified": true,
+  "passwordHash": "krAWP3hUTgfWzMONAAXvL8at6LH0oKUgyjJ1NDFtTgYDkRkxHkwCrGT0teXy8vbRSjviFHydxRTwEJXIf7wHtQ==",
+  "salt": "ZzkQRN9wiMTuhQ==",
+  "lastSignedInAt": "1614261051133",
+  "createdAt": "1614002219163",
+  "providerUserInfo": []
+},
+{
+  "localId": "TzRd8Pfza1QZrEG1ie2wlBnSptY2",
+  "email": "fausto.jaramillo@fuja.com.ec",
+  "emailVerified": true,
+  "passwordHash": "7Hmm1fojtjU7dmlnD0QzJBMJgnU/DdRUW5XtWb7EYWXoEg0dbgG3vGrMbjNLxfL1w+Vaf/rHEITvdz3MCA6oRQ==",
+  "salt": "0naMxCB4d7z5QA==",
+  "lastSignedInAt": "1614007159147",
+  "createdAt": "1614007159147",
+  "providerUserInfo": []
+},
+{
+  "localId": "Uz3AD1cmfFRbA0MifVv9qDK9ttZ2",
+  "email": "jrpoma@divusware.com",
+  "emailVerified": true,
+  "passwordHash": "zAnV+ljKUfbc0bB1szcpNnwQT2f1lHdIQwHjRzY9OlC9Lz8AhsHigH1Mw6vpVkFEv3tvJabTqRlIJ10zWcRl/w==",
+  "salt": "+vQNETkSeNtkug==",
+  "lastSignedInAt": "1613149009365",
+  "createdAt": "1613148862654",
+  "providerUserInfo": []
+},
+{
+  "localId": "ZrRCyqNjBsXHnIiVmSBEY6DmW3s1",
+  "email": "angela.1909@hotmail.com",
+  "emailVerified": false,
+  "passwordHash": "qrw425Wv7uTdKMIA4WxAFvDa5KKJD/V9hsCwplcBeWpX/B1zD9I+1UCX+ZDo/1QdgGz+Vo58M4oTUd9hp9TS+w==",
+  "salt": "UmYn3PG8ufkmXg==",
+  "lastSignedInAt": "1614904149493",
+  "createdAt": "1614904149493",
+  "providerUserInfo": []
+},
+{
+  "localId": "faVHym4Pr0f8gmb2SF5VMMdS7HI2",
+  "email": "fjgodoy07@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "lwluGClw0qpMj6/z7tcSD3rhWedC5SKZbpu4rrldKY1dlyoFeZgkcvbF0xkun7yR3ek5ebbKN0B6UBQz/fiWPQ==",
+  "salt": "W8A6+upSYeK/kg==",
+  "lastSignedInAt": "1614018986143",
+  "createdAt": "1614018793975",
+  "providerUserInfo": []
+},
+{
+  "localId": "tWebO7BAmcb71nNi2MCeKRzDYpt1",
+  "email": "gerencia@ecolac.com.ec",
+  "emailVerified": true,
+  "passwordHash": "p/aM2h1Da0nY8N5n5FNlF68DV4RfZ6VN6gnIHu4zx1TAQcGXEclQBV01srjnCFkFYUHW/3lXSLwCvcxeLEplrw==",
+  "salt": "e2PMEyMiPyeFKg==",
+  "lastSignedInAt": "1613773216090",
+  "createdAt": "1613773216090",
+  "providerUserInfo": []
+},
+{
+  "localId": "ubrbpjLyC4PZJMLVpsLgZPHXhD52",
+  "email": "srbenitez@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "vqiNnBbUfm629xLu+/qiOR/sCj22eKBo4L4C0ouN24muJIqp3pefno/Dcqk59X7IfBWDH0NGIHdJdQlA/W6qFg==",
+  "salt": "WKW5W7ZanJYSQg==",
+  "lastSignedInAt": "1618852915717",
+  "createdAt": "1618852915717",
+  "providerUserInfo": []
+},
+{
+  "localId": "wXDphsUd5jYaqA8PRY6iobQIfcc2",
+  "email": "cristhianapolo_94@hotmail.com",
+  "emailVerified": true,
+  "passwordHash": "h0Odri+BhIbjJm1enonK8xLxMNdXVGhvlqsH3W8a6FcZ6J+eHuqpVQT70eJgvYlapJ5wAAi1AfD1Bxe2HYK29A==",
+  "salt": "OlEtII8J0Fs8dw==",
+  "lastSignedInAt": "1615772829166",
+  "createdAt": "1607101632910",
+  "providerUserInfo": []
+},
+{
+  "localId": "wYwOomgimDheNKJCvIbLPoc9fj02",
+  "email": "pablorellana@netgocios.ec",
+  "emailVerified": true,
+  "passwordHash": "MsZ2dDlEQdV7mCanGlLE1SomJibuhQ9QbiUJE1FsNu0UPBbtnRTk+GBG63rKa693PydvYDNHhSKT7Kpdvx1J+g==",
+  "salt": "htf/SSGMSY2goQ==",
+  "lastSignedInAt": "1615212346790",
+  "createdAt": "1615212346790",
+  "providerUserInfo": []
+}]}

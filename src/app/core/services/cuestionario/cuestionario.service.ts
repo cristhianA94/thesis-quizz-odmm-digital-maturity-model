@@ -51,6 +51,7 @@ export class CuestionarioService implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
     this.idCategoria = route.params.id;
 
+
     return new Promise<void>((resolve, reject) => {
       Promise.all([this.getCuestionarioAPI(this.idCategoria)]).then(() => {
         resolve();
@@ -72,6 +73,7 @@ export class CuestionarioService implements Resolve<any> {
 
       this.http.get(url, header).subscribe((response: any) => {
         this.cuestionario = response;
+
         this.onCuestionarioChanged.next(this.cuestionario);
         resolve(response);
       }, reject);
@@ -234,87 +236,86 @@ export class CuestionarioService implements Resolve<any> {
     cuestionario.fechaCreacion = new Date();
 
     // Obtiene los cuestionarios de el usuario logueado
-    this.subscripcion = this.validarUsuarioCategoria(
-      cuestionario.categoria
-    ).subscribe((cuestionariodb: any) => {
-      /// ESTE lo buelve a ejecutar
-      cuestionario.categoria = this.afs.doc(
-        `categorias/${cuestionario.categoria}`
-      ).ref;
+    this.subscripcion = this.validarUsuarioCategoria(cuestionario.categoria)
+      .subscribe((cuestionariodb: any) => {
+        /// ESTE lo buelve a ejecutar
+        cuestionario.categoria = this.afs.doc(
+          `categorias/${cuestionario.categoria}`
+        ).ref;
 
-      // Detecta si contesto la categoria ya
-      this.duplicated = cuestionariodb.length > 0 ? true : false;
+        // Detecta si contesto la categoria ya
+        this.duplicated = cuestionariodb.length > 0 ? true : false;
 
-      // Agrega las respuestas a una categoria ya contestada
-      if (this.duplicated) {
-        //await this.afs.doc(`cuestionarios/${cuestionariodb[0].id}`).update({ fechaCreacion: cuestionario.fechaCreacion });
-        this.afs
-          .collection("cuestionarios/" + cuestionariodb[0].id + "/respuestas")
-          .add(respuestaUser)
-          .then(() => {
-            // Notificacion
-            let timerInterval;
-            Swal.fire({
-              title: "¡Categoria nuevamente evaluada!",
-              icon: "success",
-              timer: 1000,
-              timerProgressBar: true,
-              onBeforeOpen: () => {
-                Swal.showLoading();
-                timerInterval = setInterval(() => {
-                  Swal.getContent();
-                }, 1000);
-              },
-              onClose: () => {
-                clearInterval(timerInterval);
-              },
-            }).then((result) => {
-              //Read more about handling dismissals below
-              if (result.dismiss === Swal.DismissReason.timer) {
-              }
+        // Agrega las respuestas a una categoria ya contestada
+        if (this.duplicated) {
+          //await this.afs.doc(`cuestionarios/${cuestionariodb[0].id}`).update({ fechaCreacion: cuestionario.fechaCreacion });
+          this.afs
+            .collection("cuestionarios/" + cuestionariodb[0].id + "/respuestas")
+            .add(respuestaUser)
+            .then(() => {
+              // Notificacion
+              let timerInterval;
+              Swal.fire({
+                title: "¡Categoria nuevamente evaluada!",
+                icon: "success",
+                timer: 1000,
+                timerProgressBar: true,
+                onBeforeOpen: () => {
+                  Swal.showLoading();
+                  timerInterval = setInterval(() => {
+                    Swal.getContent();
+                  }, 1000);
+                },
+                onClose: () => {
+                  clearInterval(timerInterval);
+                },
+              }).then((result) => {
+                //Read more about handling dismissals below
+                if (result.dismiss === Swal.DismissReason.timer) {
+                }
+              });
+
+              this.router.navigate(["/cuestionario"]);
+            })
+            .catch((err) => this.alertaService.mensajeError("Error", err));
+
+          // Si no ha contestado la categoria se agrega como nueva.
+        } else {
+          this.cuestionarioCollection = this.afs.collection("cuestionarios");
+          this.cuestionarioCollection
+            .add(cuestionario)
+            .then((docCuestionario) => {
+              this.afs
+                .collection("cuestionarios/" + docCuestionario.id + "/respuestas")
+                .add(respuestaUser);
+              // Notificacion
+              let timerInterval;
+              Swal.fire({
+                title: "¡Categoria Evaluada!",
+                icon: "success",
+                timer: 1000,
+                timerProgressBar: true,
+                onBeforeOpen: () => {
+                  Swal.showLoading();
+                  timerInterval = setInterval(() => {
+                    Swal.getContent();
+                  }, 1000);
+                },
+                onClose: () => {
+                  clearInterval(timerInterval);
+                },
+              }).then((result) => {
+                //Read more about handling dismissals below
+                if (result.dismiss === Swal.DismissReason.timer) {
+                }
+              });
+
+              this.router.navigate(["/cuestionario"]);
             });
-
-            this.router.navigate(["/cuestionario"]);
-          })
-          .catch((err) => this.alertaService.mensajeError("Error", err));
-
-        // Si no ha contestado la categoria se agrega como nueva.
-      } else {
-        this.cuestionarioCollection = this.afs.collection("cuestionarios");
-        this.cuestionarioCollection
-          .add(cuestionario)
-          .then((docCuestionario) => {
-            this.afs
-              .collection("cuestionarios/" + docCuestionario.id + "/respuestas")
-              .add(respuestaUser);
-            // Notificacion
-            let timerInterval;
-            Swal.fire({
-              title: "¡Categoria Evaluada!",
-              icon: "success",
-              timer: 1000,
-              timerProgressBar: true,
-              onBeforeOpen: () => {
-                Swal.showLoading();
-                timerInterval = setInterval(() => {
-                  Swal.getContent();
-                }, 1000);
-              },
-              onClose: () => {
-                clearInterval(timerInterval);
-              },
-            }).then((result) => {
-              //Read more about handling dismissals below
-              if (result.dismiss === Swal.DismissReason.timer) {
-              }
-            });
-
-            this.router.navigate(["/cuestionario"]);
-          });
-      }
-      // Se desuscribe de la consulta para evitar bucle de adds
-      this.subscripcion.unsubscribe();
-    });
+        }
+        // Se desuscribe de la consulta para evitar bucle de adds
+        this.subscripcion.unsubscribe();
+      });
   }
 
   deleteCuestionarioDB(id: string) {
