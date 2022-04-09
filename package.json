@@ -88,7 +88,7 @@
         "jquery": "^3.4.1",
         "jspdf": "^1.5.3",
         "lodash": "^4.17.20",
-        "moment": "2.24.0",
+        "moment": "2.29.2",
         "ng-circle-progress": "^1.5.1",
         "ng2-charts": "^2.3.2",
         "ngx-csv-parser": "0.0.3",
